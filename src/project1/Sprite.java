@@ -5,6 +5,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import static project1.App.TILE_SIZE;
+
 public class Sprite {
 
   private String imageSource;
@@ -14,19 +16,22 @@ public class Sprite {
 	private float yCoordinate;
 
 	public Sprite(String imageSource, float x, float y) {
-	  this.xCoordinate = x;
-	  this.yCoordinate = y;
-
+	  this.xCoordinate = x * TILE_SIZE;
+	  this.yCoordinate = y * TILE_SIZE;
 	  this.imageSource = imageSource;
+
+	  System.out.println(this.imageSource);
 
 	  try {
       this.image = new Image(this.imageSource);
+      this.image.draw();
     } catch (SlickException e) {
 	    e.printStackTrace();
 	    System.exit(1);
     }
 	}
-	
+
+	//TODO
 	public void update(Input input, int delta) {
 	}
 	
@@ -48,5 +53,14 @@ public class Sprite {
 
   public void setyCoordinate(float yCoordinate) {
     this.yCoordinate = yCoordinate;
+  }
+
+  @Override
+  public String toString() {
+    return "Sprite{" +
+            "imageSource='" + imageSource + '\'' +
+            "xCoordinate='" + xCoordinate + '\'' +
+            "yCoordinate='" + yCoordinate + '\'' +
+            '}';
   }
 }

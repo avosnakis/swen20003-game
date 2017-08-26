@@ -1,8 +1,11 @@
 package project1;
 
+import org.lwjgl.Sys;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Loader {
 
@@ -34,7 +37,8 @@ public class Loader {
 	 * @return An array of all sprites in this level.
 	 */
 	public static Sprite[] loadSprites(String filename) {
-	  Sprite[] sprites = null;
+	  /* Use an ArrayList to initially load data as it is dynamic */
+	  ArrayList<Sprite> sprites = new ArrayList<>();
 
 	  try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       int[] levelDimensions = readMapDimensions(br.readLine());
@@ -42,17 +46,15 @@ public class Loader {
       int yDimension = levelDimensions[Y_DIMENSION_INDEX];
 
       String text;
-      sprites = new Sprite[xDimension * yDimension];
-      int i = 0;
 
       while ((text = br.readLine()) != null) {
-        sprites[i] = loadSprite(text);
+        sprites.add(loadSprite(text));
       }
     } catch (IOException e) {
 	    e.printStackTrace();
 	    System.exit(1);
     }
-    return sprites;
+    return sprites.toArray(new Sprite[sprites.size()]);
 	}
 
 	/**
@@ -102,6 +104,6 @@ public class Loader {
       default:
         break;
     }
-	  return new Sprite(filepath, Float.parseFloat(line[X_INDEX]), Float.parseFloat(line[Y_INDEX]));
+    return new Sprite(filepath, Float.parseFloat(line[X_INDEX]), Float.parseFloat(line[Y_INDEX]));
   }
 }
