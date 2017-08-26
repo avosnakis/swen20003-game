@@ -17,13 +17,19 @@ import org.newdawn.slick.Input;
  */
 public class App extends BasicGame {
 
- 	/** screen width, in pixels */
+  /**
+   * screen width, in pixels
+   */
   public static final int SCREEN_WIDTH = 800;
-  /** screen height, in pixels */
+  /**
+   * screen height, in pixels
+   */
   public static final int SCREEN_HEIGHT = 600;
-  /** size of the tiles, in pixels */
+  /**
+   * size of the tiles, in pixels
+   */
   public static final int TILE_SIZE = 32;
-    
+
   private World world;
 
   public App() {
@@ -35,8 +41,10 @@ public class App extends BasicGame {
     world = new World();
   }
 
-  /** Update the game state for a frame.
-   * @param gc The Slick game container object.
+  /**
+   * Update the game state for a frame.
+   *
+   * @param gc    The Slick game container object.
    * @param delta Time passed since last frame (milliseconds).
    */
   @Override
@@ -46,15 +54,19 @@ public class App extends BasicGame {
     world.update(input, delta);
   }
 
-  /** Render the entire screen, so it reflects the current game state.
+  /**
+   * Render the entire screen, so it reflects the current game state.
+   *
    * @param gc The Slick game container object.
-   * @param g The Slick graphics object, used for drawing.
+   * @param g  The Slick graphics object, used for drawing.
    */
   public void render(GameContainer gc, Graphics g) throws SlickException {
     world.render(g);
   }
 
-  /** Start-up method. Creates the game and runs it.
+  /**
+   * Start-up method. Creates the game and runs it.
+   *
    * @param args Command-line arguments (ignored).
    */
   public static void main(String[] args) throws SlickException {

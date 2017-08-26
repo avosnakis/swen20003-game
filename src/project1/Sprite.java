@@ -12,32 +12,32 @@ public class Sprite {
   private String imageSource;
   private Image image;
 
-	private float xCoordinate;
-	private float yCoordinate;
+  private float xCoordinate;
+  private float yCoordinate;
 
-	public Sprite(String imageSource, float x, float y) {
-	  this.xCoordinate = x * TILE_SIZE;
-	  this.yCoordinate = y * TILE_SIZE;
-	  this.imageSource = imageSource;
+  public Sprite(String imageSource, float x, float y) {
+    this.xCoordinate = x * TILE_SIZE;
+    this.yCoordinate = y * TILE_SIZE;
+    this.imageSource = imageSource;
 
-	  System.out.println(this.imageSource);
+    System.out.println(this.imageSource);
 
-	  try {
+    try {
       this.image = new Image(this.imageSource);
       this.image.draw();
     } catch (SlickException e) {
-	    e.printStackTrace();
-	    System.exit(1);
+      e.printStackTrace();
+      System.exit(1);
     }
-	}
+  }
 
-	//TODO
-	public void update(Input input, int delta) {
-	}
-	
-	public void render(Graphics g) {
-	  g.drawImage(this.image, this.xCoordinate, this.yCoordinate);
-	}
+  //TODO
+  public void update(Input input, int delta) {
+  }
+
+  public void render(Graphics g) {
+    g.drawImage(this.image, this.xCoordinate, this.yCoordinate);
+  }
 
   public float getxCoordinate() {
     return xCoordinate;
