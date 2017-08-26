@@ -7,6 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static project1.App.TILE_SIZE;
+import static project1.App.SCREEN_HEIGHT;
+import static project1.App.SCREEN_WIDTH;
+
 public class Loader {
 
   private static final int X_DIMENSION_INDEX = 0;
@@ -43,13 +47,13 @@ public class Loader {
 
     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       int[] levelDimensions = readMapDimensions(br.readLine());
-      int xDimension = levelDimensions[X_DIMENSION_INDEX];
-      int yDimension = levelDimensions[Y_DIMENSION_INDEX];
+      int xOffset = (SCREEN_WIDTH - (levelDimensions[X_DIMENSION_INDEX] * TILE_SIZE)) / 2;
+      int yOffset = (SCREEN_HEIGHT - (levelDimensions[Y_DIMENSION_INDEX] * TILE_SIZE)) / 2;
 
       String text;
 
       while ((text = br.readLine()) != null) {
-        sprites.add(loadSprite(text, xDimension, yDimension));
+        sprites.add(loadSprite(text, xOffset, yOffset));
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -81,7 +85,7 @@ public class Loader {
    * @param text The type, x coordinate, and y coordinate of the sprite. Eg:
    * @return A sprite instantiated at the specified x coordinate, y coordinate, and with the correct image.
    */
-  private static Sprite loadSprite(String text, int xDimension, int yDimension) {
+  private static Sprite loadSprite(String text, int xOffset, int yOffset) {
     final int TYPE_INDEX = 0;
     final int X_INDEX = 1;
     final int Y_INDEX = 2;
@@ -108,7 +112,7 @@ public class Loader {
         break;
     }
     return new Sprite(filepath,
-        Float.parseFloat(line[X_INDEX]) + xDimension,
-        Float.parseFloat(line[Y_INDEX]) + yDimension);
+        TILE_SIZE * Float.parseFloat(line[X_INDEX]) + xOffset,
+        TILE_SIZE * Float.parseFloat(line[Y_INDEX]) + yOffset);
   }
 }
