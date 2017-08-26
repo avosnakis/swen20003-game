@@ -18,9 +18,11 @@ public class Loader {
 
   private static final String COMMA_SEPARATOR = ",";
 
-  /* Resource file paths. File paths in Java are OS-agnostic, so standard Unix file paths were used.
-  * In the case of RESOURCE_PATH, the project working directory is the top level of the project, so
-  * we use. to quickly access the resources folder. */
+  /**
+   * Resource file paths. File paths in Java are OS-agnostic, so standard Unix file paths were used.
+   * In the case of RESOURCE_PATH, the project working directory is the top level of the project, so
+   * we use. to quickly access the resources folder.
+   */
   private static final String RESOURCE_PATH = "./res/";
   private static final String STONE_FILE = "stone.png";
   private static final String FLOOR_FILE = "floor.png";
@@ -42,7 +44,7 @@ public class Loader {
    * @return An array of all sprites in this level.
    */
   public static Sprite[] loadSprites(String filename) {
-    /* Use an ArrayList to initially load data as it is dynamic */
+    // Use an ArrayList to initially load data as it is dynamic
     ArrayList<Sprite> sprites = new ArrayList<>();
 
     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {

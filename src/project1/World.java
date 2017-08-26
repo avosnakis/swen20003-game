@@ -21,6 +21,7 @@ public class World {
   }
 
   public void update(Input input, int delta) {
+    this.player.update(input);
   }
 
   public void render(Graphics g) {
