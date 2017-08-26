@@ -1,10 +1,14 @@
 # Created by .ignore support plugin (hsz.mobi)
+
+# Binary files
+lib/
+
 ### macOS template
 # General
 *.DS_Store
 .AppleDouble
 .LSOverride
-.dylib
+*.dylib
 
 # Icon must end with two \r
 Icon
