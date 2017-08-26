@@ -7,17 +7,19 @@ import org.newdawn.slick.SlickException;
 
 public class Sprite {
 
+  private String spriteType;
   private String imageSource;
   private Image image;
 
   private float xCoordinate;
   private float yCoordinate;
 
-  public Sprite(String imageSource, float x, float y) {
+  public Sprite(String imageSource, String spriteType, float x, float y) {
     this.xCoordinate = x;
     this.yCoordinate = y;
     this.imageSource = imageSource;
-    
+    this.spriteType = spriteType;
+
     try {
       this.image = new Image(this.imageSource);
       this.image.draw();
@@ -49,6 +51,14 @@ public class Sprite {
 
   public void setyCoordinate(float yCoordinate) {
     this.yCoordinate = yCoordinate;
+  }
+
+  public String getSpriteType() {
+    return spriteType;
+  }
+
+  public void setSpriteType(String spriteType) {
+    this.spriteType = spriteType;
   }
 
   @Override

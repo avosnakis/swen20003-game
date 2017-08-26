@@ -112,6 +112,7 @@ public class Loader {
         break;
     }
     return new Sprite(filepath,
+        line[TYPE_INDEX],
         TILE_SIZE * Float.parseFloat(line[X_INDEX]) + xOffset,
         TILE_SIZE * Float.parseFloat(line[Y_INDEX]) + yOffset);
   }
