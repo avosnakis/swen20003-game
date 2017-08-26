@@ -14,6 +14,16 @@ public class Loader {
 
   private static final char COMMA_SEPARATOR = ',';
 
+  /* Resource file paths. File paths in Java are OS-agnostic, so standard Unix file paths were used.
+  * In the case of RESOURCE_PATH, the project working directory is the top level of the project, so
+  * we use. to quickly access the resources folder. */
+  private static final String RESOURCE_PATH = "./res/";
+  private static final String STONE_FILE = "stone.png";
+  private static final String FLOOR_FILE = "floor.png";
+  private static final String TARGET_FILE = "target.png";
+  private static final String WALL_FILE = "wall.png";
+  private static final String PLAYER_FILE = "player_left.png";
+
 	// Converts a world coordinate to a tile coordinate,
 	// and returns if that location is a blocked tile
 	public static boolean isBlocked(float x, float y) {
@@ -27,6 +37,7 @@ public class Loader {
 	 * @return
 	 */
 	public static Sprite[] loadSprites(String filename) {
+	  Sprite[] sprites = null;
 
 	  try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       int[] levelDimensions = readMapDimensions(br.readLine());
@@ -34,8 +45,11 @@ public class Loader {
       int yDimension = levelDimensions[Y_INDEX];
 
       String text;
-      while ((text = br.readLine()) != null) {
+      sprites = new Sprite[xDimension * yDimension];
+      int i = 0;
 
+      while ((text = br.readLine()) != null) {
+        sprites[i] = loadSprite(text);
       }
     } catch (IOException e) {
 	    e.printStackTrace();
@@ -43,7 +57,11 @@ public class Loader {
     return null;
 	}
 
-	/* Find the dimensions of the level we are reading from the first line of the .lvl file*/
+	/**
+	* Find the dimensions of the level we are reading from the first line of the .lvl file
+   * @param text
+   * @return
+	* */
 	private static int[] readMapDimensions(String text) {
 	  int[] levelDimensions = new int[NUM_DIMENSIONS];
     int separatorPosition = text.indexOf(COMMA_SEPARATOR);
@@ -53,5 +71,9 @@ public class Loader {
     /* Y dimension is the second number. We add 1 to end index as it is exclusive */
     levelDimensions[Y_INDEX] = Integer.parseInt(text.substring(COMMA_SEPARATOR, text.length() + 1));
 	  return levelDimensions;
+  }
+
+  private static Sprite loadSprite(String text) {
+    return null;
   }
 }
