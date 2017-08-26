@@ -48,7 +48,7 @@ public class Loader {
       String text;
 
       while ((text = br.readLine()) != null) {
-        sprites.add(loadSprite(text));
+        sprites.add(loadSprite(text, xDimension, yDimension));
       }
     } catch (IOException e) {
 	    e.printStackTrace();
@@ -58,7 +58,7 @@ public class Loader {
 	}
 
 	/**
-	 * Find the dimensions of the level we are reading from the first line of the .lvl file
+	 * Find the dimensions of the level we are reading from the first line of the .lvl file.
    * @param text The dimensions line of the .lvl file. Eg: 12,12
    * @return An array containing { xDimension, yDimension }
 	 */
@@ -78,7 +78,7 @@ public class Loader {
    * @param text The type, x coordinate, and y coordinate of the sprite. Eg:
    * @return A sprite instantiated at the specified x coordinate, y coordinate, and with the correct image.
    */
-  private static Sprite loadSprite(String text) {
+  private static Sprite loadSprite(String text, int xDimension, int yDimension) {
 	  final int TYPE_INDEX = 0;
 	  final int X_INDEX = 1;
 	  final int Y_INDEX = 2;
@@ -104,6 +104,8 @@ public class Loader {
       default:
         break;
     }
-    return new Sprite(filepath, Float.parseFloat(line[X_INDEX]), Float.parseFloat(line[Y_INDEX]));
+    return new Sprite(filepath,
+            Float.parseFloat(line[X_INDEX]) + xDimension,
+            Float.parseFloat(line[Y_INDEX]) + yDimension);
   }
 }
