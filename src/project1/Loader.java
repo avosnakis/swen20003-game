@@ -34,7 +34,7 @@ public class Loader {
   // and returns if that location is a blocked tile
   public static boolean isBlocked(float x, float y) {
     // Default to blocked
-    return true;
+    return false;
   }
 
   /**

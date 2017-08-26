@@ -6,10 +6,17 @@ import static project1.App.TILE_SIZE;
 
 public class Player {
 
-  private static final char UP = 'W';
-  private static final char DOWN = 'S';
-  private static final char LEFT = 'A';
-  private static final char RIGHT = 'D';
+  /**
+   * Commands for controlling the player.
+   * W is up
+   * S is down
+   * A is left
+   * D is right
+   * */
+  private static final char UP = Input.KEY_W;
+  private static final char DOWN = Input.KEY_S;
+  private static final char LEFT = Input.KEY_A;
+  private static final char RIGHT = Input.KEY_D;
 
   private Sprite playerSprite;
 
@@ -39,19 +46,29 @@ public class Player {
 
     switch (direction) {
       case UP:
-        currY += TILE_SIZE;
+        currY -= TILE_SIZE;
         break;
       case DOWN:
-        currY -= TILE_SIZE;
+        currY += TILE_SIZE;
         break;
       case LEFT:
         currX -= TILE_SIZE;
         break;
       case RIGHT:
-        currY += TILE_SIZE;
+        currX += TILE_SIZE;
         break;
       default:
+        System.exit(1);
         break;
     }
+
+    // If the next move is invalid, exit the method
+    if (Loader.isBlocked(currX, currY)) {
+      return;
+    }
+
+    // If all checks are passed, update the player's location
+    this.playerSprite.setxCoordinate(currX);
+    this.playerSprite.setyCoordinate(currY);
   }
 }
