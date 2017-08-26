@@ -1,15 +1,52 @@
 package project1;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
-public class Sprite {	
-	public Sprite(String image_src, float x, float y) {
+public class Sprite {
+
+  private String imageSource;
+  private Image image;
+
+	private float xCoordinate;
+	private float yCoordinate;
+
+	public Sprite(String imageSource, float x, float y) {
+	  this.xCoordinate = x;
+	  this.yCoordinate = y;
+
+	  this.imageSource = imageSource;
+
+	  try {
+      this.image = new Image(this.imageSource);
+    } catch (SlickException e) {
+	    e.printStackTrace();
+	    System.exit(1);
+    }
 	}
 	
 	public void update(Input input, int delta) {
 	}
 	
 	public void render(Graphics g) {
+	  g.drawImage(this.image, this.xCoordinate, this.yCoordinate);
 	}
+
+  public float getxCoordinate() {
+    return xCoordinate;
+  }
+
+  public void setxCoordinate(float xCoordinate) {
+    this.xCoordinate = xCoordinate;
+  }
+
+  public float getyCoordinate() {
+    return yCoordinate;
+  }
+
+  public void setyCoordinate(float yCoordinate) {
+    this.yCoordinate = yCoordinate;
+  }
 }
