@@ -17,9 +17,7 @@ public class Sprite {
     this.xCoordinate = x;
     this.yCoordinate = y;
     this.imageSource = imageSource;
-
-    System.out.println(this.imageSource);
-
+    
     try {
       this.image = new Image(this.imageSource);
       this.image.draw();
