@@ -58,9 +58,9 @@ public class Sprite {
   @Override
   public String toString() {
     return "Sprite{" +
-            "imageSource='" + imageSource + '\'' +
-            "xCoordinate='" + xCoordinate + '\'' +
-            "yCoordinate='" + yCoordinate + '\'' +
-            '}';
+        "imageSource='" + imageSource + '\'' +
+        "xCoordinate='" + xCoordinate + '\'' +
+        "yCoordinate='" + yCoordinate + '\'' +
+        '}';
   }
 }

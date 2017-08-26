@@ -108,7 +108,7 @@ public class Loader {
         break;
     }
     return new Sprite(filepath,
-            Float.parseFloat(line[X_INDEX]) + xDimension,
-            Float.parseFloat(line[Y_INDEX]) + yDimension);
+        Float.parseFloat(line[X_INDEX]) + xDimension,
+        Float.parseFloat(line[Y_INDEX]) + yDimension);
   }
 }
