@@ -22,17 +22,17 @@ public class Sprite {
 
     try {
       this.image = new Image(this.imageSource);
-      this.image.draw();
     } catch (SlickException e) {
       e.printStackTrace();
       System.exit(1);
     }
   }
 
-  //TODO
+  //TODO Later. This is not required at this stage of the project.
   public void update(Input input, int delta) {
   }
 
+  /** Draws this sprite to the screen. */
   public void render(Graphics g) {
     g.drawImage(this.image, this.xCoordinate, this.yCoordinate);
   }
@@ -55,10 +55,6 @@ public class Sprite {
 
   public String getSpriteType() {
     return spriteType;
-  }
-
-  public void setSpriteType(String spriteType) {
-    this.spriteType = spriteType;
   }
 
   @Override

@@ -21,7 +21,7 @@ public class Loader {
   /**
    * Resource file paths. File paths in Java are OS-agnostic, so standard Unix file paths were used.
    * In the case of RESOURCE_PATH, the project working directory is the top level of the project, so
-   * we use. to quickly access the resources folder.
+   * we use . to use relative paths.
    */
   private static final String RESOURCE_PATH = "./res/";
   private static final String STONE_FILE = "stone.png";
@@ -30,8 +30,13 @@ public class Loader {
   private static final String WALL_FILE = "wall.png";
   private static final String PLAYER_FILE = "player_left.png";
 
-  // Converts a world coordinate to a tile coordinate,
-  // and returns if that location is a blocked tile
+  /**
+   * Checks if a tile is a valid position to move to, and returns true if it is.
+   *
+   * @param x The x-coordinate of the tile to be checked.
+   * @param y The y-coordinate of the tile to be checked.
+   * @return True if the tile is valid to move to, false if it isn't.
+   * */
   public static boolean isBlocked(float x, float y) {
     // Default to blocked
     return false;
