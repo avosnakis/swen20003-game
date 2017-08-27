@@ -30,9 +30,9 @@ public class Player {
   public Player(Sprite playerSprite) {
     this.playerSprite = playerSprite;
 
-    // Set the player's x and y coordinates to the center of its sprite
-    this.playerX = this.playerSprite.getxCoordinate() - (TILE_SIZE / 2);
-    this.playerY = this.playerSprite.getyCoordinate() - (TILE_SIZE / 2);
+    // Set the player's x and y coordinates to the center of its sprite. This is for collision checking later.
+    this.playerX = this.playerSprite.getxCoordinate() + (TILE_SIZE / 2);
+    this.playerY = this.playerSprite.getyCoordinate() + (TILE_SIZE / 2);
   }
 
   /**
@@ -98,9 +98,5 @@ public class Player {
 
     this.playerX = currentPlayerX;
     this.playerY = currentPlayerY;
-  }
-
-  public Sprite getPlayerSprite() {
-    return playerSprite;
   }
 }

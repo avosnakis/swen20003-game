@@ -1,5 +1,6 @@
 package project1;
 
+import org.lwjgl.Sys;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Graphics;

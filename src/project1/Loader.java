@@ -38,12 +38,19 @@ public class Loader {
    * @return True if the tile is valid to move to, false if it isn't.
    * */
   public static boolean isBlocked(float x, float y, Sprite[] levelSprites) {
+    // Handle for the player somehow attempting to move offscreen
+    if (x < 0 || x > SCREEN_WIDTH || y < 0 || y > SCREEN_HEIGHT) {
+      return false;
+    }
+    // Iterate over every sprite in the level until we find the non-player sprite that the player will next occupy,
+    // and then check if it is a wall
     for (Sprite sprite : levelSprites) {
       String spriteType = sprite.getSpriteType();
       if (sprite.pointIsInside(x, y) && !spriteType.equals("player")) {
         return spriteType.equals("wall");
       }
     }
+    // If we check every sprite, return false by default
     return false;
   }
 
@@ -63,8 +70,8 @@ public class Loader {
       int xOffset = (SCREEN_WIDTH - (levelDimensions[X_DIMENSION_INDEX] * TILE_SIZE)) / 2;
       int yOffset = (SCREEN_HEIGHT - (levelDimensions[Y_DIMENSION_INDEX] * TILE_SIZE)) / 2;
 
+      // We assume there is one sprite's information per line
       String text;
-
       while ((text = br.readLine()) != null) {
         sprites.add(loadSprite(text, xOffset, yOffset));
       }
