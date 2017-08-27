@@ -39,6 +39,7 @@ public class Player {
    * Handle all player inputs. Checks up, down, left, and right inputs.
    * */
   public void update(Input input, Sprite[] levelSprites) {
+    // Check each of the directions to see if the player will move
     this.handlePlayerInput(UP, input, levelSprites);
     this.handlePlayerInput(DOWN, input, levelSprites);
     this.handlePlayerInput(LEFT, input, levelSprites);
@@ -92,10 +93,11 @@ public class Player {
       return;
     }
 
-    // Update the player's location once both checks are passed
+    // Update the player sprite location once both checks are passed
     this.playerSprite.setxCoordinate(currentSpriteX);
     this.playerSprite.setyCoordinate(currentSpriteY);
 
+    // Update the player's location
     this.playerX = currentPlayerX;
     this.playerY = currentPlayerY;
   }

@@ -7,7 +7,13 @@ import java.util.ArrayList;
 
 public class World {
 
+  /**
+   * Array containing all sprites in the current level.
+   * */
   private Sprite[] sprites;
+  /**
+   * The player character.
+   * */
   private Player player;
 
   private static String levelFile = "./res/levels/0.lvl";
@@ -33,7 +39,6 @@ public class World {
       sprite.render(g);
     }
   }
-
 
   /** Returns the index of the player sprite.
    *

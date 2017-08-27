@@ -10,10 +10,23 @@ import static project1.App.TILE_SIZE;
 
 public class Sprite {
 
+  /**
+   * The type of object this sprite represents in-game.
+   * */
   private String spriteType;
+
+  /**
+   * The filepath for the sprite's image.
+   * */
   private String imageSource;
+  /**
+   * The actual sprite image.
+   * */
   private Image image;
 
+  /**
+   * The sprite's X and Y coordinates.
+   * */
   private float xCoordinate;
   private float yCoordinate;
 
@@ -48,9 +61,11 @@ public class Sprite {
    * @return True if it lies inside the sprite, false otherwise.
    * */
   public boolean pointIsInside(float x, float y) {
+    // x values increase as you move right across the window
     float leftEdge = this.getxCoordinate();
     float rightEdge = this.getxCoordinate() + TILE_SIZE;
 
+    // y values increase as you move down the window
     float topEdge = this.getyCoordinate();
     float bottomEdge = this.getyCoordinate() + TILE_SIZE;
 
