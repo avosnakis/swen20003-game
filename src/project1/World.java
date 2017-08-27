@@ -3,6 +3,8 @@ package project1;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
+import java.util.ArrayList;
+
 public class World {
 
   private Sprite[] sprites;
@@ -22,7 +24,7 @@ public class World {
 
   /** Passes all inputs to the player so it can be processed. */
   public void update(Input input, int delta) {
-    this.player.update(input);
+    this.player.update(input, this.sprites);
   }
 
   /** Draws all sprites to the screen. */
@@ -32,10 +34,11 @@ public class World {
     }
   }
 
+
   /** Returns the index of the player sprite.
    *
    * @param sprites An array of all sprites.
-   * @return i The index of the player sprite, or -1 if it wasn't found. */
+   * @return The index of the player sprite, or -1 if it wasn't found. */
   private static int indexOfPlayerSprite(Sprite[] sprites) {
     for (int i = 0; i < sprites.length; i++) {
       if (sprites[i].getSpriteType().equals("player")) {

@@ -24,19 +24,25 @@ public class Player {
   private static final char RIGHT = Input.KEY_D;
 
   private Sprite playerSprite;
+  private float playerX;
+  private float playerY;
 
   public Player(Sprite playerSprite) {
     this.playerSprite = playerSprite;
+
+    // Set the player's x and y coordinates to the center of its sprite
+    this.playerX = this.playerSprite.getxCoordinate() - (TILE_SIZE / 2);
+    this.playerY = this.playerSprite.getyCoordinate() - (TILE_SIZE / 2);
   }
 
   /**
    * Handle all player inputs. Checks up, down, left, and right inputs.
    * */
-  public void update(Input input) {
-    this.handlePlayerInput(UP, input);
-    this.handlePlayerInput(DOWN, input);
-    this.handlePlayerInput(LEFT, input);
-    this.handlePlayerInput(RIGHT, input);
+  public void update(Input input, Sprite[] levelSprites) {
+    this.handlePlayerInput(UP, input, levelSprites);
+    this.handlePlayerInput(DOWN, input, levelSprites);
+    this.handlePlayerInput(LEFT, input, levelSprites);
+    this.handlePlayerInput(RIGHT, input, levelSprites);
   }
 
   /**
@@ -46,28 +52,35 @@ public class Player {
    * @param direction The key to check if had been pressed, and if so, to attempt to move the player based on that key.
    * @param input The input object, which contains information on whether the specified key had been pressed.
    * */
-  private void handlePlayerInput(char direction, Input input) {
+  private void handlePlayerInput(char direction, Input input, Sprite[] levelSprites) {
     // Exit the method early if the specified key has not been pressed.
     if (!input.isKeyPressed(direction)) {
       return;
     }
 
-    float currX = this.playerSprite.getxCoordinate();
-    float currY = this.playerSprite.getyCoordinate();
+    float currentSpriteX = this.playerSprite.getxCoordinate();
+    float currentSpriteY = this.playerSprite.getyCoordinate();
+
+    float currentPlayerX = this.playerX;
+    float currentPlayerY = this.playerY;
 
     // Adjust locations based on the direction the player is attempting to move in
     switch (direction) {
       case UP:
-        currY -= TILE_SIZE;
+        currentPlayerY -= TILE_SIZE;
+        currentSpriteY -= TILE_SIZE;
         break;
       case DOWN:
-        currY += TILE_SIZE;
+        currentPlayerY += TILE_SIZE;
+        currentSpriteY += TILE_SIZE;
         break;
       case LEFT:
-        currX -= TILE_SIZE;
+        currentPlayerX -= TILE_SIZE;
+        currentSpriteX -= TILE_SIZE;
         break;
       case RIGHT:
-        currX += TILE_SIZE;
+        currentPlayerX += TILE_SIZE;
+        currentSpriteX += TILE_SIZE;
         break;
       default:
         System.exit(1);
@@ -75,12 +88,19 @@ public class Player {
     }
 
     // If the next set of coordinates is invalid, exit the method
-    if (Loader.isBlocked(currX, currY)) {
+    if (Loader.isBlocked(currentPlayerX, currentPlayerY, levelSprites)) {
       return;
     }
 
     // Update the player's location once both checks are passed
-    this.playerSprite.setxCoordinate(currX);
-    this.playerSprite.setyCoordinate(currY);
+    this.playerSprite.setxCoordinate(currentSpriteX);
+    this.playerSprite.setyCoordinate(currentSpriteY);
+
+    this.playerX = currentPlayerX;
+    this.playerY = currentPlayerY;
+  }
+
+  public Sprite getPlayerSprite() {
+    return playerSprite;
   }
 }

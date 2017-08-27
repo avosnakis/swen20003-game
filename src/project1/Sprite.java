@@ -5,6 +5,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import static project1.App.TILE_SIZE;
+
 public class Sprite {
 
   private String spriteType;
@@ -37,8 +39,25 @@ public class Sprite {
     g.drawImage(this.image, this.xCoordinate, this.yCoordinate);
   }
 
+  /**
+   * Determines whether an (x,y) coordinate lies inside a sprite.
+   *
+   * @param x The x-coordinate to be checked.
+   * @param y The y-coordinate to be checked.
+   * @return True if it lies inside the sprite, false otherwise.
+   * */
+  public boolean pointIsInside(float x, float y) {
+    float leftEdge = this.getxCoordinate();
+    float rightEdge = this.getxCoordinate() + TILE_SIZE;
+
+    float topEdge = this.getyCoordinate();
+    float bottomEdge = this.getyCoordinate() + TILE_SIZE;
+
+    return (leftEdge < x) && (x < rightEdge) && (topEdge < y) && (y < bottomEdge);
+  }
+
   public float getxCoordinate() {
-    return xCoordinate;
+    return this.xCoordinate;
   }
 
   public void setxCoordinate(float xCoordinate) {
@@ -46,7 +65,7 @@ public class Sprite {
   }
 
   public float getyCoordinate() {
-    return yCoordinate;
+    return this.yCoordinate;
   }
 
   public void setyCoordinate(float yCoordinate) {
@@ -54,7 +73,7 @@ public class Sprite {
   }
 
   public String getSpriteType() {
-    return spriteType;
+    return this.spriteType;
   }
 
   @Override

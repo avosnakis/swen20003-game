@@ -44,7 +44,7 @@ public class App extends BasicGame {
   /**
    * Update the game state for a frame.
    *
-   * @param gc    The Slick game container object.
+   * @param gc The Slick game container object.
    * @param delta Time passed since last frame (milliseconds).
    */
   @Override
@@ -58,7 +58,7 @@ public class App extends BasicGame {
    * Render the entire screen, so it reflects the current game state.
    *
    * @param gc The Slick game container object.
-   * @param g  The Slick graphics object, used for drawing.
+   * @param g The Slick graphics object, used for drawing.
    */
   public void render(GameContainer gc, Graphics g) throws SlickException {
     world.render(g);

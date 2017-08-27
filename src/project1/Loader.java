@@ -37,8 +37,13 @@ public class Loader {
    * @param y The y-coordinate of the tile to be checked.
    * @return True if the tile is valid to move to, false if it isn't.
    * */
-  public static boolean isBlocked(float x, float y) {
-    // Default to blocked
+  public static boolean isBlocked(float x, float y, Sprite[] levelSprites) {
+    for (Sprite sprite : levelSprites) {
+      String spriteType = sprite.getSpriteType();
+      if (sprite.pointIsInside(x, y) && !spriteType.equals("player")) {
+        return spriteType.equals("wall");
+      }
+    }
     return false;
   }
 
@@ -54,6 +59,7 @@ public class Loader {
 
     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       int[] levelDimensions = readMapDimensions(br.readLine());
+      // Calculate the offset to centre the level in the middle of the window
       int xOffset = (SCREEN_WIDTH - (levelDimensions[X_DIMENSION_INDEX] * TILE_SIZE)) / 2;
       int yOffset = (SCREEN_HEIGHT - (levelDimensions[Y_DIMENSION_INDEX] * TILE_SIZE)) / 2;
 
