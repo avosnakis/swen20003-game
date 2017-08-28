@@ -18,21 +18,22 @@ public class Sprite {
 
   /**
    * The type of object this sprite represents in-game.
-   * */
+   */
   private String spriteType;
 
   /**
    * The filepath for the sprite's image.
-   * */
+   */
   private String imageSource;
+
   /**
    * The actual sprite image.
-   * */
+   */
   private Image image;
 
   /**
    * The sprite's X and Y coordinates.
-   * */
+   */
   private float xCoordinate;
   private float yCoordinate;
 
@@ -65,12 +66,14 @@ public class Sprite {
    *
    * @param input The Slick user input object.
    * @param delta Time passed since the last frame (milliseconds).
-   * */
+   */
   public void update(Input input, int delta) {
     // TODO Later. This is not required at this stage of the project.
   }
 
-  /** Draws this sprite to the screen. */
+  /**
+   * Draws this sprite to the screen.
+   */
   public void render(Graphics g) {
     g.drawImage(this.image, this.xCoordinate, this.yCoordinate);
   }
@@ -81,7 +84,7 @@ public class Sprite {
    * @param x The x-coordinate to be checked.
    * @param y The y-coordinate to be checked.
    * @return True if it lies inside the sprite, false otherwise.
-   * */
+   */
   public boolean pointIsInside(float x, float y) {
     // x values increase as you move right across the window
     float leftEdge = this.getxCoordinate();
@@ -98,7 +101,7 @@ public class Sprite {
    * Increments the position of a sprite by one tile in the specified direction.
    *
    * @param direction The Slick key code for the direction being moved in.
-   * */
+   */
   public void incrementByOneTile(char direction) {
     switch (direction) {
       case UP:
@@ -118,6 +121,25 @@ public class Sprite {
         break;
     }
   }
+
+  /**
+   * Determines whether this instance of a sprite is a wall.
+   *
+   * @return True if it is a wall, false otherwise.
+   */
+  public boolean isWall() {
+    return this.spriteType.equals("wall");
+  }
+
+  /**
+   * Determines whether this instance of a sprite is a player.
+   *
+   * @return True if it is a player, false otherwise.
+   */
+  public boolean isPlayer() {
+    return this.spriteType.equals("player");
+  }
+
   public float getxCoordinate() {
     return this.xCoordinate;
   }
@@ -126,11 +148,4 @@ public class Sprite {
     return this.yCoordinate;
   }
 
-  public boolean isWall() {
-    return this.spriteType.equals("wall");
-  }
-
-  public boolean isPlayer() {
-    return this.spriteType.equals("player");
-  }
 }

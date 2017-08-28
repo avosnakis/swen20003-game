@@ -7,7 +7,7 @@ import static project1.App.TILE_SIZE;
 /**
  * Class for controlling the player character.
  * Handles movement of the player sprite, and game controls.
- * */
+ */
 public class Player {
 
   /**
@@ -16,7 +16,7 @@ public class Player {
    * S is down.
    * A is left.
    * D is right.
-   * */
+   */
   protected static final char UP = Input.KEY_W;
   protected static final char DOWN = Input.KEY_S;
   protected static final char LEFT = Input.KEY_A;
@@ -45,7 +45,7 @@ public class Player {
 
   /**
    * Handle all player inputs. Checks up, down, left, and right inputs.
-   * */
+   */
   public void update(Input input, Sprite[] levelSprites) {
     // Check each of the directions to see if the player will move
     this.handlePlayerInput(UP, input, levelSprites);
@@ -59,8 +59,8 @@ public class Player {
    * game state and the key pressed.
    *
    * @param direction The key to check if had been pressed, and if so, to attempt to move the player based on that key.
-   * @param input The input object, which contains information on whether the specified key had been pressed.
-   * */
+   * @param input     The input object, which contains information on whether the specified key had been pressed.
+   */
   private void handlePlayerInput(char direction, Input input, Sprite[] levelSprites) {
     // Exit the method early if the specified key has not been pressed.
     if (!input.isKeyPressed(direction)) {

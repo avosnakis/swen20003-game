@@ -1,7 +1,5 @@
 package project1;
 
-import org.lwjgl.Sys;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
