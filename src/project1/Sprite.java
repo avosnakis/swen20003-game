@@ -1,6 +1,5 @@
 package project1;
 
-import org.lwjgl.Sys;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Graphics;
@@ -12,7 +11,6 @@ import static project1.Player.LEFT;
 import static project1.Player.RIGHT;
 
 import static project1.App.TILE_SIZE;
-
 
 public class Sprite {
 
