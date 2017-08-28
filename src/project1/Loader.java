@@ -22,7 +22,7 @@ public class Loader {
    * Resource file paths. File paths in Java are OS-agnostic, so standard Unix file paths were used.
    * In the case of RESOURCE_PATH, the project working directory is the top level of the project, so
    * we use . to use relative paths.
-   */
+   * */
   private static final String RESOURCE_PATH = "./res/";
   private static final String STONE_FILE = "stone.png";
   private static final String FLOOR_FILE = "floor.png";
@@ -58,7 +58,7 @@ public class Loader {
    *
    * @param filename The .lvl we are reading.
    * @return An array of all sprites in this level.
-   */
+   * */
   public static Sprite[] loadSprites(String filename) {
     // Use an ArrayList to initially load data as it is dynamic
     ArrayList<Sprite> sprites = new ArrayList<>();
@@ -86,7 +86,7 @@ public class Loader {
    *
    * @param text The dimensions line of the .lvl file. Eg: 12,12
    * @return An array containing { xDimension, yDimension }
-   */
+   * */
   private static int[] readMapDimensions(String text) {
     final int NUM_DIMENSIONS = 2;
 
@@ -103,7 +103,7 @@ public class Loader {
    *
    * @param text The type, x coordinate, and y coordinate of the sprite. Eg: wall,5,5
    * @return A sprite instantiated at the specified x coordinate, y coordinate, and with the correct image.
-   */
+   * */
   private static Sprite loadSprite(String text, int xOffset, int yOffset) {
     final int TYPE_INDEX = 0;
     final int X_INDEX = 1;

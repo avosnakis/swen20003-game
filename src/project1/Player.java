@@ -4,7 +4,6 @@ import org.newdawn.slick.Input;
 
 import static project1.App.TILE_SIZE;
 
-
 /**
  * Class for controlling the player character.
  * Handles movement of the player sprite, and game controls.

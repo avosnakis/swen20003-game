@@ -3,8 +3,9 @@ package project1;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-import java.util.ArrayList;
-
+/**
+ * Class containing all data for the current level of the game.
+ * */
 public class World {
 
   /**
@@ -43,7 +44,8 @@ public class World {
   /** Returns the index of the player sprite.
    *
    * @param sprites An array of all sprites.
-   * @return The index of the player sprite, or -1 if it wasn't found. */
+   * @return The index of the player sprite, or -1 if it wasn't found.
+   * */
   private static int indexOfPlayerSprite(Sprite[] sprites) {
     for (int i = 0; i < sprites.length; i++) {
       if (sprites[i].isPlayer()) {

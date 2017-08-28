@@ -50,8 +50,18 @@ public class Sprite {
     }
   }
 
-  //TODO Later. This is not required at this stage of the project.
+  @Override
+  public String toString() {
+    return "Sprite{" +
+        "spriteType='" + this.spriteType + '\'' +
+        ", imageSource='" + this.imageSource + '\'' +
+        ", xCoordinate='" + this.xCoordinate + '\'' +
+        ", yCoordinate='" + this.yCoordinate + '\'' +
+        '}';
+  }
+
   public void update(Input input, int delta) {
+    // TODO Later. This is not required at this stage of the project.
   }
 
   /** Draws this sprite to the screen. */
@@ -97,7 +107,7 @@ public class Sprite {
   /**
    * Increments the position of a sprite by one tile in the specified direction.
    *
-   * @param direction The Slick key code for the
+   * @param direction The Slick key code for the direction being moved in.
    * */
   public void incrementByOneTile(char direction) {
     switch (direction) {
@@ -117,15 +127,5 @@ public class Sprite {
         System.exit(1);
         break;
     }
-  }
-
-  @Override
-  public String toString() {
-    return "Sprite{" +
-        "spriteType='" + this.spriteType + '\'' +
-        ", imageSource='" + this.imageSource + '\'' +
-        ", xCoordinate='" + this.xCoordinate + '\'' +
-        ", yCoordinate='" + this.yCoordinate + '\'' +
-        '}';
   }
 }
