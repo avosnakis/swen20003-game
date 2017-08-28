@@ -18,10 +18,10 @@ public class Player {
    * A is left.
    * D is right.
    * */
-  private static final char UP = Input.KEY_W;
-  private static final char DOWN = Input.KEY_S;
-  private static final char LEFT = Input.KEY_A;
-  private static final char RIGHT = Input.KEY_D;
+  protected static final char UP = Input.KEY_W;
+  protected static final char DOWN = Input.KEY_S;
+  protected static final char LEFT = Input.KEY_A;
+  protected static final char RIGHT = Input.KEY_D;
 
   private Sprite playerSprite;
   private float playerX;
@@ -59,9 +59,6 @@ public class Player {
       return;
     }
 
-    float currentSpriteX = this.playerSprite.getxCoordinate();
-    float currentSpriteY = this.playerSprite.getyCoordinate();
-
     float currentPlayerX = this.playerX;
     float currentPlayerY = this.playerY;
 
@@ -69,19 +66,15 @@ public class Player {
     switch (direction) {
       case UP:
         currentPlayerY -= TILE_SIZE;
-        currentSpriteY -= TILE_SIZE;
         break;
       case DOWN:
         currentPlayerY += TILE_SIZE;
-        currentSpriteY += TILE_SIZE;
         break;
       case LEFT:
         currentPlayerX -= TILE_SIZE;
-        currentSpriteX -= TILE_SIZE;
         break;
       case RIGHT:
         currentPlayerX += TILE_SIZE;
-        currentSpriteX += TILE_SIZE;
         break;
       default:
         System.exit(1);
@@ -94,8 +87,7 @@ public class Player {
     }
 
     // Update the player sprite location once both checks are passed
-    this.playerSprite.setxCoordinate(currentSpriteX);
-    this.playerSprite.setyCoordinate(currentSpriteY);
+    this.playerSprite.incrementByOneTile(direction);
 
     // Update the player's location
     this.playerX = currentPlayerX;

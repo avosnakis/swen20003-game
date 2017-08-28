@@ -6,7 +6,13 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import static project1.Player.UP;
+import static project1.Player.DOWN;
+import static project1.Player.LEFT;
+import static project1.Player.RIGHT;
+
 import static project1.App.TILE_SIZE;
+
 
 public class Sprite {
 
@@ -90,6 +96,31 @@ public class Sprite {
 
   public String getSpriteType() {
     return this.spriteType;
+  }
+
+  /**
+   * Increments the position of a sprite by one tile in the specified direction.
+   *
+   * @param direction The Slick key code for the
+   * */
+  public void incrementByOneTile(char direction) {
+    switch (direction) {
+      case UP:
+        this.yCoordinate -= TILE_SIZE;
+        break;
+      case DOWN:
+        this.yCoordinate += TILE_SIZE;
+        break;
+      case LEFT:
+        this.xCoordinate -= TILE_SIZE;
+        break;
+      case RIGHT:
+        this.xCoordinate += TILE_SIZE;
+        break;
+      default:
+        System.exit(1);
+        break;
+    }
   }
 
   @Override
