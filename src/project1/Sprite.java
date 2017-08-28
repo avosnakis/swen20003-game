@@ -82,20 +82,16 @@ public class Sprite {
     return this.xCoordinate;
   }
 
-  public void setxCoordinate(float xCoordinate) {
-    this.xCoordinate = xCoordinate;
-  }
-
   public float getyCoordinate() {
     return this.yCoordinate;
   }
 
-  public void setyCoordinate(float yCoordinate) {
-    this.yCoordinate = yCoordinate;
+  public boolean isWall() {
+    return this.spriteType.equals("wall");
   }
 
-  public String getSpriteType() {
-    return this.spriteType;
+  public boolean isPlayer() {
+    return this.spriteType.equals("player");
   }
 
   /**
@@ -126,9 +122,10 @@ public class Sprite {
   @Override
   public String toString() {
     return "Sprite{" +
-        "imageSource='" + imageSource + '\'' +
-        "xCoordinate='" + xCoordinate + '\'' +
-        "yCoordinate='" + yCoordinate + '\'' +
+        "spriteType='" + this.spriteType + '\'' +
+        ", imageSource='" + this.imageSource + '\'' +
+        ", xCoordinate='" + this.xCoordinate + '\'' +
+        ", yCoordinate='" + this.yCoordinate + '\'' +
         '}';
   }
 }

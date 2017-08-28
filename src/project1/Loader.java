@@ -45,9 +45,8 @@ public class Loader {
     // Iterate over every sprite in the level until we find the non-player sprite that the player will next occupy,
     // and then check if it is a wall
     for (Sprite sprite : levelSprites) {
-      String spriteType = sprite.getSpriteType();
-      if (sprite.pointIsInside(x, y) && !spriteType.equals("player")) {
-        return spriteType.equals("wall");
+      if (sprite.pointIsInside(x, y) && !sprite.isPlayer()) {
+        return sprite.isWall();
       }
     }
     // If we check every sprite, return false by default
@@ -102,7 +101,7 @@ public class Loader {
   /**
    * Load a single sprite from a line in the .lvl file.
    *
-   * @param text The type, x coordinate, and y coordinate of the sprite. Eg:
+   * @param text The type, x coordinate, and y coordinate of the sprite. Eg: wall,5,5
    * @return A sprite instantiated at the specified x coordinate, y coordinate, and with the correct image.
    */
   private static Sprite loadSprite(String text, int xOffset, int yOffset) {

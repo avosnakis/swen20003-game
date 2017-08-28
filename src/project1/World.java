@@ -46,7 +46,7 @@ public class World {
    * @return The index of the player sprite, or -1 if it wasn't found. */
   private static int indexOfPlayerSprite(Sprite[] sprites) {
     for (int i = 0; i < sprites.length; i++) {
-      if (sprites[i].getSpriteType().equals("player")) {
+      if (sprites[i].isPlayer()) {
         return i;
       }
     }

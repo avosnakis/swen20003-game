@@ -35,6 +35,15 @@ public class Player {
     this.playerY = this.playerSprite.getyCoordinate() + (TILE_SIZE / 2);
   }
 
+  @Override
+  public String toString() {
+    return "Player{" +
+        "playerSprite=" + this.playerSprite +
+        ", playerX=" + this.playerX +
+        ", playerY=" + this.playerY +
+        '}';
+  }
+
   /**
    * Handle all player inputs. Checks up, down, left, and right inputs.
    * */
