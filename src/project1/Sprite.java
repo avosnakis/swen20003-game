@@ -60,6 +60,12 @@ public class Sprite {
         '}';
   }
 
+  /**
+   * Update a sprite based on user input.
+   *
+   * @param input The Slick user input object.
+   * @param delta Time passed since the last frame (milliseconds).
+   * */
   public void update(Input input, int delta) {
     // TODO Later. This is not required at this stage of the project.
   }
@@ -88,22 +94,6 @@ public class Sprite {
     return (leftEdge < x) && (x < rightEdge) && (topEdge < y) && (y < bottomEdge);
   }
 
-  public float getxCoordinate() {
-    return this.xCoordinate;
-  }
-
-  public float getyCoordinate() {
-    return this.yCoordinate;
-  }
-
-  public boolean isWall() {
-    return this.spriteType.equals("wall");
-  }
-
-  public boolean isPlayer() {
-    return this.spriteType.equals("player");
-  }
-
   /**
    * Increments the position of a sprite by one tile in the specified direction.
    *
@@ -127,5 +117,20 @@ public class Sprite {
         System.exit(1);
         break;
     }
+  }
+  public float getxCoordinate() {
+    return this.xCoordinate;
+  }
+
+  public float getyCoordinate() {
+    return this.yCoordinate;
+  }
+
+  public boolean isWall() {
+    return this.spriteType.equals("wall");
+  }
+
+  public boolean isPlayer() {
+    return this.spriteType.equals("player");
   }
 }
