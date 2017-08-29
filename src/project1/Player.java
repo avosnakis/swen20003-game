@@ -17,10 +17,10 @@ public class Player {
    * A is left.
    * D is right.
    */
-  protected static final char UP = Input.KEY_W;
-  protected static final char DOWN = Input.KEY_S;
-  protected static final char LEFT = Input.KEY_A;
-  protected static final char RIGHT = Input.KEY_D;
+  public static final char UP = Input.KEY_W;
+  public static final char DOWN = Input.KEY_S;
+  public static final char LEFT = Input.KEY_A;
+  public static final char RIGHT = Input.KEY_D;
 
   private Sprite playerSprite;
   private float playerX;
