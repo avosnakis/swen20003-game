@@ -66,7 +66,7 @@ public class World {
     this.grid = new Tile[xDimension][yDimension][HEIGHT];
 
     for (Sprite sprite : sprites) {
-      this.createTile(sprite, xOffset, yOffset, xDimension, yDimension);
+      this.createTile(sprite);
     }
   }
 
@@ -104,12 +104,8 @@ public class World {
    * Instantiates a tile of the specified type and places it at the appropriate place in the grid.
    *
    * @param sprite     The sprite for the tile being created.
-   * @param xOffset    The screen offset in the x direction for the current world.
-   * @param yOffset    The screen offset in the y direction for the current world.
-   * @param xDimension The number of cells in the x direction for the current world.
-   * @param yDimension The number of cells in the y direction for the current world.
    */
-  private void createTile(Sprite sprite, float xOffset, float yOffset, int xDimension, int yDimension) {
+  private void createTile(Sprite sprite) {
     int xCell = sprite.getxCell();
     int yCell = sprite.getyCell();
 
