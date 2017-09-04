@@ -15,7 +15,6 @@ import project1.tiles.Target;
 
 import static project1.App.SCREEN_HEIGHT;
 import static project1.App.SCREEN_WIDTH;
-import static project1.App.TILE_SIZE;
 
 
 /**
@@ -33,6 +32,9 @@ public class World {
    */
   private Player player;
 
+  /**
+   * Path to the level file. TODO Ask what we're supposed to do with this.
+   */
   private static String levelFile = "./res/levels/0.lvl";
 
   /**
@@ -44,7 +46,7 @@ public class World {
     final int NUM_DIMENSIONS = 2;
 
     // For now, assume there can be a maximum of 5 tiles at a single (x,y) coordinate.
-    final int height = 5;
+    final int HEIGHT = 5;
 
     Sprite[] sprites = Loader.loadSprites(levelFile);
     int[] dimensions = new int[NUM_DIMENSIONS];
@@ -61,7 +63,7 @@ public class World {
     int xOffset = Loader.offset(xDimension, SCREEN_WIDTH);
     int yOffset = Loader.offset(yDimension, SCREEN_HEIGHT);
 
-    this.grid = new Tile[xDimension][yDimension][height];
+    this.grid = new Tile[xDimension][yDimension][HEIGHT];
 
     for (Sprite sprite : sprites) {
       this.createTile(sprite, xOffset, yOffset, xDimension, yDimension);

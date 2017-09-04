@@ -2,6 +2,7 @@ package project1.tiles;
 
 import project1.Sprite;
 
+
 /**
  * Class for the stone tile.
  */

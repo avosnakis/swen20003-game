@@ -9,6 +9,7 @@ import static project1.App.TILE_SIZE;
 import static project1.App.SCREEN_HEIGHT;
 import static project1.App.SCREEN_WIDTH;
 
+
 public class Loader {
 
   private static final int X_DIMENSION_INDEX = 0;

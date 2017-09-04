@@ -4,6 +4,7 @@ import org.newdawn.slick.Graphics;
 
 import project1.Sprite;
 
+
 /**
  * Abstract superclass for all world tiles.
  */

@@ -12,6 +12,7 @@ import static project1.Player.RIGHT;
 
 import static project1.App.TILE_SIZE;
 
+
 /**
  * Class for the sprites.
  * Records the sprite's image, type, coordinates on the window and coordinates in the world grid.

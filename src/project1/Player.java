@@ -5,6 +5,7 @@ import org.newdawn.slick.Input;
 
 import project1.tiles.Tile;
 
+
 /**
  * Class for controlling the player character.
  * Handles movement of the player sprite, and game controls.
