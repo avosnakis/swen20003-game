@@ -28,9 +28,9 @@ public class World {
   private Tile[][][] grid;
 
   /**
-   * The player character.
+   * The playerCharacter character.
    */
-  private Player player;
+  private PlayerCharacter playerCharacter;
 
   /**
    * Path to the level file. TODO Ask what we're supposed to do with this.
@@ -38,14 +38,14 @@ public class World {
   private static String levelFile = "./res/levels/0.lvl";
 
   /**
-   * Instantiate a world populated with tiles and a player.
+   * Instantiate a world populated with tiles and a playerCharacter.
    */
   public World() {
     final int X_DIMENSION_INDEX = 0;
     final int Y_DIMENSION_INDEX = 1;
     final int NUM_DIMENSIONS = 2;
 
-    // For now, assume there can be a maximum of 5 tiles at a single (x,y) coordinate.
+    // For now, assume there can be a maximum of 5 tiles (not including the playerCharacter) at a single (x,y) coordinate.
     final int HEIGHT = 5;
 
     Sprite[] sprites = Loader.loadSprites(levelFile);
@@ -71,13 +71,13 @@ public class World {
   }
 
   /**
-   * Passes all inputs to the player so it can be processed.
+   * Passes all inputs to the playerCharacter so it can be processed.
    *
    * @param input The Slick user input object.
    * @param delta Time passed since the last frame (milliseconds).
    */
   public void update(Input input, int delta) {
-    this.player.update(input, this.grid);
+    this.playerCharacter.update(input, this.grid);
   }
 
   /**
@@ -96,8 +96,8 @@ public class World {
         }
       }
     }
-    // Render the player last
-    this.player.render(g);
+    // Render the playerCharacter last
+    this.playerCharacter.render(g);
   }
 
   /**
@@ -128,7 +128,7 @@ public class World {
         tile = new Target(sprite, xCell, yCell);
         break;
       case "player":
-        this.player = new Player(sprite, xCell, yCell);
+        this.playerCharacter = new PlayerCharacter(sprite, xCell, yCell);
         break;
       default:
         System.exit(1);

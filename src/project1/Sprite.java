@@ -5,10 +5,10 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import static project1.Player.UP;
-import static project1.Player.DOWN;
-import static project1.Player.LEFT;
-import static project1.Player.RIGHT;
+import static project1.PlayerCharacter.UP;
+import static project1.PlayerCharacter.DOWN;
+import static project1.PlayerCharacter.LEFT;
+import static project1.PlayerCharacter.RIGHT;
 
 import static project1.App.TILE_SIZE;
 

@@ -10,7 +10,7 @@ import project1.tiles.Tile;
  * Class for controlling the player character.
  * Handles movement of the player sprite, and game controls.
  */
-public class Player {
+public class PlayerCharacter {
 
   /**
    * Commands for controlling the player.
@@ -29,7 +29,7 @@ public class Player {
   private int playerX;
   private int playerY;
 
-  public Player(Sprite playerSprite, int playerX, int playerY) {
+  public PlayerCharacter(Sprite playerSprite, int playerX, int playerY) {
     this.playerSprite = playerSprite;
 
     this.playerX = playerX;
@@ -38,7 +38,7 @@ public class Player {
 
   @Override
   public String toString() {
-    return "Player{" +
+    return "PlayerCharacter{" +
         "playerSprite=" + this.playerSprite +
         ", playerX=" + this.playerX +
         ", playerY=" + this.playerY +
