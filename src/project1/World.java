@@ -102,38 +102,45 @@ public class World {
     int xCell = Loader.pixelsToGrid(sprite.getxCoordinate(), xOffset, xDimension);
     int yCell = Loader.pixelsToGrid(sprite.getyCoordinate(), yOffset, yDimension);
 
+    Tile tile = null;
     switch (sprite.getSpriteType()) {
       case "wall":
-        Wall wall = new Wall(sprite, xCell, yCell);
-        this.insertTile(wall, xCell, yCell);
+        tile = new Wall(sprite, xCell, yCell);
+        break;
       case "stone":
-        Stone stone = new Stone(sprite, xCell, yCell);
-        this.insertTile(stone, xCell, yCell);
+        tile = new Stone(sprite, xCell, yCell);
+        break;
       case "floor":
-        Floor floor = new Floor(sprite, xCell, yCell);
-        this.insertTile(floor, xCell, yCell);
+        tile = new Floor(sprite, xCell, yCell);
+        break;
       case "target":
-        Target target = new Target(sprite, xCell, yCell);
-        this.insertTile(target, xCell, yCell);
+        tile = new Target(sprite, xCell, yCell);
+        break;
       case "player":
         this.player = new Player(sprite, xCell, yCell);
+        break;
       default:
         System.exit(1);
+        break;
+    }
+
+    if (!sprite.getSpriteType().equals("player")) {
+      this.insertTile(tile, xCell, yCell);
     }
   }
 
   /**
    * Inserts a tile at the specified location in the world grid.
    *
-   * @param tile       The tile to be inserted.
-   * @param xDimension The x coordinate of the cell insert the tile to.
-   * @param yDimension The y coordinate of the cell insert the tile to.
+   * @param tile  The tile to be inserted.
+   * @param xCell The x coordinate of the cell insert the tile to.
+   * @param yCell The y coordinate of the cell insert the tile to.
    */
-  private void insertTile(Tile tile, int xDimension, int yDimension) {
+  private void insertTile(Tile tile, int xCell, int yCell) {
     int i = 0;
-    while (this.grid[xDimension][yDimension][i] != null) {
+    while (this.grid[xCell][yCell][i] != null) {
       i++;
     }
-    this.grid[xDimension][yDimension][i] = tile;
+    this.grid[xCell][yCell][i] = tile;
   }
 }
