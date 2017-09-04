@@ -41,8 +41,8 @@ public class Loader {
     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       int[] levelDimensions = readMapDimensions(br.readLine());
       // Calculate the offset to centre the level in the middle of the window
-      int xOffset = (SCREEN_WIDTH - (levelDimensions[X_DIMENSION_INDEX] * TILE_SIZE)) / 2;
-      int yOffset = (SCREEN_HEIGHT - (levelDimensions[Y_DIMENSION_INDEX] * TILE_SIZE)) / 2;
+      int xOffset = offset(levelDimensions[X_DIMENSION_INDEX], SCREEN_WIDTH);
+      int yOffset = offset(levelDimensions[Y_DIMENSION_INDEX], SCREEN_HEIGHT);
 
       // We assume there is one sprite's information per line
       String text;
@@ -74,9 +74,22 @@ public class Loader {
   }
 
   /**
+   * Calculates the offset in a specific dimension of all sprites.
+   *
+   * @param dimension The number of cells in that dimension.
+   * @param screenSize The size of the screen in that dimension.
+   * @return The offset of all sprites in that dimension.
+   */
+  public static int offset(int dimension, int screenSize) {
+    return (screenSize - (dimension * TILE_SIZE)) / 2;
+  }
+
+  /**
    * Load a single sprite from a line in the .lvl file.
    *
-   * @param text The type, x coordinate, and y coordinate of the sprite. Eg: wall,5,5
+   * @param text    The type, x coordinate, and y coordinate of the sprite. Eg: wall,5,5
+   * @param xOffset The offset in pixels from the left side of the screen of this sprite.
+   * @param yOffset The offset in pixels from the top of the screen of this sprite.
    * @return A sprite instantiated at the specified x coordinate, y coordinate, and with the correct image.
    */
   private static Sprite loadSprite(String text, int xOffset, int yOffset) {

@@ -35,11 +35,15 @@ public class World {
 
   private static String levelFile = "./res/levels/0.lvl";
 
+  /**
+   * Instantiate a world populated with tiles and a player.
+   */
   public World() {
     final int X_DIMENSION_INDEX = 0;
     final int Y_DIMENSION_INDEX = 1;
     final int NUM_DIMENSIONS = 2;
 
+    // For now, assume there can be a maximum of 5 tiles at a single (x,y) coordinate.
     final int height = 5;
 
     Sprite[] sprites = Loader.loadSprites(levelFile);
@@ -54,8 +58,8 @@ public class World {
     int xDimension = dimensions[X_DIMENSION_INDEX];
     int yDimension = dimensions[Y_DIMENSION_INDEX];
 
-    int xOffset = (SCREEN_WIDTH - (dimensions[X_DIMENSION_INDEX] * TILE_SIZE)) / 2;
-    int yOffset = (SCREEN_HEIGHT - (dimensions[Y_DIMENSION_INDEX] * TILE_SIZE)) / 2;
+    int xOffset = Loader.offset(xDimension, SCREEN_WIDTH);
+    int yOffset = Loader.offset(yDimension, SCREEN_HEIGHT);
 
     this.grid = new Tile[xDimension][yDimension][height];
 

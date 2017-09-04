@@ -12,12 +12,11 @@ import static project1.Player.RIGHT;
 
 import static project1.App.TILE_SIZE;
 
+/**
+ * Class for the sprites.
+ * Records the sprite's image, type, coordinates on the window and coordinates in the world grid.
+ */
 public class Sprite {
-
-  /**
-   * The filepath for the sprite's image.
-   */
-  private String imageSource;
 
   /**
    * The type of the sprite.
@@ -41,6 +40,16 @@ public class Sprite {
   private int xCell;
   private int yCell;
 
+  /**
+   * Instantiates a sprite.
+   *
+   * @param imageSource The filepath of this sprite's image.
+   * @param spriteType  The type of sprite being created.
+   * @param x           The x-coordinate on the window of this sprite.
+   * @param y           The y-coordinate on the window of this sprite.
+   * @param xCell       The x-coordinate of the cell in the world grid of this sprite.
+   * @param yCell       The y-coordinate of the cell in the world grid of this sprite.
+   */
   public Sprite(String imageSource, String spriteType, float x, float y, int xCell, int yCell) {
     this.xCoordinate = x;
     this.yCoordinate = y;
@@ -48,28 +57,14 @@ public class Sprite {
     this.xCell = xCell;
     this.yCell = yCell;
 
-    this.imageSource = imageSource;
     this.spriteType = spriteType;
 
     try {
-      this.image = new Image(this.imageSource);
+      this.image = new Image(imageSource);
     } catch (SlickException e) {
       e.printStackTrace();
       System.exit(1);
     }
-  }
-
-  @Override
-  public String toString() {
-    return "Sprite{" +
-        "imageSource='" + imageSource + '\'' +
-        ", spriteType='" + spriteType + '\'' +
-        ", image=" + image +
-        ", xCoordinate=" + xCoordinate +
-        ", yCoordinate=" + yCoordinate +
-        ", xCell=" + xCell +
-        ", yCell=" + yCell +
-        '}';
   }
 
   /**
@@ -84,6 +79,8 @@ public class Sprite {
 
   /**
    * Draws this sprite to the screen.
+   *
+   * @param g The Slick graphics object this sprite is being drawn to.
    */
   public void render(Graphics g) {
     g.drawImage(this.image, this.xCoordinate, this.yCoordinate);
@@ -151,5 +148,17 @@ public class Sprite {
 
   public String getSpriteType() {
     return spriteType;
+  }
+
+  @Override
+  public String toString() {
+    return "Sprite{" +
+        ", spriteType='" + spriteType + '\'' +
+        ", image=" + image +
+        ", xCoordinate=" + xCoordinate +
+        ", yCoordinate=" + yCoordinate +
+        ", xCell=" + xCell +
+        ", yCell=" + yCell +
+        '}';
   }
 }
