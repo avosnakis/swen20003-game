@@ -80,13 +80,18 @@ public class World {
    * @param g The Slick graphics object.
    */
   public void render(Graphics g) {
+    // Render all not-null tiles in the world
     for (Tile[][] row : this.grid) {
       for (Tile[] column : row) {
         for (Tile tile : column) {
-          tile.render(g);
+          if (tile != null) {
+            tile.render(g);
+          }
         }
       }
     }
+    // Render the player last
+    this.player.render(g);
   }
 
   /**
@@ -99,8 +104,8 @@ public class World {
    * @param yDimension The number of cells in the y direction for the current world.
    */
   private void createTile(Sprite sprite, float xOffset, float yOffset, int xDimension, int yDimension) {
-    int xCell = Loader.pixelsToGrid(sprite.getxCoordinate(), xOffset, xDimension);
-    int yCell = Loader.pixelsToGrid(sprite.getyCoordinate(), yOffset, yDimension);
+    int xCell = sprite.getxCell();
+    int yCell = sprite.getyCell();
 
     Tile tile = null;
     switch (sprite.getSpriteType()) {

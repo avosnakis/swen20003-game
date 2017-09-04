@@ -1,5 +1,6 @@
 package project1;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 import project1.tiles.Tile;
@@ -52,6 +53,10 @@ public class Player {
     this.handlePlayerInput(DOWN, input, grid);
     this.handlePlayerInput(LEFT, input, grid);
     this.handlePlayerInput(RIGHT, input, grid);
+  }
+
+  public void render(Graphics g) {
+    this.playerSprite.render(g);
   }
 
   /**

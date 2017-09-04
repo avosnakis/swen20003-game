@@ -30,14 +30,24 @@ public class Sprite {
   private Image image;
 
   /**
-   * The sprite's X and Y coordinates.
+   * The sprite's X and Y coordinates on the window.
    */
   private float xCoordinate;
   private float yCoordinate;
 
-  public Sprite(String imageSource, String spriteType, float x, float y) {
+  /**
+   * The sprite's X and Y coordiantes in the world grid.
+   */
+  private int xCell;
+  private int yCell;
+
+  public Sprite(String imageSource, String spriteType, float x, float y, int xCell, int yCell) {
     this.xCoordinate = x;
     this.yCoordinate = y;
+
+    this.xCell = xCell;
+    this.yCell = yCell;
+
     this.imageSource = imageSource;
     this.spriteType = spriteType;
 
@@ -52,9 +62,13 @@ public class Sprite {
   @Override
   public String toString() {
     return "Sprite{" +
-        ", imageSource='" + this.imageSource + '\'' +
-        ", xCoordinate='" + this.xCoordinate + '\'' +
-        ", yCoordinate='" + this.yCoordinate + '\'' +
+        "imageSource='" + imageSource + '\'' +
+        ", spriteType='" + spriteType + '\'' +
+        ", image=" + image +
+        ", xCoordinate=" + xCoordinate +
+        ", yCoordinate=" + yCoordinate +
+        ", xCell=" + xCell +
+        ", yCell=" + yCell +
         '}';
   }
 
@@ -125,6 +139,14 @@ public class Sprite {
 
   public float getyCoordinate() {
     return this.yCoordinate;
+  }
+
+  public int getxCell() {
+    return this.xCell;
+  }
+
+  public int getyCell() {
+    return this.yCell;
   }
 
   public String getSpriteType() {

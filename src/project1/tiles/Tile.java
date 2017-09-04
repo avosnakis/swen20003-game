@@ -5,12 +5,20 @@ import project1.Sprite;
 
 public abstract class Tile {
 
+  /**
+   * Whether or not this tile is passable.
+   */
   private boolean passable;
 
+  /**
+   * This tile's sprite.
+   */
   private Sprite sprite;
 
+  /**
+   * The cell in the world this tile occupies.
+   */
   private int yCell;
-
   private int xCell;
 
   public Tile(Sprite sprite, int xCell, int yCell) {
@@ -37,5 +45,15 @@ public abstract class Tile {
 
   public int getxCell() {
     return xCell;
+  }
+
+  @Override
+  public String toString() {
+    return "Tile{" +
+        "passable=" + passable +
+        ", sprite=" + sprite +
+        ", yCell=" + yCell +
+        ", xCell=" + xCell +
+        '}';
   }
 }
