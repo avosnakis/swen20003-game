@@ -121,18 +121,18 @@ public class Sprite {
   }
 
   public String getSpriteType() {
-    return spriteType;
+    return this.spriteType;
   }
 
   @Override
   public String toString() {
     return "Sprite{" +
-        ", spriteType='" + spriteType + '\'' +
-        ", image=" + image +
-        ", xCoordinate=" + xCoordinate +
-        ", yCoordinate=" + yCoordinate +
-        ", xCell=" + xCell +
-        ", yCell=" + yCell +
+        ", spriteType='" + this.spriteType + '\'' +
+        ", image=" + this.image +
+        ", xCoordinate=" + this.xCoordinate +
+        ", yCoordinate=" + this.yCoordinate +
+        ", xCell=" + this.xCell +
+        ", yCell=" + this.yCell +
         '}';
   }
 }

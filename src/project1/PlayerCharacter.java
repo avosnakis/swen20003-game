@@ -24,8 +24,14 @@ public class PlayerCharacter {
   public static final char LEFT = Input.KEY_A;
   public static final char RIGHT = Input.KEY_D;
 
+  /**
+   * The player character's sprite.
+   */
   private Sprite playerSprite;
 
+  /**
+   * The player character's position in the world grid.
+   */
   private int playerX;
   private int playerY;
 
@@ -96,7 +102,8 @@ public class PlayerCharacter {
         break;
     }
 
-    // If the next set of coordinates is invalid, exit the method
+    // If the next set of coordinates is invalid, exit the method.
+    // This is evaluated over the entire stack of tiles that the player is attempting to move to.
     for (int i = 0; i < grid[currentPlayerX][currentPlayerY].length; i++) {
       if (grid[currentPlayerX][currentPlayerY][i] != null && !grid[currentPlayerX][currentPlayerY][i].isPassable()) {
         return;

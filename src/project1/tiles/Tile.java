@@ -30,8 +30,8 @@ public abstract class Tile {
    * Instantiates a tile.
    *
    * @param sprite This tile's sprite.
-   * @param xCell The x-coordinate in the world of this cell.
-   * @param yCell The y-coordinate in the world of this cell.
+   * @param xCell  The x-coordinate in the world of this cell.
+   * @param yCell  The y-coordinate in the world of this cell.
    */
   public Tile(Sprite sprite, int xCell, int yCell) {
     this.sprite = sprite;
@@ -54,14 +54,6 @@ public abstract class Tile {
 
   public void setPassable(boolean passable) {
     this.passable = passable;
-  }
-
-  public int getyCell() {
-    return this.yCell;
-  }
-
-  public int getxCell() {
-    return this.xCell;
   }
 
   @Override
