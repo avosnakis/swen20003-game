@@ -88,25 +88,6 @@ public class Sprite {
   }
 
   /**
-   * Determines whether an (x,y) coordinate lies inside a sprite.
-   *
-   * @param x The x-coordinate to be checked.
-   * @param y The y-coordinate to be checked.
-   * @return True if it lies inside the sprite, false otherwise.
-   */
-  public boolean pointIsInside(float x, float y) {
-    // x values increase as you move right across the window
-    float leftEdge = this.getxCoordinate();
-    float rightEdge = this.getxCoordinate() + TILE_SIZE;
-
-    // y values increase as you move down the window
-    float topEdge = this.getyCoordinate();
-    float bottomEdge = this.getyCoordinate() + TILE_SIZE;
-
-    return (leftEdge < x) && (x < rightEdge) && (topEdge < y) && (y < bottomEdge);
-  }
-
-  /**
    * Increments the position of a sprite by one tile in the specified direction.
    *
    * @param direction The Slick key code for the direction being moved in.
@@ -129,14 +110,6 @@ public class Sprite {
         System.exit(1);
         break;
     }
-  }
-
-  public float getxCoordinate() {
-    return this.xCoordinate;
-  }
-
-  public float getyCoordinate() {
-    return this.yCoordinate;
   }
 
   public int getxCell() {

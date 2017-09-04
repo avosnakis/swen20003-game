@@ -21,10 +21,12 @@ public class App extends BasicGame {
    * screen width, in pixels
    */
   public static final int SCREEN_WIDTH = 800;
+
   /**
    * screen height, in pixels
    */
   public static final int SCREEN_HEIGHT = 600;
+
   /**
    * size of the tiles, in pixels
    */
