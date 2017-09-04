@@ -96,8 +96,10 @@ public class Player {
     }
 
     // If the next set of coordinates is invalid, exit the method
-    if (!grid[currentPlayerX][currentPlayerY][0].isPassable()) {
-      return;
+    for (int i = 0; i < grid[currentPlayerX][currentPlayerY].length; i++) {
+      if (grid[currentPlayerX][currentPlayerY][i] != null && !grid[currentPlayerX][currentPlayerY][i].isPassable()) {
+        return;
+      }
     }
 
     // Update the player sprite location once both checks are passed
