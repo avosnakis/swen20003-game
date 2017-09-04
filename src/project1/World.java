@@ -35,11 +35,6 @@ public class World {
 
   private static String levelFile = "./res/levels/0.lvl";
 
-  /**
-   * Error code for no player sprite in the level.
-   */
-  private static final int NO_PLAYER_SPRITE = -1;
-
   public World() {
     final int X_DIMENSION_INDEX = 0;
     final int Y_DIMENSION_INDEX = 1;
@@ -97,9 +92,9 @@ public class World {
   /**
    * Instantiates a tile of the specified type and places it at the appropriate place in the grid.
    *
-   * @param sprite The sprite for the tile being created.
-   * @param xOffset The screen offset in the x direction for the current world.
-   * @param yOffset The screen offset in the y direction for the current world.
+   * @param sprite     The sprite for the tile being created.
+   * @param xOffset    The screen offset in the x direction for the current world.
+   * @param yOffset    The screen offset in the y direction for the current world.
    * @param xDimension The number of cells in the x direction for the current world.
    * @param yDimension The number of cells in the y direction for the current world.
    */
@@ -130,7 +125,7 @@ public class World {
   /**
    * Inserts a tile at the specified location in the world grid.
    *
-   * @param tile The tile to be inserted.
+   * @param tile       The tile to be inserted.
    * @param xDimension The x coordinate of the cell insert the tile to.
    * @param yDimension The y coordinate of the cell insert the tile to.
    */

@@ -4,8 +4,6 @@ import org.newdawn.slick.Input;
 
 import project1.tiles.Tile;
 
-import static project1.App.TILE_SIZE;
-
 /**
  * Class for controlling the player character.
  * Handles movement of the player sprite, and game controls.
@@ -25,21 +23,15 @@ public class Player {
   public static final char RIGHT = Input.KEY_D;
 
   private Sprite playerSprite;
-  private float playerX;
-  private float playerY;
 
-  private int xCell;
-  private int yCell;
+  private int playerX;
+  private int playerY;
 
-  public Player(Sprite playerSprite, int xCell, int yCell) {
+  public Player(Sprite playerSprite, int playerX, int playerY) {
     this.playerSprite = playerSprite;
 
-    // Set the player's x and y coordinates to the center of its sprite. This is for collision checking later.
-    this.playerX = this.playerSprite.getxCoordinate() + (TILE_SIZE / 2);
-    this.playerY = this.playerSprite.getyCoordinate() + (TILE_SIZE / 2);
-
-    this.xCell = xCell;
-    this.yCell = yCell;
+    this.playerX = playerX;
+    this.playerY = playerY;
   }
 
   @Override
@@ -68,6 +60,7 @@ public class Player {
    *
    * @param direction The key to check if had been pressed, and if so, to attempt to move the player based on that key.
    * @param input     The input object, which contains information on whether the specified key had been pressed.
+   * @param grid      The grid of all tiles in the current world.
    */
   private void handlePlayerInput(char direction, Input input, Tile[][][] grid) {
     // Exit the method early if the specified key has not been pressed.
@@ -75,22 +68,22 @@ public class Player {
       return;
     }
 
-    float currentPlayerX = this.playerX;
-    float currentPlayerY = this.playerY;
+    int currentPlayerX = this.playerX;
+    int currentPlayerY = this.playerY;
 
     // Adjust locations based on the direction the player is attempting to move in
     switch (direction) {
       case UP:
-        currentPlayerY -= TILE_SIZE;
+        currentPlayerY--;
         break;
       case DOWN:
-        currentPlayerY += TILE_SIZE;
+        currentPlayerY++;
         break;
       case LEFT:
-        currentPlayerX -= TILE_SIZE;
+        currentPlayerX--;
         break;
       case RIGHT:
-        currentPlayerX += TILE_SIZE;
+        currentPlayerX++;
         break;
       default:
         System.exit(1);
@@ -98,7 +91,7 @@ public class Player {
     }
 
     // If the next set of coordinates is invalid, exit the method
-    if (!grid[this.xCell][this.yCell][0].isPassable()) {
+    if (!grid[currentPlayerX][currentPlayerY][0].isPassable()) {
       return;
     }
 
