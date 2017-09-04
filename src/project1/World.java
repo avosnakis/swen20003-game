@@ -1,7 +1,22 @@
 package project1;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+
+import project1.tiles.Tile;
+import project1.tiles.Stone;
+import project1.tiles.Wall;
+import project1.tiles.Floor;
+import project1.tiles.Target;
+
+import static project1.App.SCREEN_HEIGHT;
+import static project1.App.SCREEN_WIDTH;
+import static project1.App.TILE_SIZE;
+
 
 /**
  * Class containing all data for the current level of the game.
@@ -11,7 +26,7 @@ public class World {
   /**
    * Array containing all sprites in the current level.
    */
-  private Sprite[] sprites;
+  private Tile[][][] grid;
 
   /**
    * The player character.
@@ -26,14 +41,32 @@ public class World {
   private static final int NO_PLAYER_SPRITE = -1;
 
   public World() {
-    this.sprites = Loader.loadSprites(levelFile);
+    final int X_DIMENSION_INDEX = 0;
+    final int Y_DIMENSION_INDEX = 1;
+    final int NUM_DIMENSIONS = 2;
 
-    int playerSpriteIndex = indexOfPlayerSprite(this.sprites);
-    if (playerSpriteIndex == NO_PLAYER_SPRITE) {
-      // For now we assume there must always be a player in the level, so we exit if there is not.
+    final int height = 5;
+
+    Sprite[] sprites = Loader.loadSprites(levelFile);
+    int[] dimensions = new int[NUM_DIMENSIONS];
+    try {
+      dimensions = Loader.readMapDimensions(new BufferedReader(new FileReader(levelFile)).readLine());
+    } catch (IOException e) {
+      e.printStackTrace();
       System.exit(1);
     }
-    this.player = new Player(this.sprites[playerSpriteIndex]);
+
+    int xDimension = dimensions[X_DIMENSION_INDEX];
+    int yDimension = dimensions[Y_DIMENSION_INDEX];
+
+    int xOffset = (SCREEN_WIDTH - (dimensions[X_DIMENSION_INDEX] * TILE_SIZE)) / 2;
+    int yOffset = (SCREEN_HEIGHT - (dimensions[Y_DIMENSION_INDEX] * TILE_SIZE)) / 2;
+
+    this.grid = new Tile[xDimension][yDimension][height];
+
+    for (Sprite sprite : sprites) {
+      this.createTile(sprite, xOffset, yOffset, xDimension, yDimension);
+    }
   }
 
   /**
@@ -43,7 +76,7 @@ public class World {
    * @param delta Time passed since the last frame (milliseconds).
    */
   public void update(Input input, int delta) {
-    this.player.update(input, this.sprites);
+    this.player.update(input, this.grid);
   }
 
   /**
@@ -52,23 +85,60 @@ public class World {
    * @param g The Slick graphics object.
    */
   public void render(Graphics g) {
-    for (Sprite sprite : this.sprites) {
-      sprite.render(g);
+    for (Tile[][] row : this.grid) {
+      for (Tile[] column : row) {
+        for (Tile tile : column) {
+          tile.render(g);
+        }
+      }
     }
   }
 
   /**
-   * Returns the index of the player sprite.
+   * Instantiates a tile of the specified type and places it at the appropriate place in the grid.
    *
-   * @param sprites An array of all sprites.
-   * @return The index of the player sprite, or NO_PLAYER_SPRITE if it wasn't found.
+   * @param sprite The sprite for the tile being created.
+   * @param xOffset The screen offset in the x direction for the current world.
+   * @param yOffset The screen offset in the y direction for the current world.
+   * @param xDimension The number of cells in the x direction for the current world.
+   * @param yDimension The number of cells in the y direction for the current world.
    */
-  private static int indexOfPlayerSprite(Sprite[] sprites) {
-    for (int i = 0; i < sprites.length; i++) {
-      if (sprites[i].isPlayer()) {
-        return i;
-      }
+  private void createTile(Sprite sprite, float xOffset, float yOffset, int xDimension, int yDimension) {
+    int xCell = Loader.pixelsToGrid(sprite.getxCoordinate(), xOffset, xDimension);
+    int yCell = Loader.pixelsToGrid(sprite.getyCoordinate(), yOffset, yDimension);
+
+    switch (sprite.getSpriteType()) {
+      case "wall":
+        Wall wall = new Wall(sprite, xCell, yCell);
+        this.insertTile(wall, xCell, yCell);
+      case "stone":
+        Stone stone = new Stone(sprite, xCell, yCell);
+        this.insertTile(stone, xCell, yCell);
+      case "floor":
+        Floor floor = new Floor(sprite, xCell, yCell);
+        this.insertTile(floor, xCell, yCell);
+      case "target":
+        Target target = new Target(sprite, xCell, yCell);
+        this.insertTile(target, xCell, yCell);
+      case "player":
+        this.player = new Player(sprite, xCell, yCell);
+      default:
+        System.exit(1);
     }
-    return NO_PLAYER_SPRITE;
+  }
+
+  /**
+   * Inserts a tile at the specified location in the world grid.
+   *
+   * @param tile The tile to be inserted.
+   * @param xDimension The x coordinate of the cell insert the tile to.
+   * @param yDimension The y coordinate of the cell insert the tile to.
+   */
+  private void insertTile(Tile tile, int xDimension, int yDimension) {
+    int i = 0;
+    while (this.grid[xDimension][yDimension][i] != null) {
+      i++;
+    }
+    this.grid[xDimension][yDimension][i] = tile;
   }
 }

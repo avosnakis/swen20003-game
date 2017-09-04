@@ -2,6 +2,8 @@ package project1;
 
 import org.newdawn.slick.Input;
 
+import project1.tiles.Tile;
+
 import static project1.App.TILE_SIZE;
 
 /**
@@ -26,12 +28,18 @@ public class Player {
   private float playerX;
   private float playerY;
 
-  public Player(Sprite playerSprite) {
+  private int xCell;
+  private int yCell;
+
+  public Player(Sprite playerSprite, int xCell, int yCell) {
     this.playerSprite = playerSprite;
 
     // Set the player's x and y coordinates to the center of its sprite. This is for collision checking later.
     this.playerX = this.playerSprite.getxCoordinate() + (TILE_SIZE / 2);
     this.playerY = this.playerSprite.getyCoordinate() + (TILE_SIZE / 2);
+
+    this.xCell = xCell;
+    this.yCell = yCell;
   }
 
   @Override
@@ -46,12 +54,12 @@ public class Player {
   /**
    * Handle all player inputs. Checks up, down, left, and right inputs.
    */
-  public void update(Input input, Sprite[] levelSprites) {
+  public void update(Input input, Tile[][][] grid) {
     // Check each of the directions to see if the player will move
-    this.handlePlayerInput(UP, input, levelSprites);
-    this.handlePlayerInput(DOWN, input, levelSprites);
-    this.handlePlayerInput(LEFT, input, levelSprites);
-    this.handlePlayerInput(RIGHT, input, levelSprites);
+    this.handlePlayerInput(UP, input, grid);
+    this.handlePlayerInput(DOWN, input, grid);
+    this.handlePlayerInput(LEFT, input, grid);
+    this.handlePlayerInput(RIGHT, input, grid);
   }
 
   /**
@@ -61,7 +69,7 @@ public class Player {
    * @param direction The key to check if had been pressed, and if so, to attempt to move the player based on that key.
    * @param input     The input object, which contains information on whether the specified key had been pressed.
    */
-  private void handlePlayerInput(char direction, Input input, Sprite[] levelSprites) {
+  private void handlePlayerInput(char direction, Input input, Tile[][][] grid) {
     // Exit the method early if the specified key has not been pressed.
     if (!input.isKeyPressed(direction)) {
       return;
@@ -90,7 +98,7 @@ public class Player {
     }
 
     // If the next set of coordinates is invalid, exit the method
-    if (Loader.isBlocked(currentPlayerX, currentPlayerY, levelSprites)) {
+    if (!grid[this.xCell][this.yCell][0].isPassable()) {
       return;
     }
 

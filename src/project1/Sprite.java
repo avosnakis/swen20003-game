@@ -15,14 +15,14 @@ import static project1.App.TILE_SIZE;
 public class Sprite {
 
   /**
-   * The type of object this sprite represents in-game.
-   */
-  private String spriteType;
-
-  /**
    * The filepath for the sprite's image.
    */
   private String imageSource;
+
+  /**
+   * The type of the sprite.
+   */
+  private String spriteType;
 
   /**
    * The actual sprite image.
@@ -52,7 +52,6 @@ public class Sprite {
   @Override
   public String toString() {
     return "Sprite{" +
-        "spriteType='" + this.spriteType + '\'' +
         ", imageSource='" + this.imageSource + '\'' +
         ", xCoordinate='" + this.xCoordinate + '\'' +
         ", yCoordinate='" + this.yCoordinate + '\'' +
@@ -120,24 +119,6 @@ public class Sprite {
     }
   }
 
-  /**
-   * Determines whether this instance of a sprite is a wall.
-   *
-   * @return True if it is a wall, false otherwise.
-   */
-  public boolean isWall() {
-    return this.spriteType.equals("wall");
-  }
-
-  /**
-   * Determines whether this instance of a sprite is a player.
-   *
-   * @return True if it is a player, false otherwise.
-   */
-  public boolean isPlayer() {
-    return this.spriteType.equals("player");
-  }
-
   public float getxCoordinate() {
     return this.xCoordinate;
   }
@@ -146,4 +127,7 @@ public class Sprite {
     return this.yCoordinate;
   }
 
+  public String getSpriteType() {
+    return spriteType;
+  }
 }

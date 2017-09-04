@@ -29,29 +29,6 @@ public class Loader {
   private static final String PLAYER_FILE = "player_left.png";
 
   /**
-   * Checks if a tile is a valid position to move to, and returns true if it is.
-   *
-   * @param x The x-coordinate of the tile to be checked.
-   * @param y The y-coordinate of the tile to be checked.
-   * @return True if the tile is valid to move to, false if it isn't.
-   * */
-  public static boolean isBlocked(float x, float y, Sprite[] levelSprites) {
-    // Handle for the player somehow attempting to move offscreen
-    if (x < 0 || x > SCREEN_WIDTH || y < 0 || y > SCREEN_HEIGHT) {
-      return false;
-    }
-    // Iterate over every sprite in the level until we find the non-player sprite that the player will next occupy,
-    // and then check if it is a wall
-    for (Sprite sprite : levelSprites) {
-      if (sprite.pointIsInside(x, y) && !sprite.isPlayer()) {
-        return sprite.isWall();
-      }
-    }
-    // If we check every sprite, return false by default
-    return false;
-  }
-
-  /**
    * Loads the sprites from a given file.
    *
    * @param filename The .lvl we are reading.
@@ -85,7 +62,7 @@ public class Loader {
    * @param text The dimensions line of the .lvl file. Eg: 12,12
    * @return An array containing { xDimension, yDimension }
    * */
-  private static int[] readMapDimensions(String text) {
+  public static int[] readMapDimensions(String text) {
     final int NUM_DIMENSIONS = 2;
 
     String[] line = text.split(COMMA_SEPARATOR);
@@ -132,5 +109,10 @@ public class Loader {
         line[TYPE_INDEX],
         TILE_SIZE * Float.parseFloat(line[X_INDEX]) + xOffset,
         TILE_SIZE * Float.parseFloat(line[Y_INDEX]) + yOffset);
+  }
+
+  public static int pixelsToGrid(float pixels, float offset, int dimension) {
+    //TODO
+    return 0;
   }
 }
