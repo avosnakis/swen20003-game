@@ -23,7 +23,7 @@ import static project1.App.SCREEN_WIDTH;
 public class World {
 
   /**
-   * Array containing all sprites in the current level.
+   * Array containing all tiles in the current level.
    */
   private Tile[][][] grid;
 

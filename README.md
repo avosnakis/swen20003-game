@@ -6,4 +6,4 @@ Phase 1: substantiate game, draw graphics, move player.
 
 Phase 2: TBD
 
-Requires the Slick game library and OS-specific OpenGL binaries.
+Requires the Slick game library and OS-specific plugins.
