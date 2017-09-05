@@ -21,7 +21,7 @@ public abstract class Tile {
   private Sprite sprite;
 
   /**
-   * The cell in the world this tile occupies.
+   * The cell in the world's grid this tile occupies.
    */
   private int yCell;
   private int xCell;

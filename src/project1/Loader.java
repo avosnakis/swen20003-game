@@ -77,7 +77,7 @@ public class Loader {
   /**
    * Calculates the offset in a specific dimension of all sprites.
    *
-   * @param dimension The number of cells in that dimension.
+   * @param dimension  The number of cells in that dimension.
    * @param screenSize The size of the screen in that dimension.
    * @return The offset of all sprites in that dimension.
    */

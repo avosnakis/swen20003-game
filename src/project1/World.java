@@ -103,7 +103,7 @@ public class World {
   /**
    * Instantiates a tile of the specified type and places it at the appropriate place in the grid.
    *
-   * @param sprite     The sprite for the tile being created.
+   * @param sprite The sprite for the tile being created.
    */
   private void createTile(Sprite sprite) {
     int xCell = sprite.getxCell();

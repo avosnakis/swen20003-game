@@ -36,7 +36,7 @@ public class Sprite {
   private float yCoordinate;
 
   /**
-   * The sprite's X and Y coordiantes in the world grid.
+   * The sprite's X and Y coordinates in the world grid.
    */
   private int xCell;
   private int yCell;
