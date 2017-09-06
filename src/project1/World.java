@@ -13,9 +13,6 @@ import project1.tiles.Wall;
 import project1.tiles.Floor;
 import project1.tiles.Target;
 
-import static project1.App.SCREEN_HEIGHT;
-import static project1.App.SCREEN_WIDTH;
-
 
 /**
  * Class containing all data for the current level of the game.
@@ -33,9 +30,9 @@ public class World {
   private PlayerCharacter playerCharacter;
 
   /**
-   * Path to the level file. TODO Ask what we're supposed to do with this.
+   * Path to the level file.
    */
-  private static String levelFile = "./res/levels/0.lvl";
+  private static final String levelFile = "./res/levels/0.lvl";
 
   /**
    * Instantiate a world populated with tiles and a playerCharacter.
@@ -50,8 +47,8 @@ public class World {
 
     Sprite[] sprites = Loader.loadSprites(levelFile);
     int[] dimensions = new int[NUM_DIMENSIONS];
-    try {
-      dimensions = Loader.readMapDimensions(new BufferedReader(new FileReader(levelFile)).readLine());
+    try (BufferedReader br = new BufferedReader(new FileReader(levelFile))) {
+      dimensions = Loader.readMapDimensions(br.readLine());
     } catch (IOException e) {
       e.printStackTrace();
       System.exit(1);
@@ -59,9 +56,6 @@ public class World {
 
     int xDimension = dimensions[X_DIMENSION_INDEX];
     int yDimension = dimensions[Y_DIMENSION_INDEX];
-
-    int xOffset = Loader.offset(xDimension, SCREEN_WIDTH);
-    int yOffset = Loader.offset(yDimension, SCREEN_HEIGHT);
 
     this.grid = new Tile[xDimension][yDimension][HEIGHT];
 
