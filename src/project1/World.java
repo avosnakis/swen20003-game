@@ -22,9 +22,7 @@ public class World {
    * The playerCharacter character.
    */
   private PlayerCharacter playerCharacter;
-
-  private int time = 0;
-
+  
   /**
    * Path to the level file.
    */
