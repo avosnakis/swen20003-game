@@ -1,8 +1,6 @@
-package project1.tiles;
+package project1;
 
 import org.newdawn.slick.Graphics;
-
-import project1.Sprite;
 
 
 /**

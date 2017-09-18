@@ -1,6 +1,4 @@
-package project1.tiles;
-
-import project1.Sprite;
+package project1;
 
 
 /**

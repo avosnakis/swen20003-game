@@ -7,12 +7,6 @@ import java.io.IOException;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-import project1.tiles.Tile;
-import project1.tiles.Stone;
-import project1.tiles.Wall;
-import project1.tiles.Floor;
-import project1.tiles.Target;
-
 
 /**
  * Class containing all data for the current level of the game.

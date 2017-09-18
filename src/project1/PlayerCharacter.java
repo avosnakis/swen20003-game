@@ -3,8 +3,6 @@ package project1;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-import project1.tiles.Tile;
-
 
 /**
  * Class for controlling the player character.
