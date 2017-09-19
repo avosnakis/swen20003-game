@@ -55,27 +55,27 @@ public class Sprite {
   public void moveToDest(int dir) {
     float speed = 32;
     // Translate the direction to an x and y displacement
-    float delta_x = 0,
-        delta_y = 0;
+    float deltaX = 0;
+    float deltaY = 0;
     switch (dir) {
       case DIR_LEFT:
-        delta_x = -speed;
+        deltaX = -speed;
         break;
       case DIR_RIGHT:
-        delta_x = speed;
+        deltaX = speed;
         break;
       case DIR_UP:
-        delta_y = -speed;
+        deltaY = -speed;
         break;
       case DIR_DOWN:
-        delta_y = speed;
+        deltaY = speed;
         break;
     }
 
     // Make sure the position isn't occupied!
-    if (!Loader.isBlocked(x + delta_x, y + delta_y)) {
-      x += delta_x;
-      y += delta_y;
+    if (!Loader.isBlocked(x + deltaX, y + deltaY)) {
+      x += deltaX;
+      y += deltaY;
     }
   }
 }

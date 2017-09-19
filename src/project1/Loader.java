@@ -13,10 +13,10 @@ import java.util.ArrayList;
 public class Loader {
   private static String[][] types;
 
-  private static int world_width;
-  private static int world_height;
-  private static int offset_x;
-  private static int offset_y;
+  private static int worldWidth;
+  private static int worldHeight;
+  private static int offsetX;
+  private static int offsetY;
 
   /**
    * Create the appropriate sprite given a name and location.
@@ -45,9 +45,9 @@ public class Loader {
   // Converts a world coordinate to a tile coordinate,
   // and returns if that location is a blocked tile
   public static boolean isBlocked(float x, float y) {
-    x -= offset_x;
+    x -= offsetX;
     x /= App.TILE_SIZE;
-    y -= offset_y;
+    y -= offsetY;
     y /= App.TILE_SIZE;
 
     // Rounding is important here
@@ -55,7 +55,7 @@ public class Loader {
     y = Math.round(y);
 
     // Do bounds checking!
-    if (x >= 0 && x < world_width && y >= 0 && y < world_height) {
+    if (x >= 0 && x < worldWidth && y >= 0 && y < worldHeight) {
       return types[(int) x][(int) y].equals("wall");
     }
     // Default to blocked
@@ -78,16 +78,16 @@ public class Loader {
       // Find the world size
       line = reader.readLine();
       String[] parts = line.split(",");
-      world_width = Integer.parseInt(parts[0]);
-      world_height = Integer.parseInt(parts[1]);
+      worldWidth = Integer.parseInt(parts[0]);
+      worldHeight = Integer.parseInt(parts[1]);
 
       // Create the array of object types
-      types = new String[world_width][world_height];
+      types = new String[worldWidth][worldHeight];
 
       // Calculate the top left of the tiles so that the level is
       // centred
-      offset_x = (App.SCREEN_WIDTH - world_width * App.TILE_SIZE) / 2;
-      offset_y = (App.SCREEN_HEIGHT - world_height * App.TILE_SIZE) / 2;
+      offsetX = (App.SCREEN_WIDTH - worldWidth * App.TILE_SIZE) / 2;
+      offsetY = (App.SCREEN_HEIGHT - worldHeight * App.TILE_SIZE) / 2;
 
       // Loop over every line of the file
       while ((line = reader.readLine()) != null) {
@@ -102,14 +102,12 @@ public class Loader {
         types[(int) x][(int) y] = name;
 
         // Adjust for the grid
-        x = offset_x + x * App.TILE_SIZE;
-        y = offset_y + y * App.TILE_SIZE;
+        x = offsetX + x * App.TILE_SIZE;
+        y = offsetY + y * App.TILE_SIZE;
 
         // Create the sprite
         list.add(createSprite(name, x, y));
       }
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
