@@ -22,9 +22,9 @@ public class Sprite {
   private float x;
   private float y;
 
-  public Sprite(String image_src, float x, float y) {
+  public Sprite(String imageSource, float x, float y) {
     try {
-      image = new Image(image_src);
+      this.image = new Image(imageSource);
     } catch (SlickException e) {
       e.printStackTrace();
     }
@@ -39,17 +39,17 @@ public class Sprite {
   }
 
   public void render(Graphics g) {
-    image.drawCentered(x, y);
+    this.image.drawCentered(x, y);
   }
 
   // Forces this sprite to align to the grid
   public void snapToGrid() {
-    x /= App.TILE_SIZE;
-    y /= App.TILE_SIZE;
-    x = Math.round(x);
-    y = Math.round(y);
-    x *= App.TILE_SIZE;
-    y *= App.TILE_SIZE;
+    this.x /= App.TILE_SIZE;
+    this.y /= App.TILE_SIZE;
+    this.x = Math.round(x);
+    this.y = Math.round(y);
+    this.x *= App.TILE_SIZE;
+    this.y *= App.TILE_SIZE;
   }
 
   public void moveToDest(int dir) {
@@ -74,8 +74,8 @@ public class Sprite {
 
     // Make sure the position isn't occupied!
     if (!Loader.isBlocked(x + deltaX, y + deltaY)) {
-      x += deltaX;
-      y += deltaY;
+      this.x += deltaX;
+      this.y += deltaY;
     }
   }
 }

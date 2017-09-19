@@ -17,7 +17,7 @@ public class World {
   }
 
   public void update(Input input, int delta) {
-    for (Sprite sprite : sprites) {
+    for (Sprite sprite : this.sprites) {
       if (sprite != null) {
         sprite.update(input, delta);
       }
@@ -25,7 +25,7 @@ public class World {
   }
 
   public void render(Graphics g) {
-    for (Sprite sprite : sprites) {
+    for (Sprite sprite : this.sprites) {
       if (sprite != null) {
         sprite.render(g);
       }
