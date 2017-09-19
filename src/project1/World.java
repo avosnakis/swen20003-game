@@ -1,141 +1,33 @@
+/**
+ * Sample Project for SWEN20003: Object Oriented Software Development 2017
+ * by Eleanor McMurtry
+ */
 package project1;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
+import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-
-/**
- * Class containing all data for the current level of the game.
- */
 public class World {
-
-  /**
-   * Array containing all tiles in the current level.
-   */
-  private Tile[][][] grid;
-
-  /**
-   * The playerCharacter character.
-   */
-  private PlayerCharacter playerCharacter;
-  
-  /**
-   * Path to the level file.
-   */
-  private static final String levelFile = "./res/levels/0.lvl";
-
-  /**
-   * Instantiate a world populated with tiles and a playerCharacter.
-   */
-  public World() {
-    final int X_DIMENSION_INDEX = 0;
-    final int Y_DIMENSION_INDEX = 1;
-    final int NUM_DIMENSIONS = 2;
-
-    // For now, assume there can be a maximum of 5 tiles (not including the playerCharacter) at a single (x,y) coordinate.
-    final int HEIGHT = 5;
-
-    Sprite[] sprites = Loader.loadSprites(levelFile);
-    int[] dimensions = new int[NUM_DIMENSIONS];
-    try (BufferedReader br = new BufferedReader(new FileReader(levelFile))) {
-      dimensions = Loader.readMapDimensions(br.readLine());
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
-
-    int xDimension = dimensions[X_DIMENSION_INDEX];
-    int yDimension = dimensions[Y_DIMENSION_INDEX];
-
-    this.grid = new Tile[xDimension][yDimension][HEIGHT];
-
-    for (Sprite sprite : sprites) {
-      this.createTile(sprite);
-    }
-  }
-
-  /**
-   * Passes all inputs to the playerCharacter so it can be processed.
-   *
-   * @param input The Slick user input object.
-   * @param delta Time passed since the last frame (milliseconds).
-   */
-  public void update(Input input, int delta) {
-    this.playerCharacter.update(input, this.grid);
-  }
-
-  /**
-   * Draws all sprites to the screen.
-   *
-   * @param g The Slick graphics object.
-   */
-  public void render(Graphics g) {
-    // Render all not-null tiles in the world
-    for (Tile[][] row : this.grid) {
-      for (Tile[] column : row) {
-        for (Tile tile : column) {
-          if (tile != null) {
-            tile.render(g);
-          }
-        }
-      }
-    }
-    // Render the playerCharacter last
-    this.playerCharacter.render(g);
-  }
-
-  /**
-   * Instantiates a tile of the specified type and places it at the appropriate place in the grid.
-   *
-   * @param sprite The sprite for the tile being created.
-   */
-  private void createTile(Sprite sprite) {
-    int xCell = sprite.getxCell();
-    int yCell = sprite.getyCell();
-
-    Tile tile = null;
-    switch (sprite.getSpriteType()) {
-      case "wall":
-        tile = new Wall(sprite, xCell, yCell);
-        break;
-      case "stone":
-        tile = new Stone(sprite, xCell, yCell);
-        break;
-      case "floor":
-        tile = new Floor(sprite, xCell, yCell);
-        break;
-      case "target":
-        tile = new Target(sprite, xCell, yCell);
-        break;
-      case "player":
-        this.playerCharacter = new PlayerCharacter(sprite, xCell, yCell);
-        break;
-      default:
-        System.exit(1);
-        break;
-    }
-
-    if (!sprite.getSpriteType().equals("player")) {
-      this.insertTile(tile, xCell, yCell);
-    }
-  }
-
-  /**
-   * Inserts a tile at the specified location in the world grid.
-   *
-   * @param tile  The tile to be inserted.
-   * @param xCell The x coordinate of the cell insert the tile to.
-   * @param yCell The y coordinate of the cell insert the tile to.
-   */
-  private void insertTile(Tile tile, int xCell, int yCell) {
-    int i = 0;
-    while (this.grid[xCell][yCell][i] != null) {
-      i++;
-    }
-    this.grid[xCell][yCell][i] = tile;
-  }
+	private ArrayList<Sprite> sprites;
+	
+	public World() {
+		sprites = Loader.loadSprites("res/levels/0.lvl");
+	}
+	
+	public void update(Input input, int delta) {
+		for (Sprite sprite : sprites) {
+			if (sprite != null) {
+				sprite.update(input, delta);
+			}
+		}		
+	}
+	
+	public void render(Graphics g) {
+		for (Sprite sprite : sprites) {
+			if (sprite != null) {
+				sprite.render(g);
+			}
+		}
+	}
 }
