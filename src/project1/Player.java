@@ -27,6 +27,6 @@ public class Player extends Sprite {
     }
 
     // Move to our destination
-    moveToDest(dir);
+    this.moveToDest(dir);
   }
 }

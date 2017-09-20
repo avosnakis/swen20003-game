@@ -31,7 +31,7 @@ public class Sprite {
 
     this.x = x;
     this.y = y;
-    snapToGrid();
+    this.snapToGrid();
   }
 
   public void update(Input input, int delta) {
