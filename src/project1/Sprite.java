@@ -10,13 +10,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Graphics;
 
 public class Sprite {
-  // Used to decide what direction an object is moving
-  // Look up enums to find a more elegant solution!
-  public static final int DIR_NONE = 0;
-  public static final int DIR_LEFT = 1;
-  public static final int DIR_RIGHT = 2;
-  public static final int DIR_UP = 3;
-  public static final int DIR_DOWN = 4;
 
   private Image image = null;
   private float x;
@@ -52,30 +45,19 @@ public class Sprite {
     this.y *= App.TILE_SIZE;
   }
 
-  public void moveToDest(int dir) {
-    float speed = 32;
-    // Translate the direction to an x and y displacement
-    float deltaX = 0;
-    float deltaY = 0;
-    switch (dir) {
-      case DIR_LEFT:
-        deltaX = -speed;
-        break;
-      case DIR_RIGHT:
-        deltaX = speed;
-        break;
-      case DIR_UP:
-        deltaY = -speed;
-        break;
-      case DIR_DOWN:
-        deltaY = speed;
-        break;
-    }
+  public float getX() {
+    return this.x;
+  }
 
-    // Make sure the position isn't occupied!
-    if (!Loader.isBlocked(x + deltaX, y + deltaY)) {
-      this.x += deltaX;
-      this.y += deltaY;
-    }
+  public void setX(float x) {
+    this.x = x;
+  }
+
+  public float getY() {
+    return this.y;
+  }
+
+  public void setY(float y) {
+    this.y = y;
   }
 }

@@ -6,7 +6,7 @@ package project1;
 
 import org.newdawn.slick.Input;
 
-public class Player extends Sprite {
+public class Player extends Character implements Controllable {
 
   public Player(float x, float y) {
     super("res/player_left.png", x, y);
@@ -14,6 +14,11 @@ public class Player extends Sprite {
 
   @Override
   public void update(Input input, int delta) {
+    this.handlePlayerInput(input);
+  }
+
+  @Override
+  public void handlePlayerInput(Input input) {
     int dir = DIR_NONE;
 
     if (input.isKeyPressed(Input.KEY_LEFT)) {
@@ -27,6 +32,6 @@ public class Player extends Sprite {
     }
 
     // Move to our destination
-    this.moveToDest(dir);
+    this.moveToDestination(dir);
   }
 }

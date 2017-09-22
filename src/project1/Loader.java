@@ -32,10 +32,26 @@ public class Loader {
         return new Wall(x, y);
       case "floor":
         return new Floor(x, y);
-      case "stone":
-        return new Stone(x, y);
       case "target":
         return new Target(x, y);
+      case "switch":
+        return new Switch(x, y);
+      case "door":
+        return new Door(x ,y);
+      case "cracked":
+        return new CrackedWall(x, y);
+      case "stone":
+        return new Stone(x, y);
+      case "ice":
+        return new Ice(x, y);
+      case "tnt":
+        return new Tnt(x, y);
+      case "mage":
+        return new Mage(x, y);
+      case "skeleton":
+        return new Skeleton(x, y);
+      case "rogue":
+        return new Rogue(x, y);
       case "player":
         return new Player(x, y);
     }
