@@ -13,8 +13,8 @@ public class Player extends Character implements Controllable {
   }
 
   @Override
-  public void update(Input input, int delta) {
-    this.handlePlayerInput(input);
+  public void update(Input input, int delta, World world) {
+    this.handlePlayerInput(input, world);
   }
 
   @Override
@@ -33,5 +33,24 @@ public class Player extends Character implements Controllable {
 
     // Move to our destination
     this.moveToDestination(dir);
+  }
+
+  @Override
+  public void handlePlayerInput(Input input, World word) {
+    int dir = DIR_NONE;
+
+    if (input.isKeyPressed(Input.KEY_LEFT)) {
+      dir = DIR_LEFT;
+    } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
+      dir = DIR_RIGHT;
+    } else if (input.isKeyPressed(Input.KEY_UP)) {
+      dir = DIR_UP;
+    } else if (input.isKeyPressed(Input.KEY_DOWN)) {
+      dir = DIR_DOWN;
+    }
+
+    // Move to our destination
+    this.moveToDestination(dir);
+
   }
 }

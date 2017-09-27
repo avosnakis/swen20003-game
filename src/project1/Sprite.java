@@ -15,19 +15,24 @@ public class Sprite {
   private float x;
   private float y;
 
-  public Sprite(String imageSource, float x, float y) {
+  private boolean passable;
+  private String spriteCategory;
+
+  public Sprite(String imageSource, String spriteCategory, float x, float y) {
     try {
       this.image = new Image(imageSource);
     } catch (SlickException e) {
       e.printStackTrace();
     }
 
+    this.spriteCategory = spriteCategory;
+
     this.x = x;
     this.y = y;
     this.snapToGrid();
   }
 
-  public void update(Input input, int delta) {
+  public void update(Input input, int delta, World world) {
 
   }
 
@@ -59,5 +64,17 @@ public class Sprite {
 
   public void setY(float y) {
     this.y = y;
+  }
+
+  public String getSpriteCategory() {
+    return this.spriteCategory;
+  }
+
+  public boolean isPassable() {
+    return this.passable;
+  }
+
+  public void setPassable(boolean passable) {
+    this.passable = passable;
   }
 }

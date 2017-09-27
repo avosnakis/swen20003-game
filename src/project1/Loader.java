@@ -5,7 +5,6 @@
 package project1;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -128,5 +127,13 @@ public class Loader {
       e.printStackTrace();
     }
     return list;
+  }
+
+  public static int getWorldWidth() {
+    return worldWidth;
+  }
+
+  public static int getWorldHeight() {
+    return worldHeight;
   }
 }

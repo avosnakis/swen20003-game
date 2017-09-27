@@ -2,11 +2,11 @@ package project1;
 
 public abstract class Character extends Sprite implements Movable {
   public Character(String imageSource, float x, float y) {
-    super("res/player_left.png", x, y);
+    super(imageSource, "character", x, y);
   }
 
   @Override
-  public void moveToDestination(int direction) {
+  public void moveToDestination(int direction, World world) {
     float speed = 32;
     // Translate the direction to an x and y displacement
     float deltaX = 0;

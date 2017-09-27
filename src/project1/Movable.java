@@ -7,5 +7,5 @@ public interface Movable {
   int DIR_UP = 3;
   int DIR_DOWN = 4;
 
-  public void moveToDestination(int direction);
+  public void moveToDestination(int direction, World world);
 }
