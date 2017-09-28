@@ -15,6 +15,7 @@ public class World {
 
   private ArrayList<Sprite> sprites;
   private int[][][] spriteIndices;
+  private ArrayList<int[]> targetLocations;
 
   public World(String filename) {
     this.sprites = Loader.loadSprites(filename);
@@ -27,6 +28,7 @@ public class World {
     }
 
     for (int i = 0; i < this.sprites.size(); i++) {
+      if (this.sprites.get(i).equals("f"))
       this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
     }
   }

@@ -60,8 +60,8 @@ public class Loader {
   /**
    * Loads the sprites from a given file.
    *
-   * @param filename
-   * @return
+   * @param filename The file to load the level from.
+   * @return A collection of all sprites in this level.
    */
   public static ArrayList<Sprite> loadSprites(String filename) {
     ArrayList<Sprite> list = new ArrayList<>();

@@ -50,7 +50,7 @@ public class App extends BasicGame {
 
   @Override
   public void init(GameContainer gc) throws SlickException {
-    this.world = new World(levels[this.currentLevel]);
+    this.world = new World("res/levels/" + levels[this.currentLevel]);
   }
 
   /**
@@ -65,7 +65,7 @@ public class App extends BasicGame {
     // move to the next level and skip the rest of this frame
     if (this.world.hasWon()) {
       this.currentLevel += 1;
-      this.world = new World(levels[this.currentLevel]);
+      this.world = new World("res/levels/" + levels[this.currentLevel]);
       return;
     }
 
