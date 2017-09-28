@@ -45,7 +45,9 @@ public class Sprite implements Movable {
     this.image.drawCentered(x, y);
   }
 
-  // Forces this sprite to align to the grid
+  /**
+   * Aligns the sprite's coordinates to the grid.
+   */
   public void snapToGrid() {
     this.x /= App.TILE_SIZE;
     this.y /= App.TILE_SIZE;
@@ -130,7 +132,11 @@ public class Sprite implements Movable {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(this.xCell + deltaXCell, this.yCell + deltaYCell, direction)) {
-      world.moveIndex(this.xCell, this.yCell, this.xCell + deltaXCell, this.yCell + deltaYCell, this.spriteCategory);
+      world.moveIndex(this.xCell,
+          this.yCell,
+          this.xCell + deltaXCell,
+          this.yCell + deltaYCell,
+          this.spriteCategory);
 
       this.x += deltaX;
       this.y += deltaY;

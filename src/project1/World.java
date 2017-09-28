@@ -47,6 +47,14 @@ public class World {
     }
   }
 
+  /**
+   * Determines whether an (x,y) position is possible to move to.
+   *
+   * @param x The x point to be checked.
+   * @param y The y point to be checked.
+   * @param direction The direction the sprite is currently moving.
+   * @return Whether the position is blocked or not.
+   */
   public boolean isBlocked(int x, int y, Direction direction) {
     boolean cannotMove = true;
     for (int i = 0; i < this.spriteIndices[x][y].length && this.spriteIndices[x][y][i] != NO_INDEX; i++) {
@@ -60,7 +68,7 @@ public class World {
         case "block":
           int nextX = incrementCoordinate(x, 'x', direction);
           int nextY = incrementCoordinate(y, 'y', direction);
-          
+
           cannotMove = isBlocked(nextX, nextY, direction);
           this.sprites.get(index).moveToDestination(direction, this);
           break;
@@ -128,10 +136,20 @@ public class World {
     }
   }
 
+  /**
+   * Increments a cell coordinate in the specified direction.
+   *
+   * @param coordinate The coordinate to be incremented.
+   * @param axis The axis the coordinate lies on.
+   * @param direction The direction the movement is happening in.
+   * @return The incremented coordinate.
+   */
   private static int incrementCoordinate(int coordinate, char axis, Direction direction) {
     if (axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) {
+      // x coordinate cannot go up or down, so don't change it
       return coordinate;
     } else if (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT)) {
+      // y coordinate cannot go left or right, so don't change it
       return coordinate;
     } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
       return --coordinate;
@@ -142,6 +160,7 @@ public class World {
     } else if (axis == 'y' && direction == Direction.DIR_DOWN) {
       return ++coordinate;
     } else {
+      // default case
       return coordinate;
     }
   }
