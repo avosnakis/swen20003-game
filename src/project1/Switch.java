@@ -1,7 +1,8 @@
 package project1;
 
-public class Switch extends Sprite {
-  public Switch(float x, float y) {
-    super("res/switch.png", x, y);
+public class Switch extends Tile {
+  public Switch(float x, float y, int xCell, int yCell) {
+    super("res/switch.png", x, y, xCell, yCell);
+    super.setPassable(true);
   }
 }

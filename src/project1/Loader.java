@@ -5,13 +5,11 @@
 package project1;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Loader {
-  private static String[][] types;
 
   private static int worldWidth;
   private static int worldHeight;
@@ -26,57 +24,38 @@ public class Loader {
    * @param y    the y position
    * @return the sprite object
    */
-  private static Sprite createSprite(String name, float x, float y) {
+  private static Sprite createSprite(String name, float x, float y, int xCell, int yCell) {
     switch (name) {
       case "wall":
-        return new Wall(x, y);
+        return new Wall(x, y, xCell, yCell);
       case "floor":
-        return new Floor(x, y);
+        return new Floor(x, y, xCell, yCell);
       case "target":
-        return new Target(x, y);
+        return new Target(x, y, xCell, yCell);
       case "switch":
-        return new Switch(x, y);
+        return new Switch(x, y, xCell, yCell);
       case "door":
-        return new Door(x ,y);
+        return new Door(x ,y, xCell, yCell);
       case "cracked":
-        return new CrackedWall(x, y);
+        return new CrackedWall(x, y, xCell, yCell);
       case "stone":
-        return new Stone(x, y);
+        return new Stone(x, y, xCell, yCell);
       case "ice":
-        return new Ice(x, y);
+        return new Ice(x, y, xCell, yCell);
       case "tnt":
-        return new Tnt(x, y);
+        return new Tnt(x, y, xCell, yCell);
       case "mage":
-        return new Mage(x, y);
+        return new Mage(x, y, xCell, yCell);
       case "skeleton":
-        return new Skeleton(x, y);
+        return new Skeleton(x, y, xCell, yCell);
       case "rogue":
-        return new Rogue(x, y);
+        return new Rogue(x, y, xCell, yCell);
       case "player":
-        return new Player(x, y);
+        return new Player(x, y, xCell, yCell);
     }
     return null;
   }
 
-  // Converts a world coordinate to a tile coordinate,
-  // and returns if that location is a blocked tile
-  public static boolean isBlocked(float x, float y) {
-    x -= offsetX;
-    x /= App.TILE_SIZE;
-    y -= offsetY;
-    y /= App.TILE_SIZE;
-
-    // Rounding is important here
-    x = Math.round(x);
-    y = Math.round(y);
-
-    // Do bounds checking!
-    if (x >= 0 && x < worldWidth && y >= 0 && y < worldHeight) {
-      return types[(int) x][(int) y].equals("wall");
-    }
-    // Default to blocked
-    return true;
-  }
 
   /**
    * Loads the sprites from a given file.
@@ -97,9 +76,6 @@ public class Loader {
       worldWidth = Integer.parseInt(parts[0]);
       worldHeight = Integer.parseInt(parts[1]);
 
-      // Create the array of object types
-      types = new String[worldWidth][worldHeight];
-
       // Calculate the top left of the tiles so that the level is
       // centred
       offsetX = (App.SCREEN_WIDTH - worldWidth * App.TILE_SIZE) / 2;
@@ -108,25 +84,31 @@ public class Loader {
       // Loop over every line of the file
       while ((line = reader.readLine()) != null) {
         String name;
-        float x, y;
 
         // Split the line into parts
         parts = line.split(",");
         name = parts[0];
-        x = Integer.parseInt(parts[1]);
-        y = Integer.parseInt(parts[2]);
-        types[(int) x][(int) y] = name;
+        int xCell = Integer.parseInt(parts[1]);
+        int yCell = Integer.parseInt(parts[2]);
 
         // Adjust for the grid
-        x = offsetX + x * App.TILE_SIZE;
-        y = offsetY + y * App.TILE_SIZE;
+        float x = offsetX + xCell * App.TILE_SIZE;
+        float y = offsetY + yCell * App.TILE_SIZE;
 
         // Create the sprite
-        list.add(createSprite(name, x, y));
+        list.add(createSprite(name, x, y, xCell, yCell));
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
     return list;
+  }
+
+  public static int getWorldWidth() {
+    return worldWidth;
+  }
+
+  public static int getWorldHeight() {
+    return worldHeight;
   }
 }

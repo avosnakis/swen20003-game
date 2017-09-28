@@ -4,8 +4,9 @@
  */
 package project1;
 
-public class Target extends Sprite {
-  public Target(float x, float y) {
-    super("res/Target.png", x, y);
+public class Target extends Tile {
+  public Target(float x, float y, int xCell, int yCell) {
+    super("res/Target.png", x, y, xCell, yCell);
+    super.setPassable(true);
   }
 }
