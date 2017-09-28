@@ -15,9 +15,11 @@ public class World {
 
   private ArrayList<Sprite> sprites;
   private int[][][] spriteIndices;
+  private ArrayList<int[]> targetLocations;
 
-  public World() {
-    this.sprites = Loader.loadSprites("res/levels/0.lvl");
+  public World(String filename) {
+    this.sprites = Loader.loadSprites(filename);
+    this.targetLocations = new ArrayList<>();
 
     this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
     for (int[][] plane : this.spriteIndices) {
@@ -27,6 +29,9 @@ public class World {
     }
 
     for (int i = 0; i < this.sprites.size(); i++) {
+      if (this.sprites.get(i).getSpriteType().equals("target")) {
+        this.addTargetLocation(this.sprites.get(i));
+      }
       this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
     }
   }
@@ -45,6 +50,38 @@ public class World {
         sprite.render(g);
       }
     }
+  }
+
+  /**
+   * @return Whether all targets have been covered by a block.
+   */
+  public boolean hasWon() {
+    boolean hasWon = false;
+    for (int[] location : this.targetLocations) {
+      hasWon = this.isCovered(location[0], location[1]);
+      if (!hasWon) {
+        return false;
+      }
+    }
+    return hasWon;
+  }
+
+  /**
+   * Checks to see whether a target at an (x,y) position has been covered by a block.
+   *
+   * @param x The x coordinate to check.
+   * @param y The y coordinate to check.
+   * @return Whether the target has been covered by a block.
+   */
+  private boolean isCovered(int x, int y) {
+    int i = 0;
+    while (this.spriteIndices[x][y][i] != NO_INDEX) {
+      if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteCategory().equals("block")) {
+        return true;
+      }
+      i++;
+    }
+    return false;
   }
 
   /**
@@ -134,6 +171,19 @@ public class World {
         this.spriteIndices[x][y][i + 1] = NO_INDEX;
       }
     }
+  }
+
+  /**
+   * Records the (x,y) position of a target.
+   *
+   * @param target The target to be recorded
+   */
+  private void addTargetLocation(Sprite target) {
+    int[] coordinates = new int[2];
+    coordinates[0] = target.getxCell();
+    coordinates[1] = target.getyCell();
+
+    this.targetLocations.add(coordinates);
   }
 
   /**

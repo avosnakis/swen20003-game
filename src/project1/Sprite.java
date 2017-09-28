@@ -20,8 +20,9 @@ public class Sprite implements Movable {
 
   private boolean passable;
   private String spriteCategory;
+  private String spriteType;
 
-  public Sprite(String imageSource, String spriteCategory, float x, float y, int xCell, int yCell) {
+  public Sprite(String imageSource, String spriteCategory, String spriteType, float x, float y, int xCell, int yCell) {
     try {
       this.image = new Image(imageSource);
     } catch (SlickException e) {
@@ -29,6 +30,7 @@ public class Sprite implements Movable {
     }
 
     this.spriteCategory = spriteCategory;
+    this.spriteType = spriteType;
 
     this.xCell = xCell;
     this.yCell = yCell;
@@ -91,6 +93,10 @@ public class Sprite implements Movable {
 
   public String getSpriteCategory() {
     return this.spriteCategory;
+  }
+
+  public String getSpriteType() {
+    return this.spriteType;
   }
 
   public boolean isPassable() {

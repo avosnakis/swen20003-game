@@ -9,7 +9,7 @@ import org.newdawn.slick.Input;
 public class Player extends Character implements Controllable {
 
   public Player(float x, float y, int xCell, int yCell) {
-    super("res/player_left.png", x, y, xCell, yCell);
+    super("res/player_left.png", "player", x, y, xCell, yCell);
   }
 
   @Override
