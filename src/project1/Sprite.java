@@ -30,6 +30,7 @@ public class Sprite implements Movable {
     }
 
     this.spriteCategory = spriteCategory;
+    this.spriteType = spriteType;
 
     this.xCell = xCell;
     this.yCell = yCell;
@@ -92,6 +93,10 @@ public class Sprite implements Movable {
 
   public String getSpriteCategory() {
     return this.spriteCategory;
+  }
+
+  public String getSpriteType() {
+    return this.spriteType;
   }
 
   public boolean isPassable() {
