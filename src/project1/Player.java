@@ -39,6 +39,7 @@ public class Player extends Character implements Controllable {
       return;
     }
 
+    world.incrementMoves();
     // Move to our destination
     this.moveToDestination(direction, world);
   }

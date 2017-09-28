@@ -17,6 +17,8 @@ public class World {
   private int[][][] spriteIndices;
   private ArrayList<int[]> targetLocations;
 
+  private int moveCount;
+
   public World(String filename) {
     this.sprites = Loader.loadSprites(filename);
     this.targetLocations = new ArrayList<>();
@@ -34,6 +36,8 @@ public class World {
       }
       this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
     }
+
+    this.moveCount = 0;
   }
 
   public void update(Input input, int delta) {
@@ -50,6 +54,7 @@ public class World {
         sprite.render(g);
       }
     }
+    g.drawString(String.format("Moves: %d", this.moveCount), 0, 0);
   }
 
   /**
@@ -82,6 +87,10 @@ public class World {
       i++;
     }
     return false;
+  }
+
+  public void incrementMoves() {
+    this.moveCount++;
   }
 
   /**
