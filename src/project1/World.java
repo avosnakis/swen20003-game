@@ -16,8 +16,8 @@ public class World {
   private ArrayList<Sprite> sprites;
   private int[][][] spriteIndices;
 
-  public World() {
-    this.sprites = Loader.loadSprites("res/levels/0.lvl");
+  public World(String filename) {
+    this.sprites = Loader.loadSprites(filename);
 
     this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
     for (int[][] plane : this.spriteIndices) {
@@ -45,6 +45,10 @@ public class World {
         sprite.render(g);
       }
     }
+  }
+
+  public boolean hasWon() {
+    return false;
   }
 
   /**
