@@ -9,16 +9,19 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Graphics;
 
-public class Sprite {
+public class Sprite implements Movable {
 
   private Image image = null;
   private float x;
   private float y;
 
+  private int xCell;
+  private int yCell;
+
   private boolean passable;
   private String spriteCategory;
 
-  public Sprite(String imageSource, String spriteCategory, float x, float y) {
+  public Sprite(String imageSource, String spriteCategory, float x, float y, int xCell, int yCell) {
     try {
       this.image = new Image(imageSource);
     } catch (SlickException e) {
@@ -27,6 +30,8 @@ public class Sprite {
 
     this.spriteCategory = spriteCategory;
 
+    this.xCell = xCell;
+    this.yCell = yCell;
     this.x = x;
     this.y = y;
     this.snapToGrid();
@@ -66,6 +71,22 @@ public class Sprite {
     this.y = y;
   }
 
+  public int getxCell() {
+    return this.xCell;
+  }
+
+  public void setxCell(int xCell) {
+    this.xCell = xCell;
+  }
+
+  public int getyCell() {
+    return this.yCell;
+  }
+
+  public void setyCell(int yCell) {
+    this.yCell = yCell;
+  }
+
   public String getSpriteCategory() {
     return this.spriteCategory;
   }
@@ -76,5 +97,43 @@ public class Sprite {
 
   public void setPassable(boolean passable) {
     this.passable = passable;
+  }
+
+  public void moveToDestination(int direction, World world) {
+    float speed = 32;
+    int cellSpeed = 1;
+    // Translate the direction to an x and y displacement
+    float deltaX = 0;
+    float deltaY = 0;
+    int deltaXCell = 0;
+    int deltaYCell = 0;
+
+    switch (direction) {
+      case DIR_LEFT:
+        deltaX = -speed;
+        deltaXCell = -cellSpeed;
+        break;
+      case DIR_RIGHT:
+        deltaX = speed;
+        deltaXCell = cellSpeed;
+        break;
+      case DIR_UP:
+        deltaY = -speed;
+        deltaYCell = -cellSpeed;
+        break;
+      case DIR_DOWN:
+        deltaY = speed;
+        deltaYCell = cellSpeed;
+        break;
+    }
+
+    // Make sure the position isn't occupied!
+    if (!world.isBlocked((int)(this.getX() + deltaX), (int)(this.getY() + deltaY), direction)) {
+      this.setX(this.getX() + deltaX);
+      this.setY(this.getY() + deltaY);
+
+      this.setxCell(this.getxCell() + deltaXCell);
+      this.setyCell(this.getyCell() + deltaYCell);
+    }
   }
 }

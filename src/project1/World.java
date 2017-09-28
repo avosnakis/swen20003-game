@@ -7,6 +7,7 @@ package project1;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.lwjgl.Sys;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
@@ -26,8 +27,16 @@ public class World {
       }
     }
 
+    System.out.println(this.spriteIndices.length);
+    System.out.println(this.spriteIndices[0].length);
+
+    for (int[][] plane : this.spriteIndices) {
+      for (int[] row : plane) {
+        System.out.println(Arrays.toString(row));
+      }
+    }
     for (int i = 0; i < this.sprites.size(); i++) {
-      this.insertIndex(i, (int)this.sprites.get(i).getX(), (int)this.sprites.get(i).getY());
+      this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
     }
   }
 
@@ -56,16 +65,22 @@ public class World {
           break;
         case "tile":
           cannotMove = !this.sprites.get(index).isPassable();
+          if (cannotMove) {
+            return true;
+          }
           break;
         case "block":
-          this.sprites.get(index).moveToDestination
+          this.sprites.get(index).moveToDestination(dir, this);
+          break;
       }
     }
-    return true;
+    return false;
   }
 
   private void insertIndex(int index, int x, int y) {
     int i = 0;
+    System.out.println(x);
+    System.out.println(y);
     while (this.spriteIndices[x][y][i] != NO_INDEX) {
       i++;
     }

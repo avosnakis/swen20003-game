@@ -8,8 +8,8 @@ import org.newdawn.slick.Input;
 
 public class Player extends Character implements Controllable {
 
-  public Player(float x, float y) {
-    super("res/player_left.png", x, y);
+  public Player(float x, float y, int xCell, int yCell) {
+    super("res/player_left.png", x, y, xCell, yCell);
   }
 
   @Override
@@ -19,24 +19,10 @@ public class Player extends Character implements Controllable {
 
   @Override
   public void handlePlayerInput(Input input) {
-    int dir = DIR_NONE;
-
-    if (input.isKeyPressed(Input.KEY_LEFT)) {
-      dir = DIR_LEFT;
-    } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-      dir = DIR_RIGHT;
-    } else if (input.isKeyPressed(Input.KEY_UP)) {
-      dir = DIR_UP;
-    } else if (input.isKeyPressed(Input.KEY_DOWN)) {
-      dir = DIR_DOWN;
-    }
-
-    // Move to our destination
-    this.moveToDestination(dir);
   }
 
   @Override
-  public void handlePlayerInput(Input input, World word) {
+  public void handlePlayerInput(Input input, World world) {
     int dir = DIR_NONE;
 
     if (input.isKeyPressed(Input.KEY_LEFT)) {
@@ -50,7 +36,6 @@ public class Player extends Character implements Controllable {
     }
 
     // Move to our destination
-    this.moveToDestination(dir);
-
+    this.moveToDestination(dir, world);
   }
 }

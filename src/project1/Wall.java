@@ -5,8 +5,8 @@
 package project1;
 
 public class Wall extends Tile {
-  public Wall(float x, float y) {
-    super("res/wall.png", x, y);
+  public Wall(float x, float y, int xCell, int yCell) {
+    super("res/wall.png", x, y, xCell, yCell);
     super.setPassable(false);
   }
 }
