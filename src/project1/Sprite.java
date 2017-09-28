@@ -99,7 +99,8 @@ public class Sprite implements Movable {
     this.passable = passable;
   }
 
-  public void moveToDestination(int direction, World world) {
+  @Override
+  public void moveToDestination(Direction direction, World world) {
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement

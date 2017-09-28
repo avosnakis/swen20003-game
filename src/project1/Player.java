@@ -23,23 +23,23 @@ public class Player extends Character implements Controllable {
 
   @Override
   public void handlePlayerInput(Input input, World world) {
-    int dir = DIR_NONE;
+    Direction direction = Direction.DIR_NONE;
 
     if (input.isKeyPressed(Input.KEY_LEFT)) {
-      dir = DIR_LEFT;
+      direction = Direction.DIR_LEFT;
     } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-      dir = DIR_RIGHT;
+      direction = Direction.DIR_RIGHT;
     } else if (input.isKeyPressed(Input.KEY_UP)) {
-      dir = DIR_UP;
+      direction = Direction.DIR_UP;
     } else if (input.isKeyPressed(Input.KEY_DOWN)) {
-      dir = DIR_DOWN;
+      direction = Direction.DIR_DOWN;
     }
 
-    if (dir == DIR_NONE) {
+    if (direction == Direction.DIR_NONE) {
       return;
     }
 
     // Move to our destination
-    this.moveToDestination(dir, world);
+    this.moveToDestination(direction, world);
   }
 }

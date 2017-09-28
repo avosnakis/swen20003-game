@@ -7,7 +7,6 @@ package project1;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.lwjgl.Sys;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
@@ -48,9 +47,7 @@ public class World {
     }
   }
 
-  public boolean isBlocked(int x, int y, int dir) {
-    System.out.println(x);
-    System.out.println(y);
+  public boolean isBlocked(int x, int y, Direction direction) {
     boolean cannotMove = true;
     for (int i = 0; i < this.spriteIndices[x][y].length && this.spriteIndices[x][y][i] != NO_INDEX; i++) {
       int index = this.spriteIndices[x][y][i];
@@ -59,18 +56,29 @@ public class World {
           break;
         case "tile":
           cannotMove = !this.sprites.get(index).isPassable();
-          if (cannotMove) {
-            return true;
-          }
           break;
         case "block":
-          this.sprites.get(index).moveToDestination(dir, this);
+          int nextX = incrementCoordinate(x, 'x', direction);
+          int nextY = incrementCoordinate(y, 'y', direction);
+          
+          cannotMove = isBlocked(nextX, nextY, direction);
+          this.sprites.get(index).moveToDestination(direction, this);
           break;
+      }
+      if (cannotMove) {
+        return true;
       }
     }
     return false;
   }
 
+  /**
+   * Inserts a sprite index at an (x,y) coordinate.
+   *
+   * @param index
+   * @param x
+   * @param y
+   */
   private void insertIndex(int index, int x, int y) {
     int i = 0;
     while (this.spriteIndices[x][y][i] != NO_INDEX) {
@@ -79,6 +87,16 @@ public class World {
     this.spriteIndices[x][y][i] = index;
   }
 
+  /**
+   * Moves a sprite index from one (x, y) coordinate to another.
+   *
+   * @param fromX The initial x coordinate.
+   * @param fromY The initial y coordinate.
+   * @param toX The final x coordinate.
+   * @param toY The final y coordinate.
+   * @param type The type of the sprite being moved. Assumes there will only be a single block or character at a single
+   *             (x,y) position.
+   */
   public void moveIndex(int fromX, int fromY, int toX, int toY, String type) {
     int i = 0;
     while (!this.sprites.get(this.spriteIndices[fromX][fromY][i]).getSpriteCategory().equals(type)) {
@@ -95,12 +113,36 @@ public class World {
     this.spriteIndices[toX][toY][i] = temp;
   }
 
+  /**
+   * Shifts the z-axis at a specified coordinate, so that all empty slots are at the top of the matrix.
+   *
+   * @param x The x-coordinate of the z-axis to shift.
+   * @param y The y-coordinate of the z-axis to shift.
+   */
   private void shiftDown(int x, int y) {
     for (int i = 0; i < this.spriteIndices[x][y].length - 1; i++) {
       if (this.spriteIndices[x][y][i] == NO_INDEX) {
         this.spriteIndices[x][y][i] = this.spriteIndices[x][y][i + 1];
         this.spriteIndices[x][y][i + 1] = NO_INDEX;
       }
+    }
+  }
+
+  private static int incrementCoordinate(int coordinate, char axis, Direction direction) {
+    if (axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) {
+      return coordinate;
+    } else if (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT)) {
+      return coordinate;
+    } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
+      return --coordinate;
+    } else if (axis == 'x' && direction == Direction.DIR_RIGHT) {
+      return ++coordinate;
+    } else if (axis == 'y' && direction == Direction.DIR_UP) {
+      return --coordinate;
+    } else if (axis == 'y' && direction == Direction.DIR_DOWN) {
+      return ++coordinate;
+    } else {
+      return coordinate;
     }
   }
 }
