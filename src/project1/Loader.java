@@ -111,4 +111,12 @@ public class Loader {
   public static int getWorldHeight() {
     return worldHeight;
   }
+
+  public static int getOffsetX() {
+    return offsetX;
+  }
+
+  public static int getOffsetY() {
+    return offsetY;
+  }
 }

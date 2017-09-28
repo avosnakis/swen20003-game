@@ -6,17 +6,23 @@ package project1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Stack;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-public class World {
+public class World implements Controllable {
   private static final int NO_INDEX = -1;
 
   private ArrayList<Sprite> sprites;
-  private int[][][] spriteIndices;
   private ArrayList<int[]> targetLocations;
+  private int[][][] spriteIndices;
 
+  private int timer;
+  private Stack<Integer> updateTimes;
+  private HashMap<Integer, int[][][]> pastWorldLocations;
+  private boolean updatedThisFrame;
   private int moveCount;
 
   public World(String filename) {
@@ -37,14 +43,29 @@ public class World {
       this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
     }
 
+    this.updatedThisFrame = false;
+    this.updateTimes = new Stack<>();
+    this.updateTimes.push(0);
+    this.pastWorldLocations = new HashMap<>();
+    this.pastWorldLocations.put(0, this.spriteIndices);
+
+    this.timer = 0;
     this.moveCount = 0;
   }
 
   public void update(Input input, int delta) {
+    this.handlePlayerInput(input);
+    this.timer += delta;
     for (Sprite sprite : this.sprites) {
       if (sprite != null) {
         sprite.update(input, delta, this);
       }
+    }
+
+    if (this.updatedThisFrame) {
+      this.updateTimes.push(this.timer);
+      this.pastWorldLocations.put(this.timer, this.spriteIndices);
+      this.updatedThisFrame = false;
     }
   }
 
@@ -114,7 +135,6 @@ public class World {
         case "block":
           int nextX = incrementCoordinate(x, 'x', direction);
           int nextY = incrementCoordinate(y, 'y', direction);
-
           cannotMove = isBlocked(nextX, nextY, direction);
           this.sprites.get(index).moveToDestination(direction, this);
           break;
@@ -153,6 +173,10 @@ public class World {
    */
   public void moveIndex(int fromX, int fromY, int toX, int toY, String type) {
     int i = 0;
+    System.out.println(fromX);
+    System.out.println(fromY);
+    System.out.println(Arrays.toString(this.spriteIndices[fromX][fromY]));
+    System.out.println(type);
     while (!this.sprites.get(this.spriteIndices[fromX][fromY][i]).getSpriteCategory().equals(type)) {
       i++;
     }
@@ -222,5 +246,37 @@ public class World {
       // default case
       return coordinate;
     }
+  }
+
+  public int getTimer() {
+    return this.timer;
+  }
+
+  public void setUpdatedThisFrame(boolean updatedThisFrame) {
+    this.updatedThisFrame = updatedThisFrame;
+  }
+
+  @Override
+  public void handlePlayerInput(Input input) {
+    if (!input.isKeyPressed(Input.KEY_Z)) {
+      return;
+    }
+
+    int lastUpdateTime = this.updateTimes.pop();
+    if (lastUpdateTime == 0) {
+      this.timer = 0;
+      this.updateTimes.push(0);
+      return;
+    }
+
+    for (Sprite sprite : this.sprites) {
+      sprite.undo(lastUpdateTime);
+    }
+    this.spriteIndices = this.pastWorldLocations.get(lastUpdateTime);
+    this.moveCount--;
+  }
+
+  @Override
+  public void handlePlayerInput(Input input, World word) {
   }
 }
