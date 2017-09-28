@@ -86,11 +86,21 @@ public class World {
     }
     int temp = this.spriteIndices[fromX][fromY][i];
     this.spriteIndices[fromX][fromY][i] = NO_INDEX;
+    this.shiftDown(fromX, fromY);
 
     i = 0;
     while (this.spriteIndices[toX][toY][i] != NO_INDEX) {
       i++;
     }
     this.spriteIndices[toX][toY][i] = temp;
+  }
+
+  private void shiftDown(int x, int y) {
+    for (int i = 0; i < this.spriteIndices[x][y].length - 1; i++) {
+      if (this.spriteIndices[x][y][i] == NO_INDEX) {
+        this.spriteIndices[x][y][i] = this.spriteIndices[x][y][i + 1];
+        this.spriteIndices[x][y][i + 1] = NO_INDEX;
+      }
+    }
   }
 }
