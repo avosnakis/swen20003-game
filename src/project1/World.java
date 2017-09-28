@@ -20,21 +20,13 @@ public class World {
   public World() {
     this.sprites = Loader.loadSprites("res/levels/0.lvl");
 
-    this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldWidth()][5];
+    this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
     for (int[][] plane : this.spriteIndices) {
       for (int[] row : plane) {
         Arrays.fill(row, NO_INDEX);
       }
     }
 
-    System.out.println(this.spriteIndices.length);
-    System.out.println(this.spriteIndices[0].length);
-
-    for (int[][] plane : this.spriteIndices) {
-      for (int[] row : plane) {
-        System.out.println(Arrays.toString(row));
-      }
-    }
     for (int i = 0; i < this.sprites.size(); i++) {
       this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
     }
@@ -57,6 +49,8 @@ public class World {
   }
 
   public boolean isBlocked(int x, int y, int dir) {
+    System.out.println(x);
+    System.out.println(y);
     boolean cannotMove = true;
     for (int i = 0; i < this.spriteIndices[x][y].length && this.spriteIndices[x][y][i] != NO_INDEX; i++) {
       int index = this.spriteIndices[x][y][i];
@@ -79,11 +73,24 @@ public class World {
 
   private void insertIndex(int index, int x, int y) {
     int i = 0;
-    System.out.println(x);
-    System.out.println(y);
     while (this.spriteIndices[x][y][i] != NO_INDEX) {
       i++;
     }
     this.spriteIndices[x][y][i] = index;
+  }
+
+  public void moveIndex(int fromX, int fromY, int toX, int toY, String type) {
+    int i = 0;
+    while (!this.sprites.get(this.spriteIndices[fromX][fromY][i]).getSpriteCategory().equals(type)) {
+      i++;
+    }
+    int temp = this.spriteIndices[fromX][fromY][i];
+    this.spriteIndices[fromX][fromY][i] = NO_INDEX;
+
+    i = 0;
+    while (this.spriteIndices[toX][toY][i] != NO_INDEX) {
+      i++;
+    }
+    this.spriteIndices[toX][toY][i] = temp;
   }
 }

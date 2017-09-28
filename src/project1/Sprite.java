@@ -128,12 +128,15 @@ public class Sprite implements Movable {
     }
 
     // Make sure the position isn't occupied!
-    if (!world.isBlocked((int)(this.getX() + deltaX), (int)(this.getY() + deltaY), direction)) {
-      this.setX(this.getX() + deltaX);
-      this.setY(this.getY() + deltaY);
+    if (!world.isBlocked(this.xCell + deltaXCell, this.yCell + deltaYCell, direction)) {
+      world.moveIndex(this.xCell, this.yCell, this.xCell + deltaXCell, this.yCell + deltaYCell, this.spriteCategory);
 
-      this.setxCell(this.getxCell() + deltaXCell);
-      this.setyCell(this.getyCell() + deltaYCell);
+      this.x += deltaX;
+      this.y += deltaY;
+
+      this.xCell += deltaXCell;
+      this.yCell += deltaYCell;
+
     }
   }
 }

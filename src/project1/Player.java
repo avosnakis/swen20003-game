@@ -35,6 +35,10 @@ public class Player extends Character implements Controllable {
       dir = DIR_DOWN;
     }
 
+    if (dir == DIR_NONE) {
+      return;
+    }
+
     // Move to our destination
     this.moveToDestination(dir, world);
   }

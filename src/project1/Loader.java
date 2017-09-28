@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Loader {
-  private static String[][] types;
 
   private static int worldWidth;
   private static int worldHeight;
@@ -76,9 +75,6 @@ public class Loader {
       String[] parts = line.split(",");
       worldWidth = Integer.parseInt(parts[0]);
       worldHeight = Integer.parseInt(parts[1]);
-
-      // Create the array of object types
-      types = new String[worldWidth][worldHeight];
 
       // Calculate the top left of the tiles so that the level is
       // centred
