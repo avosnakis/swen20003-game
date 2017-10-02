@@ -305,6 +305,44 @@ public class World implements Controllable {
     this.moveCount--;
   }
 
+  public int crackedWallAtLocation(int x, int y) {
+    int i = 0;
+    while (this.spriteIndices[x][y][i] != NO_INDEX && i < this.spriteIndices[x][y].length) {
+      if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteType().equals("cracked")) {
+        return i;
+      }
+      i++;
+    }
+    return -1;
+  }
+
+  public void destroyWall(int x, int y, int z) {
+    int index = this.spriteIndices[x][y][z];
+    this.sprites.set(index, null);
+    this.spriteIndices[x][y][z] = NO_INDEX;
+    this.shiftDown(x, y);
+  }
+
+  /**
+   * Destroys a TNT block at an (x, y) coordinate.
+   *
+   * @param x The x coordinate of the TNT to destroy.
+   * @param y The y coordinate of the TNT to destroy.
+   */
+  public void destroyTnt(int x, int y) {
+    int i = 0;
+    while (this.spriteIndices[x][y][i] != NO_INDEX && i < this.spriteIndices[x][y].length) {
+      if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteType().equals("tnt")) {
+        break;
+      }
+      i++;
+    }
+
+    this.sprites.set(this.spriteIndices[x][y][i], null);
+    this.spriteIndices[x][y][i] = NO_INDEX;
+    this.shiftDown(x, y);
+  }
+
   /**
    * Manually instantiate a new 3D array of sprite indices, and copy the contents of the old one to in.
    *
@@ -315,7 +353,8 @@ public class World implements Controllable {
     for (int i = 0; i < Loader.getWorldWidth(); i++) {
       for (int j = 0; j < Loader.getWorldHeight(); j++) {
         System.arraycopy(this.spriteIndices[i][j],
-            0, newSpriteIndices[i][j],
+            0,
+            newSpriteIndices[i][j],
             0,
             this.spriteIndices[i][j].length);
       }
@@ -330,6 +369,4 @@ public class World implements Controllable {
   public void setChangedThisFrame(boolean changedThisFrame) {
     this.changedThisFrame = changedThisFrame;
   }
-
-
 }

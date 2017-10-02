@@ -3,7 +3,7 @@ package project1;
 import org.newdawn.slick.Input;
 
 public class Ice extends Block {
-  private static final int SLIDE_INTERVAL = 400;
+  private static final int SLIDE_INTERVAL = 250;
 
   private int timer;
   private boolean sliding;
