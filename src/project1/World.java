@@ -297,7 +297,9 @@ public class World implements Controllable {
 
     // Undo all sprites
     for (Sprite sprite : this.sprites) {
-      sprite.undo(lastUpdateTime);
+      if (sprite != null) {
+        sprite.undo(lastUpdateTime);
+      }
     }
 
     // Set the world state back and decrement the move count
