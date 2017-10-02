@@ -35,7 +35,7 @@ public class Loader {
       case "switch":
         return new Switch(x, y, xCell, yCell);
       case "door":
-        return new Door(x ,y, xCell, yCell);
+        return new Door(x, y, xCell, yCell);
       case "cracked":
         return new CrackedWall(x, y, xCell, yCell);
       case "stone":

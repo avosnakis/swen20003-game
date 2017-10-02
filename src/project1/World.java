@@ -141,8 +141,8 @@ public class World implements Controllable {
   /**
    * Determines whether an (x,y) position is possible to move to.
    *
-   * @param x The x point to be checked.
-   * @param y The y point to be checked.
+   * @param x         The x point to be checked.
+   * @param y         The y point to be checked.
    * @param direction The direction the sprite is currently moving.
    * @return Whether the position is blocked or not.
    */
@@ -190,10 +190,10 @@ public class World implements Controllable {
    *
    * @param fromX The initial x coordinate.
    * @param fromY The initial y coordinate.
-   * @param toX The final x coordinate.
-   * @param toY The final y coordinate.
-   * @param type The type of the sprite being moved. Assumes there will only be a single block or character at a single
-   *             (x,y) position.
+   * @param toX   The final x coordinate.
+   * @param toY   The final y coordinate.
+   * @param type  The type of the sprite being moved. Assumes there will only be a single block or character at a single
+   *              (x,y) position.
    */
   public void moveIndex(int fromX, int fromY, int toX, int toY, String type) {
     int i = 0;
@@ -246,8 +246,8 @@ public class World implements Controllable {
    * Increments a cell coordinate in the specified direction.
    *
    * @param coordinate The coordinate to be incremented.
-   * @param axis The axis the coordinate lies on.
-   * @param direction The direction the movement is happening in.
+   * @param axis       The axis the coordinate lies on.
+   * @param direction  The direction the movement is happening in.
    * @return The incremented coordinate.
    */
   private static int incrementCoordinate(int coordinate, char axis, Direction direction) {
