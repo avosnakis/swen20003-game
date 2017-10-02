@@ -15,18 +15,20 @@ import org.newdawn.slick.Input;
 public class World implements Controllable {
   private static final int NO_INDEX = -1;
 
+  private String levelFile;
+
   private ArrayList<Sprite> sprites;
   private ArrayList<int[]> targetLocations;
   private int[][][] spriteIndices;
 
   private int timer;
-  private Stack<Integer> updateTimes;
+  private Stack<Integer> changeTimes;
   private HashMap<Integer, int[][][]> pastWorldLocations;
-  private boolean updatedThisFrame;
+  private boolean changedThisFrame;
   private int moveCount;
 
-  public World(String filename) {
-    this.sprites = Loader.loadSprites(filename);
+  public World(String levelFile) {
+    this.sprites = Loader.loadSprites(levelFile);
     this.targetLocations = new ArrayList<>();
 
     this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
@@ -43,32 +45,54 @@ public class World implements Controllable {
       this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
     }
 
-    this.updatedThisFrame = false;
-    this.updateTimes = new Stack<>();
-    this.updateTimes.push(0);
+    this.changedThisFrame = false;
+    this.changeTimes = new Stack<>();
+    this.changeTimes.push(0);
+
     this.pastWorldLocations = new HashMap<>();
-    this.pastWorldLocations.put(0, this.spriteIndices);
+    this.pastWorldLocations.put(0, this.spriteIndices.clone());
 
     this.timer = 0;
     this.moveCount = 0;
+
+    this.levelFile = levelFile;
   }
 
+  /**
+   * Update all objects of the game, handle player input, and record the changed state of the world if so needed.
+   *
+   * @param input
+   * @param delta
+   */
   public void update(Input input, int delta) {
+
+    // Check if the player tried to undo
     this.handlePlayerInput(input);
+
+    // Increment the internal timer, and make a record of the current world state
     this.timer += delta;
+    int[][][] currentSpriteIndices = this.copySpriteIndices();
+
+    // Update all sprites
     for (Sprite sprite : this.sprites) {
       if (sprite != null) {
         sprite.update(input, delta, this);
       }
     }
 
-    if (this.updatedThisFrame) {
-      this.updateTimes.push(this.timer);
-      this.pastWorldLocations.put(this.timer, this.spriteIndices);
-      this.updatedThisFrame = false;
+    // If there were changes in the world, save the past information
+    if (this.changedThisFrame) {
+      this.changeTimes.push(this.timer);
+      this.pastWorldLocations.put(this.timer, currentSpriteIndices);
+      this.changedThisFrame = false;
     }
   }
 
+  /**
+   * Render all sprites and the move count to the screen.
+   *
+   * @param g The graphics object for the game.
+   */
   public void render(Graphics g) {
     for (Sprite sprite : this.sprites) {
       if (sprite != null) {
@@ -135,7 +159,7 @@ public class World implements Controllable {
         case "block":
           int nextX = incrementCoordinate(x, 'x', direction);
           int nextY = incrementCoordinate(y, 'y', direction);
-          cannotMove = isBlocked(nextX, nextY, direction);
+          cannotMove = this.isBlocked(nextX, nextY, direction);
           this.sprites.get(index).moveToDestination(direction, this);
           break;
       }
@@ -173,17 +197,16 @@ public class World implements Controllable {
    */
   public void moveIndex(int fromX, int fromY, int toX, int toY, String type) {
     int i = 0;
-    System.out.println(fromX);
-    System.out.println(fromY);
-    System.out.println(Arrays.toString(this.spriteIndices[fromX][fromY]));
-    System.out.println(type);
+    // Find the index of block or character we want to move
     while (!this.sprites.get(this.spriteIndices[fromX][fromY][i]).getSpriteCategory().equals(type)) {
       i++;
     }
+    // Remove its index
     int temp = this.spriteIndices[fromX][fromY][i];
     this.spriteIndices[fromX][fromY][i] = NO_INDEX;
     this.shiftDown(fromX, fromY);
 
+    // Place it in its new location
     i = 0;
     while (this.spriteIndices[toX][toY][i] != NO_INDEX) {
       i++;
@@ -248,35 +271,65 @@ public class World implements Controllable {
     }
   }
 
-  public int getTimer() {
-    return this.timer;
-  }
-
-  public void setUpdatedThisFrame(boolean updatedThisFrame) {
-    this.updatedThisFrame = updatedThisFrame;
-  }
-
   @Override
   public void handlePlayerInput(Input input) {
-    if (!input.isKeyPressed(Input.KEY_Z)) {
-      return;
+    if (input.isKeyPressed(Input.KEY_Z)) {
+      this.undo();
     }
-
-    int lastUpdateTime = this.updateTimes.pop();
-    if (lastUpdateTime == 0) {
-      this.timer = 0;
-      this.updateTimes.push(0);
-      return;
-    }
-
-    for (Sprite sprite : this.sprites) {
-      sprite.undo(lastUpdateTime);
-    }
-    this.spriteIndices = this.pastWorldLocations.get(lastUpdateTime);
-    this.moveCount--;
   }
 
   @Override
   public void handlePlayerInput(Input input, World word) {
   }
+
+  /**
+   * Set the world back to the last time a player made an input.
+   */
+  private void undo() {
+    int lastUpdateTime = this.changeTimes.pop();
+
+    // If the world is in its initial state, do nothing
+    if (lastUpdateTime == 0) {
+      this.timer = 0;
+      this.changeTimes.push(0);
+      return;
+    }
+
+    // Undo all sprites
+    for (Sprite sprite : this.sprites) {
+      sprite.undo(lastUpdateTime);
+    }
+
+    // Set the world state back and decrement the move count
+    this.spriteIndices = this.pastWorldLocations.get(lastUpdateTime);
+    this.moveCount--;
+  }
+
+  /**
+   * Manually instantiate a new 3D array of sprite indices, and copy the contents of the old one to in.
+   *
+   * @return A new instance of the current sprite indices array as-is.
+   */
+  private int[][][] copySpriteIndices() {
+    int[][][] newSpriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
+    for (int i = 0; i < Loader.getWorldWidth(); i++) {
+      for (int j = 0; j < Loader.getWorldHeight(); j++) {
+        System.arraycopy(this.spriteIndices[i][j],
+            0, newSpriteIndices[i][j],
+            0,
+            this.spriteIndices[i][j].length);
+      }
+    }
+    return newSpriteIndices;
+  }
+
+  public int getTimer() {
+    return this.timer;
+  }
+
+  public void setChangedThisFrame(boolean changedThisFrame) {
+    this.changedThisFrame = changedThisFrame;
+  }
+
+
 }

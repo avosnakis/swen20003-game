@@ -95,7 +95,7 @@ public class Sprite implements Movable {
         break;
     }
     this.addPastPosition(world.getTimer());
-    world.setUpdatedThisFrame(true);
+    world.setChangedThisFrame(true);
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(this.xCell + deltaXCell, this.yCell + deltaYCell, direction)) {
@@ -117,7 +117,7 @@ public class Sprite implements Movable {
   public void addPastPosition(int time) {
     int[] coordinates = new int[2];
     coordinates[0] = this.xCell;
-    coordinates[0] = this.yCell;
+    coordinates[1] = this.yCell;
 
     this.pastPositions.put(time, coordinates);
   }
@@ -136,6 +136,7 @@ public class Sprite implements Movable {
     // Set the sprite's coordinates
     this.x = Loader.getOffsetX() + this.xCell * App.TILE_SIZE;
     this.y = Loader.getOffsetY() + this.yCell * App.TILE_SIZE;
+    this.snapToGrid();
 
     this.pastPositions.remove(time);
   }
