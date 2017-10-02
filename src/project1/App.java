@@ -30,7 +30,6 @@ public class App extends BasicGame {
   public static final int TILE_SIZE = 32;
 
   private static final String[] levels = {
-      "targettest.lvl",
       "0.lvl",
       "1.lvl",
       "2.lvl",
