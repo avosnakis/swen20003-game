@@ -341,7 +341,6 @@ public class World implements Controllable {
   }
 
   public void destroyWall(int x, int y, int z) {
-    System.out.println("cracked");
     int index = this.spriteIndices[x][y][z];
     this.clearReferences(this.sprites.get(index).getPastPositions(), index);
     this.sprites.set(index, null);
@@ -356,7 +355,6 @@ public class World implements Controllable {
    * @param y The y coordinate of the TNT to destroy.
    */
   public void destroyTnt(int x, int y, HashMap<Integer, int[]> tntPastPositions) {
-    System.out.println("tnt");
     int i = 0;
     while (this.spriteIndices[x][y][i] != NO_INDEX && i < this.spriteIndices[x][y].length) {
       if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteType().equals("tnt")) {
