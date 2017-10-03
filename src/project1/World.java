@@ -16,7 +16,17 @@ import org.newdawn.slick.Input;
 public class World implements Controllable {
   private static final int NO_INDEX = -1;
 
-  private String levelFile;
+  private static final String[] levels = {
+      "0.lvl",
+      "1.lvl",
+      "2.lvl",
+      "3.lvl",
+      "4.lvl",
+      "5.lvl",
+      "6.lvl"
+  };
+
+  private int currentLevel;
 
   private ArrayList<Sprite> sprites;
   private ArrayList<Position<Integer>> targetLocations;
@@ -28,12 +38,14 @@ public class World implements Controllable {
   private boolean changedThisFrame;
   private int moveCount;
 
-  public World(String levelFile) {
-    this.reset(levelFile);
+  public World() {
+    this.currentLevel = 0;
+    this.reset(0);
   }
 
-  private void reset(String levelFile) {
-    this.sprites = Loader.loadSprites(levelFile);
+  private void reset(int level) {
+    String filename = "res/levels/" + levels[level];
+    this.sprites = Loader.loadSprites(filename);
     this.targetLocations = new ArrayList<>();
 
     this.initialiseSpriteIndices();
@@ -48,9 +60,6 @@ public class World implements Controllable {
 
     this.timer = 0;
     this.moveCount = 0;
-
-    this.levelFile = levelFile;
-
   }
 
   private void initialiseSpriteIndices() {
@@ -81,6 +90,13 @@ public class World implements Controllable {
    * @param delta
    */
   public void update(Input input, int delta) {
+    // If the player completed the level on the previous frame,
+    // move to the next level and skip the rest of this frame
+    if (this.hasWon()) {
+      this.currentLevel += 1;
+      this.reset(this.currentLevel);
+      return;
+    }
 
     // Check if the player tried to undo
     this.handlePlayerInput(input);
@@ -290,7 +306,7 @@ public class World implements Controllable {
   @Override
   public void handlePlayerInput(Input input) {
     if (input.isKeyPressed(Input.KEY_R)) {
-      this.reset(this.levelFile);
+      this.reset(this.currentLevel);
       return;
     }
     if (input.isKeyPressed(Input.KEY_Z)) {

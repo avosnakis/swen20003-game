@@ -29,27 +29,15 @@ public class App extends BasicGame {
    */
   public static final int TILE_SIZE = 32;
 
-  private static final String[] levels = {
-      "0.lvl",
-      "1.lvl",
-      "2.lvl",
-      "3.lvl",
-      "4.lvl",
-      "5.lvl",
-      "6.lvl"
-  };
-
-  private int currentLevel;
   private World world;
 
   public App() {
     super("Shadow Blocks");
-    this.currentLevel = 0;
   }
 
   @Override
   public void init(GameContainer gc) throws SlickException {
-    this.world = new World("res/levels/" + levels[this.currentLevel]);
+    this.world = new World();
   }
 
   /**
@@ -60,14 +48,6 @@ public class App extends BasicGame {
    */
   @Override
   public void update(GameContainer gc, int delta) throws SlickException {
-    // If the player completed the level on the previous frame,
-    // move to the next level and skip the rest of this frame
-    if (this.world.hasWon()) {
-      this.currentLevel += 1;
-      this.world = new World("res/levels/" + levels[this.currentLevel]);
-      return;
-    }
-
     // Get data about the current input (keyboard state).
     Input input = gc.getInput();
     this.world.update(input, delta);
