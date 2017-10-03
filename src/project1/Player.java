@@ -8,8 +8,8 @@ import org.newdawn.slick.Input;
 
 public class Player extends Character implements Controllable {
 
-  public Player(float x, float y, int xCell, int yCell) {
-    super("res/player_left.png", "player", x, y, xCell, yCell);
+  public Player(Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super("res/player_left.png", "player", cellPosition, windowPosition);
   }
 
   @Override

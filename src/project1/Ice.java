@@ -9,8 +9,8 @@ public class Ice extends Block {
   private boolean sliding;
   private Direction currentSlideDirection;
 
-  public Ice(float x, float y, int xCell, int yCell) {
-    super("res/ice.png", "ice", x, y, xCell, yCell);
+  public Ice(Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super("res/ice.png", "ice", cellPosition, windowPosition);
 
     this.timer = 0;
     this.sliding = false;
@@ -72,21 +72,24 @@ public class Ice extends Block {
       world.setChangedThisFrame(true);
     }
 
+    int nextXCell = this.getxCell() + deltaXCell;
+    int nextYCell = this.getyCell() + deltaYCell;
+
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(this.getxCell() + deltaXCell, this.getyCell() + deltaYCell, direction)) {
+    if (!world.isBlocked(nextXCell, nextYCell, direction)) {
       world.moveIndex(this.getxCell(),
           this.getyCell(),
-          this.getxCell() + deltaXCell,
-          this.getyCell() + deltaYCell,
-          this.getSpriteCategory());
+          this.getzCell(),
+          nextXCell,
+          nextYCell);
 
       // Update the window coordinates
       this.setX(this.getX() + deltaX);
       this.setY(this.getY() + deltaY);
 
       // Update the cell coordinates
-      this.setxCell(this.getxCell() + deltaXCell);
-      this.setyCell(this.getyCell() + deltaYCell);
+      this.setxCell(nextXCell);
+      this.setyCell(nextYCell);
 
       // The block is now sliding
       this.sliding = true;

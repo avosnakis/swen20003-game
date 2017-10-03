@@ -1,8 +1,8 @@
 package project1;
 
 public class Tnt extends Block {
-  public Tnt(float x, float y, int xCell, int yCell) {
-    super("res/tnt.png", "tnt", x, y, xCell, yCell);
+  public Tnt(Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super("res/tnt.png", "tnt", cellPosition, windowPosition);
   }
 
   @Override
@@ -40,8 +40,9 @@ public class Tnt extends Block {
     // Destroy the cracked wall the TNT if there is a cracked wall at the next location
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
     if (crackedIndex != -1) {
-      world.destroyWall(nextXCell, nextYCell, crackedIndex);
-      world.destroyTnt(this.getxCell(), this.getyCell(), this.getPastPositions());
+      // Destroy the cracked wall and this tnt
+      world.destroySprite(nextXCell, nextYCell, crackedIndex);
+      world.destroySprite(this.getxCell(), this.getyCell(), this.getzCell());
       return;
     }
 
@@ -52,9 +53,9 @@ public class Tnt extends Block {
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
       world.moveIndex(this.getxCell(),
           this.getyCell(),
+          this.getzCell(),
           nextXCell,
-          nextYCell,
-          this.getSpriteCategory());
+          nextYCell);
 
       this.setX(this.getX() + deltaX);
       this.setY(this.getY() + deltaY);

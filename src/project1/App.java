@@ -44,7 +44,7 @@ public class App extends BasicGame {
 
   public App() {
     super("Shadow Blocks");
-    this.currentLevel = 1;
+    this.currentLevel = 0;
   }
 
   @Override

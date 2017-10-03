@@ -19,7 +19,7 @@ public class World implements Controllable {
   private String levelFile;
 
   private ArrayList<Sprite> sprites;
-  private ArrayList<int[]> targetLocations;
+  private ArrayList<Position<Integer>> targetLocations;
   private int[][][] spriteIndices;
 
   private int timer;
@@ -36,19 +36,8 @@ public class World implements Controllable {
     this.sprites = Loader.loadSprites(levelFile);
     this.targetLocations = new ArrayList<>();
 
-    this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
-    for (int[][] plane : this.spriteIndices) {
-      for (int[] row : plane) {
-        Arrays.fill(row, NO_INDEX);
-      }
-    }
-
-    for (int i = 0; i < this.sprites.size(); i++) {
-      if (this.sprites.get(i).getSpriteType().equals("target")) {
-        this.addTargetLocation(this.sprites.get(i));
-      }
-      this.insertIndex(i, this.sprites.get(i).getxCell(), this.sprites.get(i).getyCell());
-    }
+    this.initialiseSpriteIndices();
+    this.initialiseTargetLocations();
 
     this.changedThisFrame = false;
     this.changeTimes = new Stack<>();
@@ -62,6 +51,27 @@ public class World implements Controllable {
 
     this.levelFile = levelFile;
 
+  }
+
+  private void initialiseSpriteIndices() {
+    this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
+    for (int[][] plane : this.spriteIndices) {
+      for (int[] row : plane) {
+        Arrays.fill(row, NO_INDEX);
+      }
+    }
+    for (int i = 0; i < this.sprites.size(); i++) {
+      Sprite sprite = this.sprites.get(i);
+      this.spriteIndices[sprite.getxCell()][sprite.getyCell()][sprite.getzCell()] = i;
+    }
+  }
+
+  private void initialiseTargetLocations() {
+    for (int i = 0; i < this.sprites.size(); i++) {
+      if (this.sprites.get(i).getSpriteType().equals("target")) {
+        this.addTargetLocation(this.sprites.get(i));
+      }
+    }
   }
 
   /**
@@ -113,8 +123,8 @@ public class World implements Controllable {
    */
   public boolean hasWon() {
     boolean hasWon = false;
-    for (int[] location : this.targetLocations) {
-      hasWon = this.isCovered(location[0], location[1]);
+    for (Position<Integer> location : this.targetLocations) {
+      hasWon = this.isCovered(location.getX(), location.getY());
       if (!hasWon) {
         return false;
       }
@@ -144,6 +154,10 @@ public class World implements Controllable {
     this.moveCount++;
   }
 
+  public void decrementMoves() {
+    this.moveCount--;
+  }
+
   /**
    * Determines whether an (x,y) position is possible to move to.
    *
@@ -153,6 +167,11 @@ public class World implements Controllable {
    * @return Whether the position is blocked or not.
    */
   public boolean isBlocked(int x, int y, Direction direction) {
+    // Check that the block is moving to a spot inside the grid
+    if (x < 0 || x > Loader.getWorldWidth() || y < 0 || y > Loader.getWorldHeight()) {
+      return false;
+    }
+    System.out.println(direction);
     boolean cannotMove = true;
     for (int i = 0; i < this.spriteIndices[x][y].length && this.spriteIndices[x][y][i] != NO_INDEX; i++) {
       int index = this.spriteIndices[x][y][i];
@@ -177,47 +196,27 @@ public class World implements Controllable {
   }
 
   /**
-   * Inserts a sprite index at an (x,y) coordinate.
-   *
-   * @param index
-   * @param x
-   * @param y
-   */
-  private void insertIndex(int index, int x, int y) {
-    int i = 0;
-    while (this.spriteIndices[x][y][i] != NO_INDEX) {
-      i++;
-    }
-    this.spriteIndices[x][y][i] = index;
-  }
-
-  /**
    * Moves a sprite index from one (x, y) coordinate to another.
    *
    * @param fromX The initial x coordinate.
    * @param fromY The initial y coordinate.
+   * @param fromZ The initial z coordinate.
    * @param toX   The final x coordinate.
    * @param toY   The final y coordinate.
-   * @param type  The type of the sprite being moved. Assumes there will only be a single block or character at a single
-   *              (x,y) position.
    */
-  public void moveIndex(int fromX, int fromY, int toX, int toY, String type) {
-    int i = 0;
-    // Find the index of block or character we want to move
-    while (!this.sprites.get(this.spriteIndices[fromX][fromY][i]).getSpriteCategory().equals(type)) {
-      i++;
-    }
+  public void moveIndex(int fromX, int fromY, int fromZ, int toX, int toY) {
     // Remove its index
-    int temp = this.spriteIndices[fromX][fromY][i];
-    this.spriteIndices[fromX][fromY][i] = NO_INDEX;
+    int spriteIndex = this.spriteIndices[fromX][fromY][fromZ];
+    this.spriteIndices[fromX][fromY][fromZ] = NO_INDEX;
     this.shiftDown(fromX, fromY);
 
     // Place it in its new location
-    i = 0;
-    while (this.spriteIndices[toX][toY][i] != NO_INDEX) {
-      i++;
+    int newZ = 0;
+    while (this.spriteIndices[toX][toY][newZ] != NO_INDEX) {
+      newZ++;
     }
-    this.spriteIndices[toX][toY][i] = temp;
+    this.spriteIndices[toX][toY][newZ] = spriteIndex;
+    this.sprites.get(spriteIndex).setzcell(newZ);
   }
 
   /**
@@ -256,11 +255,7 @@ public class World implements Controllable {
    * @param target The target to be recorded
    */
   private void addTargetLocation(Sprite target) {
-    int[] coordinates = new int[2];
-    coordinates[0] = target.getxCell();
-    coordinates[1] = target.getyCell();
-
-    this.targetLocations.add(coordinates);
+    this.targetLocations.add(target.getCellPosition());
   }
 
   /**
@@ -329,7 +324,7 @@ public class World implements Controllable {
 
     // Set the world state back and decrement the move count
     this.spriteIndices = this.pastWorldLocations.get(lastUpdateTime);
-    this.moveCount--;
+    this.decrementMoves();
   }
 
   public int crackedWallAtLocation(int x, int y) {
@@ -343,33 +338,11 @@ public class World implements Controllable {
     return -1;
   }
 
-  public void destroyWall(int x, int y, int z) {
+  public void destroySprite(int x, int y, int z) {
     int index = this.spriteIndices[x][y][z];
     this.clearReferences(this.sprites.get(index).getPastPositions(), index);
     this.sprites.set(index, null);
     this.spriteIndices[x][y][z] = NO_INDEX;
-    this.shiftDown(x, y);
-  }
-
-  /**
-   * Destroys a TNT block at an (x, y) coordinate.
-   *
-   * @param x The x coordinate of the TNT to destroy.
-   * @param y The y coordinate of the TNT to destroy.
-   */
-  public void destroyTnt(int x, int y, HashMap<Integer, int[]> tntPastPositions) {
-    int i = 0;
-    while (this.spriteIndices[x][y][i] != NO_INDEX && i < this.spriteIndices[x][y].length) {
-      if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteType().equals("tnt")) {
-        break;
-      }
-      i++;
-    }
-    int index = this.spriteIndices[x][y][i];
-
-    this.clearReferences(tntPastPositions, index);
-    this.sprites.set(this.spriteIndices[x][y][i], null);
-    this.spriteIndices[x][y][i] = NO_INDEX;
     this.shiftDown(x, y);
   }
 
@@ -379,28 +352,26 @@ public class World implements Controllable {
    * @param spritePastPositions The past positions of the sprite.
    * @param index               The sprite's index in the sprites ArrayList.
    */
-  private void clearReferences(HashMap<Integer, int[]> spritePastPositions, int index) {
+  private void clearReferences(HashMap<Integer, Position<Integer>> spritePastPositions, int index) {
     Iterator<Integer> iterator = this.changeTimes.iterator();
 
     // Initialise the x and y to the first position
     int time = iterator.next();
-    int currentX = spritePastPositions.get(time)[0];
-    int currentY = spritePastPositions.get(time)[1];
+    int currentX = spritePastPositions.get(time).getX();
+    int currentY = spritePastPositions.get(time).getY();
+    int currentZ = spritePastPositions.get(time).getZ();
 
     // Move through the World history by timestamp and remove every reference to this block
     while (iterator.hasNext()) {
-      int i = 0;
-      while (pastWorldLocations.get(time)[currentX][currentY][i] != index) {
-        i++;
-      }
-      this.pastWorldLocations.get(time)[currentX][currentY][i] = NO_INDEX;
+      this.pastWorldLocations.get(time)[currentX][currentY][currentZ] = NO_INDEX;
       shiftDown(currentX, currentY, this.pastWorldLocations.get(time));
 
       // Increment to the next world state, and if the sprite was changed then, update the positions to update
       time = iterator.next();
       if (spritePastPositions.containsKey(time)) {
-        currentX = spritePastPositions.get(time)[0];
-        currentY = spritePastPositions.get(time)[1];
+        currentX = spritePastPositions.get(time).getX();
+        currentY = spritePastPositions.get(time).getY();
+        currentZ = spritePastPositions.get(time).getZ();
       }
     }
   }

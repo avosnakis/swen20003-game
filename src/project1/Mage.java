@@ -1,7 +1,7 @@
 package project1;
 
 public class Mage extends Character {
-  public Mage(float x, float y, int xCell, int yCell) {
-    super("res/mage.png", "mage", x, y, xCell, yCell);
+  public Mage(Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super("res/mage.png", "mage", cellPosition, windowPosition);
   }
 }
