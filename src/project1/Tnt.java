@@ -41,7 +41,7 @@ public class Tnt extends Block {
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
     if (crackedIndex != -1) {
       world.destroyWall(nextXCell, nextYCell, crackedIndex);
-      world.destroyTnt(this.getxCell(), this.getyCell());
+      world.destroyTnt(this.getxCell(), this.getyCell(), this.getPastPositions());
       return;
     }
 

@@ -188,4 +188,8 @@ public class Sprite implements Movable {
   public void setPassable(boolean passable) {
     this.passable = passable;
   }
+
+  public HashMap<Integer, int[]> getPastPositions() {
+    return this.pastPositions;
+  }
 }

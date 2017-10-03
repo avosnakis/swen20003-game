@@ -4,11 +4,9 @@
  */
 package project1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
+import org.lwjgl.Sys;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
@@ -54,7 +52,7 @@ public class World implements Controllable {
     this.changeTimes.push(0);
 
     this.pastWorldLocations = new HashMap<>();
-    this.pastWorldLocations.put(0, this.spriteIndices.clone());
+    this.pastWorldLocations.put(0, this.copySpriteIndices());
 
     this.timer = 0;
     this.moveCount = 0;
@@ -235,6 +233,21 @@ public class World implements Controllable {
   }
 
   /**
+   * Shifts the z-axis at a specified coordinate, so that all empty slots are at the top of the matrix.
+   *
+   * @param x The x-coordinate of the z-axis to shift.
+   * @param y The y-coordinate of the z-axis to shift.
+   */
+  private void shiftDown(int x, int y, int[][][] matrix) {
+    for (int i = 0; i < matrix[x][y].length - 1; i++) {
+      if (matrix[x][y][i] == NO_INDEX) {
+        matrix[x][y][i] = matrix[x][y][i + 1];
+        matrix[x][y][i + 1] = NO_INDEX;
+      }
+    }
+  }
+
+  /**
    * Records the (x,y) position of a target.
    *
    * @param target The target to be recorded
@@ -328,7 +341,9 @@ public class World implements Controllable {
   }
 
   public void destroyWall(int x, int y, int z) {
+    System.out.println("cracked");
     int index = this.spriteIndices[x][y][z];
+    this.clearReferences(this.sprites.get(index).getPastPositions(), index);
     this.sprites.set(index, null);
     this.spriteIndices[x][y][z] = NO_INDEX;
     this.shiftDown(x, y);
@@ -340,7 +355,8 @@ public class World implements Controllable {
    * @param x The x coordinate of the TNT to destroy.
    * @param y The y coordinate of the TNT to destroy.
    */
-  public void destroyTnt(int x, int y) {
+  public void destroyTnt(int x, int y, HashMap<Integer, int[]> tntPastPositions) {
+    System.out.println("tnt");
     int i = 0;
     while (this.spriteIndices[x][y][i] != NO_INDEX && i < this.spriteIndices[x][y].length) {
       if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteType().equals("tnt")) {
@@ -348,10 +364,44 @@ public class World implements Controllable {
       }
       i++;
     }
+    int index = this.spriteIndices[x][y][i];
 
+    this.clearReferences(tntPastPositions, index);
     this.sprites.set(this.spriteIndices[x][y][i], null);
     this.spriteIndices[x][y][i] = NO_INDEX;
     this.shiftDown(x, y);
+  }
+
+  /**
+   * Purges the World history of all references to an object.
+   *
+   * @param spritePastPositions The past positions of the sprite.
+   * @param index               The sprite's index in the sprites ArrayList.
+   */
+  private void clearReferences(HashMap<Integer, int[]> spritePastPositions, int index) {
+    Iterator<Integer> iterator = this.changeTimes.iterator();
+
+    // Initialise the x and y to the first position
+    int time = iterator.next();
+    int currentX = spritePastPositions.get(time)[0];
+    int currentY = spritePastPositions.get(time)[1];
+
+    // Move through the World history by timestamp and remove every reference to this block
+    while (iterator.hasNext()) {
+      int i = 0;
+      while (pastWorldLocations.get(time)[currentX][currentY][i] != index) {
+        i++;
+      }
+      this.pastWorldLocations.get(time)[currentX][currentY][i] = NO_INDEX;
+      shiftDown(currentX, currentY, this.pastWorldLocations.get(time));
+
+      // Increment to the next world state, and if the sprite was changed then, update the positions to update
+      time = iterator.next();
+      if (spritePastPositions.containsKey(time)) {
+        currentX = spritePastPositions.get(time)[0];
+        currentY = spritePastPositions.get(time)[1];
+      }
+    }
   }
 
   /**
