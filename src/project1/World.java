@@ -28,6 +28,10 @@ public class World implements Controllable {
   private int moveCount;
 
   public World(String levelFile) {
+    this.reset(levelFile);
+  }
+
+  private void reset(String levelFile) {
     this.sprites = Loader.loadSprites(levelFile);
     this.targetLocations = new ArrayList<>();
 
@@ -56,6 +60,7 @@ public class World implements Controllable {
     this.moveCount = 0;
 
     this.levelFile = levelFile;
+
   }
 
   /**
@@ -273,6 +278,10 @@ public class World implements Controllable {
 
   @Override
   public void handlePlayerInput(Input input) {
+    if (input.isKeyPressed(Input.KEY_R)) {
+      this.reset(this.levelFile);
+      return;
+    }
     if (input.isKeyPressed(Input.KEY_Z)) {
       this.undo();
     }
