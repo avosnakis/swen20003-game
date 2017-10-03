@@ -4,12 +4,12 @@
  */
 package project1;
 
+import java.util.HashMap;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Graphics;
-
-import java.util.HashMap;
 
 public class Sprite implements Movable {
 

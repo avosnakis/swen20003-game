@@ -4,9 +4,12 @@
  */
 package project1;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Stack;
+import java.util.HashMap;
+import java.util.Iterator;
 
-import org.lwjgl.Sys;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
