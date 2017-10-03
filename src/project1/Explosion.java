@@ -9,13 +9,11 @@ public class Explosion {
 
   private int timer;
 
-  private float x;
-  private float y;
+  private Position<Float> windowPosition;
   private Image image;
 
-  public Explosion(float x, float y) {
-    this.x = x;
-    this.y = y;
+  public Explosion(Position<Float> windowPosition) {
+    this.windowPosition = windowPosition;
 
     try {
       this.image = new Image("res/explosion.png");

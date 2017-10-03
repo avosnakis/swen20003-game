@@ -40,7 +40,7 @@ public class World implements Controllable {
 
   public World() {
     this.currentLevel = 0;
-    this.reset(0);
+    this.reset(currentLevel);
   }
 
   private void reset(int level) {
@@ -75,6 +75,9 @@ public class World implements Controllable {
     }
   }
 
+  /**
+   * Records all target locations.
+   */
   private void initialiseTargetLocations() {
     for (int i = 0; i < this.sprites.size(); i++) {
       if (this.sprites.get(i).getSpriteType().equals("target")) {
@@ -166,14 +169,6 @@ public class World implements Controllable {
     return false;
   }
 
-  public void incrementMoves() {
-    this.moveCount++;
-  }
-
-  public void decrementMoves() {
-    this.moveCount--;
-  }
-
   /**
    * Determines whether an (x,y) position is possible to move to.
    *
@@ -187,7 +182,6 @@ public class World implements Controllable {
     if (x < 0 || x > Loader.getWorldWidth() || y < 0 || y > Loader.getWorldHeight()) {
       return false;
     }
-    System.out.println(direction);
     boolean cannotMove = true;
     for (int i = 0; i < this.spriteIndices[x][y].length && this.spriteIndices[x][y][i] != NO_INDEX; i++) {
       int index = this.spriteIndices[x][y][i];
@@ -356,7 +350,7 @@ public class World implements Controllable {
 
   public void destroySprite(int x, int y, int z) {
     int index = this.spriteIndices[x][y][z];
-    this.clearReferences(this.sprites.get(index).getPastPositions(), index);
+    this.clearReferences(this.sprites.get(index).getPastPositions());
     this.sprites.set(index, null);
     this.spriteIndices[x][y][z] = NO_INDEX;
     this.shiftDown(x, y);
@@ -366,9 +360,8 @@ public class World implements Controllable {
    * Purges the World history of all references to an object.
    *
    * @param spritePastPositions The past positions of the sprite.
-   * @param index               The sprite's index in the sprites ArrayList.
    */
-  private void clearReferences(HashMap<Integer, Position<Integer>> spritePastPositions, int index) {
+  private void clearReferences(HashMap<Integer, Position<Integer>> spritePastPositions) {
     Iterator<Integer> iterator = this.changeTimes.iterator();
 
     // Initialise the x and y to the first position
@@ -417,5 +410,13 @@ public class World implements Controllable {
 
   public void setChangedThisFrame(boolean changedThisFrame) {
     this.changedThisFrame = changedThisFrame;
+  }
+
+  public void incrementMoves() {
+    this.moveCount++;
+  }
+
+  public void decrementMoves() {
+    this.moveCount--;
   }
 }

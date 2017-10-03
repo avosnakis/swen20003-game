@@ -92,6 +92,7 @@ public class Sprite implements Movable {
         deltaYCell = cellSpeed;
         break;
     }
+
     this.addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
@@ -102,11 +103,7 @@ public class Sprite implements Movable {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveIndex(this.getxCell(),
-          this.getyCell(),
-          this.getzCell(),
-          nextXCell,
-          nextYCell);
+      world.moveIndex(this.getxCell(), this.getyCell(), this.getzCell(), nextXCell, nextYCell);
 
       this.setX(nextX);
       this.setY(nextY);

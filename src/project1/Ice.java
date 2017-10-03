@@ -2,6 +2,8 @@ package project1;
 
 import org.newdawn.slick.Input;
 
+import java.util.Stack;
+
 public class Ice extends Block {
   private static final int SLIDE_INTERVAL = 250;
 
@@ -11,10 +13,7 @@ public class Ice extends Block {
 
   public Ice(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/ice.png", "ice", cellPosition, windowPosition);
-
-    this.timer = 0;
-    this.sliding = false;
-    this.currentSlideDirection = Direction.DIR_NONE;
+    this.stop();
   }
 
   @Override
@@ -95,9 +94,22 @@ public class Ice extends Block {
       this.sliding = true;
     } else {
       // The ice block has collided and it can't move anymore
-      this.sliding = false;
-      this.timer = 0;
-      this.currentSlideDirection = Direction.DIR_NONE;
+      this.stop();
     }
+  }
+
+  /**
+   * Stops the ice block from sliding, and resets all associated parameters.
+   */
+  private void stop() {
+    this.sliding = false;
+    this.timer = 0;
+    this.currentSlideDirection = Direction.DIR_NONE;
+  }
+
+  @Override
+  public void undo(int time) {
+    super.undo(time);
+    this.stop();
   }
 }

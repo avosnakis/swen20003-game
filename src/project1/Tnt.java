@@ -37,7 +37,7 @@ public class Tnt extends Block {
     int nextXCell = this.getxCell() + deltaXCell;
     int nextYCell = this.getyCell() + deltaYCell;
 
-    // Destroy the cracked wall the TNT if there is a cracked wall at the next location
+    // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
     if (crackedIndex != -1) {
       // Destroy the cracked wall and this tnt
@@ -51,11 +51,7 @@ public class Tnt extends Block {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveIndex(this.getxCell(),
-          this.getyCell(),
-          this.getzCell(),
-          nextXCell,
-          nextYCell);
+      world.moveIndex(this.getxCell(), this.getyCell(), this.getzCell(), nextXCell, nextYCell);
 
       this.setX(this.getX() + deltaX);
       this.setY(this.getY() + deltaY);

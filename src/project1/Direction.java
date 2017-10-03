@@ -12,6 +12,12 @@ public enum Direction {
   DIR_UP,
   DIR_DOWN;
 
+  /**
+   * Determines the direction based on the input. Essentially the direcitonal controls for the game.
+   *
+   * @param input The Slick input object.
+   * @return The direction that the player will try to move.
+   */
   public static Direction determineDirection(Input input) {
     Direction direction = Direction.DIR_NONE;
 
