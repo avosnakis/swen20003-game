@@ -4,31 +4,29 @@
  */
 package project1;
 
+import java.util.HashMap;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Graphics;
 
-import java.util.HashMap;
-
 public class Sprite implements Movable {
 
   private Image image = null;
-  private float x;
-  private float y;
 
-  private int xCell;
-  private int yCell;
+  private Position<Integer> cellPosition;
+  private Position<Float> windowPosition;
 
   private boolean passable;
   private String spriteCategory;
   private String spriteType;
 
-  private HashMap<Integer, int[]> pastPositions;
+  private HashMap<Integer, Position<Integer>> pastPositions;
 
-  public Sprite(String imageSource, String spriteCategory, String spriteType, float x, float y, int xCell, int yCell) {
+  public Sprite(String imageSource, String spriteCategory, String spriteType, Position<Integer> cellPosition, Position<Float> windowPosition) {
     try {
-      this.image = new Image(imageSource);
+      image = new Image(imageSource);
     } catch (SlickException e) {
       e.printStackTrace();
     }
@@ -36,14 +34,11 @@ public class Sprite implements Movable {
     this.spriteCategory = spriteCategory;
     this.spriteType = spriteType;
 
-    this.xCell = xCell;
-    this.yCell = yCell;
-    this.x = x;
-    this.y = y;
-    this.snapToGrid();
+    this.cellPosition = cellPosition;
+    snapToGrid(windowPosition.x, windowPosition.y);
 
-    this.pastPositions = new HashMap<>();
-    this.addPastPosition(0);
+    pastPositions = new HashMap<>();
+    addPastPosition(0);
   }
 
   public void update(Input input, int delta, World world) {
@@ -51,19 +46,23 @@ public class Sprite implements Movable {
   }
 
   public void render(Graphics g) {
-    this.image.drawCentered(x, y);
+    image.drawCentered(windowPosition.x, windowPosition.y);
   }
 
   /**
    * Aligns the sprite's coordinates to the grid.
    */
-  public void snapToGrid() {
-    this.x /= App.TILE_SIZE;
-    this.y /= App.TILE_SIZE;
-    this.x = Math.round(x);
-    this.y = Math.round(y);
-    this.x *= App.TILE_SIZE;
-    this.y *= App.TILE_SIZE;
+  public void snapToGrid(float x, float y) {
+    x /= App.TILE_SIZE;
+    y /= App.TILE_SIZE;
+
+    x = (float)Math.round(x);
+    y = (float)Math.round(y);
+
+    x *= App.TILE_SIZE;
+    y *= App.TILE_SIZE;
+
+    windowPosition = new Position<>(x, y, 0f);
   }
 
   @Override
@@ -94,98 +93,89 @@ public class Sprite implements Movable {
         deltaYCell = cellSpeed;
         break;
     }
-    this.addPastPosition(world.getTimer());
+
+    addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
+    int nextXCell = this.getxCell() + deltaXCell;
+    int nextYCell = this.getyCell() + deltaYCell;
+    float nextX = this.getX() + deltaX;
+    float nextY = this.getY() + deltaY;
+
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(this.xCell + deltaXCell, this.yCell + deltaYCell, direction)) {
-      world.moveIndex(this.xCell,
-          this.yCell,
-          this.xCell + deltaXCell,
-          this.yCell + deltaYCell,
-          this.spriteCategory);
-
-      this.x += deltaX;
-      this.y += deltaY;
-
-      this.xCell += deltaXCell;
-      this.yCell += deltaYCell;
-
+    if (!world.isBlocked(nextXCell, nextYCell, direction)) {
+      world.moveReference(cellPosition, nextXCell, nextYCell);
+      snapToGrid(nextX, nextY);
     }
   }
 
   public void addPastPosition(int time) {
-    int[] coordinates = new int[2];
-    coordinates[0] = this.xCell;
-    coordinates[1] = this.yCell;
-
-    this.pastPositions.put(time, coordinates);
+    pastPositions.put(time, new Position<>(cellPosition));
   }
 
   public void undo(int time) {
     // If the block didn't update at this time, exit the method
-    if (!this.pastPositions.containsKey(time)) {
+    if (!pastPositions.containsKey(time)) {
       return;
     }
 
     // Get the coordinates of the specified time this block moved and update it
-    int[] coordinates = this.pastPositions.get(time);
-    this.xCell = coordinates[0];
-    this.yCell = coordinates[1];
+    cellPosition = pastPositions.get(time);
+
+    float newX = (float)Loader.getOffsetX() + getxCell() * App.TILE_SIZE;
+    float newY = (float)Loader.getOffsetY() + getyCell() * App.TILE_SIZE;
 
     // Set the sprite's coordinates
-    this.x = Loader.getOffsetX() + this.xCell * App.TILE_SIZE;
-    this.y = Loader.getOffsetY() + this.yCell * App.TILE_SIZE;
-    this.snapToGrid();
+    snapToGrid(newX, newY);
 
-    this.pastPositions.remove(time);
+    pastPositions.remove(time);
+  }
+
+  public void setCellPosition(Position<Integer> cellPosition) {
+    this.cellPosition = cellPosition;
   }
 
   public float getX() {
-    return this.x;
-  }
-
-  public void setX(float x) {
-    this.x = x;
+    return windowPosition.x;
   }
 
   public float getY() {
-    return this.y;
-  }
-
-  public void setY(float y) {
-    this.y = y;
+    return windowPosition.y;
   }
 
   public int getxCell() {
-    return this.xCell;
-  }
-
-  public void setxCell(int xCell) {
-    this.xCell = xCell;
+    return cellPosition.x;
   }
 
   public int getyCell() {
-    return this.yCell;
+    return cellPosition.y;
   }
 
-  public void setyCell(int yCell) {
-    this.yCell = yCell;
+  public int getzCell() {
+    return cellPosition.z;
   }
 
   public String getSpriteCategory() {
-    return this.spriteCategory;
+    return spriteCategory;
   }
 
   public String getSpriteType() {
-    return this.spriteType;
+    return spriteType;
   }
 
   public boolean isPassable() {
-    return this.passable;
+    return passable;
   }
 
   public void setPassable(boolean passable) {
     this.passable = passable;
+  }
+
+  public HashMap<Integer, Position<Integer>> getPastPositions() {
+    return pastPositions;
+  }
+
+  public Position<Integer> getCellPosition() {
+    return cellPosition;
   }
 }

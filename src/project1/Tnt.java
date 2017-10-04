@@ -1,8 +1,8 @@
 package project1;
 
 public class Tnt extends Block {
-  public Tnt(float x, float y, int xCell, int yCell) {
-    super("res/tnt.png", "tnt", x, y, xCell, yCell);
+  public Tnt(Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super("res/tnt.png", "tnt", cellPosition, windowPosition);
   }
 
   @Override
@@ -34,33 +34,24 @@ public class Tnt extends Block {
         break;
     }
 
-    int nextXCell = this.getxCell() + deltaXCell;
-    int nextYCell = this.getyCell() + deltaYCell;
+    int nextXCell = getxCell() + deltaXCell;
+    int nextYCell = getyCell() + deltaYCell;
 
-    // Destroy the cracked wall the TNT if there is a cracked wall at the next location
+    // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
-    if (crackedIndex != -1) {
-      world.destroyWall(nextXCell, nextYCell, crackedIndex);
-      world.destroyTnt(this.getxCell(), this.getyCell());
+    if (crackedIndex != WorldState.NO_INDEX) {
+      world.destroySprite(new Position<>(nextXCell, nextYCell, crackedIndex));
+      world.destroySprite(getCellPosition());
       return;
     }
 
-    this.addPastPosition(world.getTimer());
+    addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveIndex(this.getxCell(),
-          this.getyCell(),
-          nextXCell,
-          nextYCell,
-          this.getSpriteCategory());
-
-      this.setX(this.getX() + deltaX);
-      this.setY(this.getY() + deltaY);
-
-      this.setxCell(nextXCell);
-      this.setyCell(nextYCell);
+      world.moveReference(getCellPosition(), nextXCell, nextYCell);
+      snapToGrid(getX() + deltaX, getY()+ deltaY);
     }
   }
 }

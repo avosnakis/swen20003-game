@@ -8,13 +8,13 @@ import org.newdawn.slick.Input;
 
 public class Player extends Character implements Controllable {
 
-  public Player(float x, float y, int xCell, int yCell) {
-    super("res/player_left.png", "player", x, y, xCell, yCell);
+  public Player(Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super("res/player_left.png", "player", cellPosition, windowPosition);
   }
 
   @Override
   public void update(Input input, int delta, World world) {
-    this.handlePlayerInput(input, world);
+    handlePlayerInput(input, world);
   }
 
   @Override
@@ -30,6 +30,6 @@ public class Player extends Character implements Controllable {
 
     world.incrementMoves();
     // Move to our destination
-    this.moveToDestination(direction, world);
+    moveToDestination(direction, world);
   }
 }
