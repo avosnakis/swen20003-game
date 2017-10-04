@@ -37,7 +37,7 @@ public class App extends BasicGame {
 
   @Override
   public void init(GameContainer gc) throws SlickException {
-    this.world = new World();
+    world = new World();
   }
 
   /**
@@ -50,7 +50,7 @@ public class App extends BasicGame {
   public void update(GameContainer gc, int delta) throws SlickException {
     // Get data about the current input (keyboard state).
     Input input = gc.getInput();
-    this.world.update(input, delta);
+    world.update(input, delta);
   }
 
   /**
@@ -60,7 +60,7 @@ public class App extends BasicGame {
    * @param g  The Slick graphics object, used for drawing.
    */
   public void render(GameContainer gc, Graphics g) throws SlickException {
-    this.world.render(g);
+    world.render(g);
   }
 
   /**

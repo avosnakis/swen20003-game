@@ -14,7 +14,7 @@ public class Player extends Character implements Controllable {
 
   @Override
   public void update(Input input, int delta, World world) {
-    this.handlePlayerInput(input, world);
+    handlePlayerInput(input, world);
   }
 
   @Override
@@ -30,6 +30,6 @@ public class Player extends Character implements Controllable {
 
     world.incrementMoves();
     // Move to our destination
-    this.moveToDestination(direction, world);
+    moveToDestination(direction, world);
   }
 }

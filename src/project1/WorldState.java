@@ -4,26 +4,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class WorldState {
-  private static final int NO_INDEX = -1;
+  public static final int NO_INDEX = -1;
+  public static final int LENGTH = 5;
 
   private int[][][] spriteIndices;
 
   public WorldState(ArrayList<Sprite> sprites) {
-    this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
-    for (int[][] plane : this.spriteIndices) {
+    // Initialise the spriteIndices array to holding null values.
+    spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][LENGTH];
+    for (int[][] plane : spriteIndices) {
       for (int[] row : plane) {
         Arrays.fill(row, NO_INDEX);
       }
     }
+
+    // Populate the spriteIndices array with the actual values.
     for (int i = 0; i < sprites.size(); i++) {
       Sprite sprite = sprites.get(i);
-      this.spriteIndices[sprite.getxCell()][sprite.getyCell()][sprite.getzCell()] = i;
+      spriteIndices[sprite.getxCell()][sprite.getyCell()][sprite.getzCell()] = i;
     }
-
   }
 
   public WorldState(WorldState worldState) {
-    this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
+    // Copy the data from another worldState.
+    spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][LENGTH];
     for (int i = 0; i < Loader.getWorldWidth(); i++) {
       for (int j = 0; j < Loader.getWorldHeight(); j++) {
 
@@ -36,53 +40,86 @@ public class WorldState {
     }
   }
 
-  public void removeValue(int x, int y, int z) {
-    this.spriteIndices[x][y][z] = NO_INDEX;
-    this.shiftDown(x, y);
-  }
-
+  /**
+   * Remove the value from a position, and shift the array at the (x, y) to ensure that all the filled positions are
+   * at the bottom.
+   *
+   * @param position The position to remove the value from.
+   */
   public void removeValue(Position<Integer> position) {
-    this.spriteIndices[position.x][position.y][position.z] = NO_INDEX;
-    this.shiftDown(position.x, position.y);
+    spriteIndices[position.x][position.y][position.z] = NO_INDEX;
+    shiftDown(position.x, position.y);
   }
 
-  public void setValue(int x, int y, int z, int value) {
-    this.spriteIndices[x][y][z] = value;
+  /**
+   * Set the value at the specified position to the specified value.
+   *
+   * @param position The position with the value to be set.
+   * @param value    The value to set at the position.
+   */
+  public void setValue(Position<Integer> position, int value) {
+    spriteIndices[position.x][position.y][position.z] = value;
   }
 
+  /**
+   * Returns the array at an (x, y) coordinate.
+   *
+   * @param x The x coordinate of the array.
+   * @param y The y coordinate of the array.
+   * @return The array at the (x, y) coordinate.
+   */
   public int[] getArrayAt(int x, int y) {
-    return this.spriteIndices[x][y];
+    return spriteIndices[x][y];
   }
 
+  /**
+   * Returns the value at a position.
+   *
+   * @param position The (x, y, z) position.
+   * @return The value at the position.
+   */
+  public int getValueAt(Position<Integer> position) {
+    return spriteIndices[position.x][position.y][position.z];
+  }
+
+  /**
+   * Returns the value at an (x, y, z) coordinate.
+   *
+   * @param x The x coordinate of the position.
+   * @param y The y coordinate of the position.
+   * @param z The z coordinate of the position.
+   * @return The value at the position.
+   */
   public int getValueAt(int x, int y, int z) {
-    return this.spriteIndices[x][y][z];
+    return spriteIndices[x][y][z];
   }
 
+  /**
+   * Finds the first empty z coordinate at an (x, y) coordinate.
+   *
+   * @param x The x coordinate of the position to check.
+   * @param y The y coordinate of the position to check.
+   * @return The first empty z coordinate.
+   */
   public int findEmptyZ(int x, int y) {
     int z = 0;
-    while (this.spriteIndices[x][y][z] != NO_INDEX) {
+    while (spriteIndices[x][y][z] != NO_INDEX) {
       z++;
     }
     return z;
   }
 
   /**
-   * Moves a sprite index from one (x, y) coordinate to another.
+   * Moves a sprite index from one (x, y, z) coordinate to another.
    *
-   * @param fromX The initial x coordinate.
-   * @param fromY The initial y coordinate.
-   * @param fromZ The initial z coordinate.
-   * @param toX   The final x coordinate.
-   * @param toY   The final y coordinate.
+   * @param initialPosition The initial (x, y, z) coordinate of the sprite.
+   * @param finalPosition   The final (x, y, z) coordinate of the sprite.
    */
-  public void moveIndex(int fromX, int fromY, int fromZ, int toX, int toY, int toZ) {
-    // Remove its index
-    int spriteIndex = this.spriteIndices[fromX][fromY][fromZ];
-    this.spriteIndices[fromX][fromY][fromZ] = NO_INDEX;
-    this.shiftDown(fromX, fromY);
+  public void moveIndex(Position<Integer> initialPosition, Position<Integer> finalPosition) {
+    int spriteIndex = spriteIndices[initialPosition.x][initialPosition.y][initialPosition.z];
 
-    // Place it in its new location
-    this.spriteIndices[toX][toY][toZ] = spriteIndex;
+    removeValue(initialPosition);
+    setValue(finalPosition, spriteIndex);
   }
 
   /**
@@ -92,10 +129,10 @@ public class WorldState {
    * @param y The y-coordinate of the z-axis to shift.
    */
   private void shiftDown(int x, int y) {
-    for (int i = 0; i < this.spriteIndices[x][y].length - 1; i++) {
-      if (this.spriteIndices[x][y][i] == NO_INDEX) {
-        this.spriteIndices[x][y][i] = this.spriteIndices[x][y][i + 1];
-        this.spriteIndices[x][y][i + 1] = NO_INDEX;
+    for (int i = 0; i < spriteIndices[x][y].length - 1; i++) {
+      if (spriteIndices[x][y][i] == NO_INDEX) {
+        spriteIndices[x][y][i] = spriteIndices[x][y][i + 1];
+        spriteIndices[x][y][i + 1] = NO_INDEX;
       }
     }
   }

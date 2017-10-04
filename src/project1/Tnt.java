@@ -34,25 +34,24 @@ public class Tnt extends Block {
         break;
     }
 
-    int nextXCell = this.getxCell() + deltaXCell;
-    int nextYCell = this.getyCell() + deltaYCell;
+    int nextXCell = getxCell() + deltaXCell;
+    int nextYCell = getyCell() + deltaYCell;
 
     // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
-    if (crackedIndex != -1) {
-      // Destroy the cracked wall and this tnt
-      world.destroySprite(nextXCell, nextYCell, crackedIndex);
-      world.destroySprite(this.getxCell(), this.getyCell(), this.getzCell());
+    if (crackedIndex != WorldState.NO_INDEX) {
+      world.destroySprite(new Position<>(nextXCell, nextYCell, crackedIndex));
+      world.destroySprite(getCellPosition());
       return;
     }
 
-    this.addPastPosition(world.getTimer());
+    addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveReference(this.getxCell(), this.getyCell(), this.getzCell(), nextXCell, nextYCell);
-      this.snapToGrid(this.getX() + deltaX, this.getY()+ deltaY);
+      world.moveReference(getCellPosition(), nextXCell, nextYCell);
+      snapToGrid(getX() + deltaX, getY()+ deltaY);
     }
   }
 }

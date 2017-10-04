@@ -11,21 +11,21 @@ public class Ice extends Block {
 
   public Ice(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/ice.png", "ice", cellPosition, windowPosition);
-    this.stop();
+    stop();
   }
 
   @Override
   public void update(Input input, int delta, World world) {
 
     // Increment the timer while it's sliding
-    if (this.sliding) {
-      this.timer += delta;
+    if (sliding) {
+      timer += delta;
     }
 
     // Check if the ice block will slide in this frame, and if so, reset its timer as well
-    if (this.timer >= SLIDE_INTERVAL && this.sliding) {
-      this.moveToDestination(this.currentSlideDirection, world);
-      this.timer = 0;
+    if (timer >= SLIDE_INTERVAL && sliding) {
+      moveToDestination(currentSlideDirection, world);
+      timer = 0;
     }
   }
 
@@ -63,27 +63,27 @@ public class Ice extends Block {
     }
 
     // It wasn't sliding when it moved, which means the player just pushed it, so store this position
-    if (!this.sliding) {
-      this.currentSlideDirection = direction;
-      this.addPastPosition(world.getTimer());
+    if (!sliding) {
+      currentSlideDirection = direction;
+      addPastPosition(world.getTimer());
       world.setChangedThisFrame(true);
     }
 
-    int nextXCell = this.getxCell() + deltaXCell;
-    int nextYCell = this.getyCell() + deltaYCell;
+    int nextXCell = getxCell() + deltaXCell;
+    int nextYCell = getyCell() + deltaYCell;
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveReference(this.getxCell(), this.getyCell(), this.getzCell(), nextXCell, nextYCell);
+      world.moveReference(getCellPosition(), nextXCell, nextYCell);
 
       // Update the window coordinates
-      this.snapToGrid(this.getX() + deltaX, this.getY() + deltaY);
+      snapToGrid(getX() + deltaX, getY() + deltaY);
 
       // The block is now sliding
-      this.sliding = true;
+      sliding = true;
     } else {
       // The ice block has collided and it can't move anymore
-      this.stop();
+      stop();
     }
   }
 
@@ -91,15 +91,15 @@ public class Ice extends Block {
    * Stops the ice block from sliding, and resets all associated parameters.
    */
   private void stop() {
-    this.sliding = false;
-    this.timer = 0;
-    this.currentSlideDirection = Direction.DIR_NONE;
+    sliding = false;
+    timer = 0;
+    currentSlideDirection = Direction.DIR_NONE;
   }
 
   // TODO bug with undo interacting with Ice sliding. Throws an ArrayOutOfBoundsException. Reproducing is inconsistent.
   @Override
   public void undo(int time) {
     super.undo(time);
-    this.stop();
+    stop();
   }
 }

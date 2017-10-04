@@ -104,7 +104,7 @@ public class Sprite implements Movable {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveReference(getxCell(), getyCell(), getzCell(), nextXCell, nextYCell);
+      world.moveReference(cellPosition, nextXCell, nextYCell);
       snapToGrid(nextX, nextY);
     }
   }
@@ -132,7 +132,7 @@ public class Sprite implements Movable {
   }
 
   public void setCellPosition(Position<Integer> cellPosition) {
-    cellPosition = cellPosition;
+    this.cellPosition = cellPosition;
   }
 
   public float getX() {
