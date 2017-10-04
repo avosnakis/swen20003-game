@@ -31,11 +31,7 @@ public class WorldState {
     for (int i = 0; i < Loader.getWorldWidth(); i++) {
       for (int j = 0; j < Loader.getWorldHeight(); j++) {
 
-        System.arraycopy(worldState.getArrayAt(i, j),
-            0,
-            spriteIndices[i][j],
-            0,
-            spriteIndices[i][j].length);
+        System.arraycopy(worldState.getArrayAt(i, j), 0, spriteIndices[i][j], 0, LENGTH);
       }
     }
   }
