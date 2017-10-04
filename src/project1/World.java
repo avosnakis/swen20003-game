@@ -4,11 +4,7 @@
  */
 package project1;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Stack;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -30,58 +26,45 @@ public class World implements Controllable {
 
   private ArrayList<Sprite> sprites;
   private ArrayList<Position<Integer>> targetLocations;
-  private int[][][] spriteIndices;
+  private WorldState currentState;
 
   private int timer;
   private Stack<Integer> changeTimes;
-  private HashMap<Integer, int[][][]> pastWorldLocations;
+  private HashMap<Integer, WorldState> pastStates;
   private boolean changedThisFrame;
   private int moveCount;
 
   public World() {
-    this.currentLevel = 0;
-    this.reset(currentLevel);
+    currentLevel = 0;
+    reset(currentLevel);
   }
 
   private void reset(int level) {
     String filename = "res/levels/" + levels[level];
-    this.sprites = Loader.loadSprites(filename);
-    this.targetLocations = new ArrayList<>();
+    sprites = Loader.loadSprites(filename);
+    initialiseTargetLocations();
 
-    this.initialiseSpriteIndices();
-    this.initialiseTargetLocations();
+    currentState = new WorldState(sprites);
 
-    this.changedThisFrame = false;
-    this.changeTimes = new Stack<>();
-    this.changeTimes.push(0);
+    changedThisFrame = false;
+    changeTimes = new Stack<>();
+    changeTimes.push(0);
 
-    this.pastWorldLocations = new HashMap<>();
-    this.pastWorldLocations.put(0, this.copySpriteIndices());
+    pastStates = new HashMap<>();
+    pastStates.put(0, copyWorldState());
 
-    this.timer = 0;
-    this.moveCount = 0;
-  }
-
-  private void initialiseSpriteIndices() {
-    this.spriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
-    for (int[][] plane : this.spriteIndices) {
-      for (int[] row : plane) {
-        Arrays.fill(row, NO_INDEX);
-      }
-    }
-    for (int i = 0; i < this.sprites.size(); i++) {
-      Sprite sprite = this.sprites.get(i);
-      this.spriteIndices[sprite.getxCell()][sprite.getyCell()][sprite.getzCell()] = i;
-    }
+    timer = 0;
+    moveCount = 0;
   }
 
   /**
    * Records all target locations.
    */
   private void initialiseTargetLocations() {
-    for (int i = 0; i < this.sprites.size(); i++) {
-      if (this.sprites.get(i).getSpriteType().equals("target")) {
-        this.addTargetLocation(this.sprites.get(i));
+    targetLocations = new ArrayList<>();
+    for (int i = 0; i < sprites.size(); i++) {
+      if (sprites.get(i).getSpriteType().equals("target")) {
+        addTargetLocation(sprites.get(i));
       }
     }
   }
@@ -95,31 +78,31 @@ public class World implements Controllable {
   public void update(Input input, int delta) {
     // If the player completed the level on the previous frame,
     // move to the next level and skip the rest of this frame
-    if (this.hasWon()) {
-      this.currentLevel += 1;
-      this.reset(this.currentLevel);
+    if (hasWon()) {
+      currentLevel += 1;
+      reset(currentLevel);
       return;
     }
 
     // Check if the player tried to undo
-    this.handlePlayerInput(input);
+    handlePlayerInput(input);
 
     // Increment the internal timer, and make a record of the current world state
-    this.timer += delta;
-    int[][][] currentSpriteIndices = this.copySpriteIndices();
+    timer += delta;
+    WorldState currentWorldState = copyWorldState();
 
     // Update all sprites
-    for (Sprite sprite : this.sprites) {
+    for (Sprite sprite : sprites) {
       if (sprite != null) {
         sprite.update(input, delta, this);
       }
     }
 
     // If there were changes in the world, save the past information
-    if (this.changedThisFrame) {
-      this.changeTimes.push(this.timer);
-      this.pastWorldLocations.put(this.timer, currentSpriteIndices);
-      this.changedThisFrame = false;
+    if (changedThisFrame) {
+      changeTimes.push(this.timer);
+      pastStates.put(this.timer, currentWorldState);
+      changedThisFrame = false;
     }
   }
 
@@ -129,12 +112,12 @@ public class World implements Controllable {
    * @param g The graphics object for the game.
    */
   public void render(Graphics g) {
-    for (Sprite sprite : this.sprites) {
+    for (Sprite sprite : sprites) {
       if (sprite != null) {
         sprite.render(g);
       }
     }
-    g.drawString(String.format("Moves: %d", this.moveCount), 0, 0);
+    g.drawString(String.format("Moves: %d", moveCount), 0, 0);
   }
 
   /**
@@ -142,8 +125,8 @@ public class World implements Controllable {
    */
   public boolean hasWon() {
     boolean hasWon = false;
-    for (Position<Integer> location : this.targetLocations) {
-      hasWon = this.isCovered(location.getX(), location.getY());
+    for (Position<Integer> location : targetLocations) {
+      hasWon = isCovered(location.x, location.y);
       if (!hasWon) {
         return false;
       }
@@ -159,12 +142,10 @@ public class World implements Controllable {
    * @return Whether the target has been covered by a block.
    */
   private boolean isCovered(int x, int y) {
-    int i = 0;
-    while (this.spriteIndices[x][y][i] != NO_INDEX) {
-      if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteCategory().equals("block")) {
+    for (int i = 0; i < currentState.getArrayAt(x, y).length && currentState.getValueAt(x, y, i) != NO_INDEX; i++) {
+      if (sprites.get(currentState.getValueAt(x, y, i)).getSpriteCategory().equals("block")) {
         return true;
       }
-      i++;
     }
     return false;
   }
@@ -183,19 +164,19 @@ public class World implements Controllable {
       return false;
     }
     boolean cannotMove = true;
-    for (int i = 0; i < this.spriteIndices[x][y].length && this.spriteIndices[x][y][i] != NO_INDEX; i++) {
-      int index = this.spriteIndices[x][y][i];
-      switch (this.sprites.get(index).getSpriteCategory()) {
+    for (int i = 0; i < currentState.getArrayAt(x, y).length && currentState.getValueAt(x, y, i) != NO_INDEX; i++) {
+      int index = currentState.getValueAt(x, y, i);
+      switch (sprites.get(index).getSpriteCategory()) {
         case "character":
           break;
         case "tile":
-          cannotMove = !this.sprites.get(index).isPassable();
+          cannotMove = !sprites.get(index).isPassable();
           break;
         case "block":
           int nextX = incrementCoordinate(x, 'x', direction);
           int nextY = incrementCoordinate(y, 'y', direction);
-          cannotMove = this.isBlocked(nextX, nextY, direction);
-          this.sprites.get(index).moveToDestination(direction, this);
+          cannotMove = isBlocked(nextX, nextY, direction);
+          sprites.get(index).moveToDestination(direction, this);
           break;
       }
       if (cannotMove) {
@@ -214,49 +195,11 @@ public class World implements Controllable {
    * @param toX   The final x coordinate.
    * @param toY   The final y coordinate.
    */
-  public void moveIndex(int fromX, int fromY, int fromZ, int toX, int toY) {
-    // Remove its index
-    int spriteIndex = this.spriteIndices[fromX][fromY][fromZ];
-    this.spriteIndices[fromX][fromY][fromZ] = NO_INDEX;
-    this.shiftDown(fromX, fromY);
-
-    // Place it in its new location
-    int newZ = 0;
-    while (this.spriteIndices[toX][toY][newZ] != NO_INDEX) {
-      newZ++;
-    }
-    this.spriteIndices[toX][toY][newZ] = spriteIndex;
-    this.sprites.get(spriteIndex).setzcell(newZ);
-  }
-
-  /**
-   * Shifts the z-axis at a specified coordinate, so that all empty slots are at the top of the matrix.
-   *
-   * @param x The x-coordinate of the z-axis to shift.
-   * @param y The y-coordinate of the z-axis to shift.
-   */
-  private void shiftDown(int x, int y) {
-    for (int i = 0; i < this.spriteIndices[x][y].length - 1; i++) {
-      if (this.spriteIndices[x][y][i] == NO_INDEX) {
-        this.spriteIndices[x][y][i] = this.spriteIndices[x][y][i + 1];
-        this.spriteIndices[x][y][i + 1] = NO_INDEX;
-      }
-    }
-  }
-
-  /**
-   * Shifts the z-axis at a specified coordinate, so that all empty slots are at the top of the matrix.
-   *
-   * @param x The x-coordinate of the z-axis to shift.
-   * @param y The y-coordinate of the z-axis to shift.
-   */
-  private void shiftDown(int x, int y, int[][][] matrix) {
-    for (int i = 0; i < matrix[x][y].length - 1; i++) {
-      if (matrix[x][y][i] == NO_INDEX) {
-        matrix[x][y][i] = matrix[x][y][i + 1];
-        matrix[x][y][i + 1] = NO_INDEX;
-      }
-    }
+  public void moveReference(int fromX, int fromY, int fromZ, int toX, int toY) {
+    int spriteIndex = currentState.getValueAt(fromX, fromY, fromZ);
+    int newZ = currentState.findEmptyZ(toX, toY);
+    currentState.moveIndex(fromX, fromY, fromZ, toX, toY, newZ);
+    sprites.get(spriteIndex).setCellPosition(new Position<>(toX, toY, newZ));
   }
 
   /**
@@ -265,7 +208,7 @@ public class World implements Controllable {
    * @param target The target to be recorded
    */
   private void addTargetLocation(Sprite target) {
-    this.targetLocations.add(target.getCellPosition());
+    targetLocations.add(target.getCellPosition());
   }
 
   /**
@@ -300,11 +243,11 @@ public class World implements Controllable {
   @Override
   public void handlePlayerInput(Input input) {
     if (input.isKeyPressed(Input.KEY_R)) {
-      this.reset(this.currentLevel);
+      reset(currentLevel);
       return;
     }
     if (input.isKeyPressed(Input.KEY_Z)) {
-      this.undo();
+      undo();
     }
   }
 
@@ -316,44 +259,42 @@ public class World implements Controllable {
    * Set the world back to the last time a player made an input.
    */
   private void undo() {
-    int lastUpdateTime = this.changeTimes.pop();
+    int lastUpdateTime = changeTimes.pop();
 
     // If the world is in its initial state, do nothing
     if (lastUpdateTime == 0) {
-      this.timer = 0;
-      this.changeTimes.push(0);
+      timer = 0;
+      changeTimes.push(0);
       return;
     }
 
     // Undo all sprites
-    for (Sprite sprite : this.sprites) {
+    for (Sprite sprite : sprites) {
       if (sprite != null) {
         sprite.undo(lastUpdateTime);
       }
     }
 
     // Set the world state back and decrement the move count
-    this.spriteIndices = this.pastWorldLocations.get(lastUpdateTime);
-    this.decrementMoves();
+    currentState = pastStates.get(lastUpdateTime);
+    decrementMoves();
   }
 
   public int crackedWallAtLocation(int x, int y) {
-    int i = 0;
-    while (this.spriteIndices[x][y][i] != NO_INDEX && i < this.spriteIndices[x][y].length) {
-      if (this.sprites.get(this.spriteIndices[x][y][i]).getSpriteType().equals("cracked")) {
+    for (int i = 0; i < currentState.getArrayAt(x, y).length; i++) {
+      int index = currentState.getValueAt(x, y, i);
+      if (index != -1 && sprites.get(index).getSpriteType().equals("cracked")) {
         return i;
       }
-      i++;
     }
     return -1;
   }
 
   public void destroySprite(int x, int y, int z) {
-    int index = this.spriteIndices[x][y][z];
-    this.clearReferences(this.sprites.get(index).getPastPositions());
-    this.sprites.set(index, null);
-    this.spriteIndices[x][y][z] = NO_INDEX;
-    this.shiftDown(x, y);
+    int index = currentState.getValueAt(x, y, z);
+    clearReferences(sprites.get(index).getPastPositions());
+    sprites.set(index, null);
+    currentState.removeValue(x, y, z);
   }
 
   /**
@@ -362,50 +303,35 @@ public class World implements Controllable {
    * @param spritePastPositions The past positions of the sprite.
    */
   private void clearReferences(HashMap<Integer, Position<Integer>> spritePastPositions) {
-    Iterator<Integer> iterator = this.changeTimes.iterator();
+    Iterator<Integer> iterator = changeTimes.iterator();
 
     // Initialise the x and y to the first position
     int time = iterator.next();
-    int currentX = spritePastPositions.get(time).getX();
-    int currentY = spritePastPositions.get(time).getY();
-    int currentZ = spritePastPositions.get(time).getZ();
+    Position<Integer> currentPosition = spritePastPositions.get(time);
 
     // Move through the World history by timestamp and remove every reference to this block
     while (iterator.hasNext()) {
-      this.pastWorldLocations.get(time)[currentX][currentY][currentZ] = NO_INDEX;
-      shiftDown(currentX, currentY, this.pastWorldLocations.get(time));
+      pastStates.get(time).removeValue(currentPosition);
 
       // Increment to the next world state, and if the sprite was changed then, update the positions to update
       time = iterator.next();
       if (spritePastPositions.containsKey(time)) {
-        currentX = spritePastPositions.get(time).getX();
-        currentY = spritePastPositions.get(time).getY();
-        currentZ = spritePastPositions.get(time).getZ();
+        currentPosition = spritePastPositions.get(time);
       }
     }
   }
 
   /**
-   * Manually instantiate a new 3D array of sprite indices, and copy the contents of the old one to in.
+   * Manually instantiate a new WorldState with exactly the same data as the current state.
    *
    * @return A new instance of the current sprite indices array as-is.
    */
-  private int[][][] copySpriteIndices() {
-    int[][][] newSpriteIndices = new int[Loader.getWorldWidth()][Loader.getWorldHeight()][5];
-    for (int i = 0; i < Loader.getWorldWidth(); i++) {
-      for (int j = 0; j < Loader.getWorldHeight(); j++) {
-        System.arraycopy(this.spriteIndices[i][j],
-            0,
-            newSpriteIndices[i][j],
-            0,
-            this.spriteIndices[i][j].length);
-      }
-    }
-    return newSpriteIndices;
+  private WorldState copyWorldState() {
+    return new WorldState(currentState);
   }
 
   public int getTimer() {
-    return this.timer;
+    return timer;
   }
 
   public void setChangedThisFrame(boolean changedThisFrame) {
@@ -413,10 +339,10 @@ public class World implements Controllable {
   }
 
   public void incrementMoves() {
-    this.moveCount++;
+    moveCount++;
   }
 
   public void decrementMoves() {
-    this.moveCount--;
+    moveCount--;
   }
 }

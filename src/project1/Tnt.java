@@ -51,13 +51,8 @@ public class Tnt extends Block {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveIndex(this.getxCell(), this.getyCell(), this.getzCell(), nextXCell, nextYCell);
-
-      this.setX(this.getX() + deltaX);
-      this.setY(this.getY() + deltaY);
-
-      this.setxCell(nextXCell);
-      this.setyCell(nextYCell);
+      world.moveReference(this.getxCell(), this.getyCell(), this.getzCell(), nextXCell, nextYCell);
+      this.snapToGrid(this.getX() + deltaX, this.getY()+ deltaY);
     }
   }
 }

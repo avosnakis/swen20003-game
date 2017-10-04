@@ -26,7 +26,7 @@ public class Loader {
    */
   private static Sprite createSprite(String name, float x, float y, int xCell, int yCell, int zCell) {
     Position<Integer> cellPosition = new Position<>(xCell, yCell, zCell);
-    Position<Float> windowPosition = new Position<>(x, y);
+    Position<Float> windowPosition = new Position<>(x, y, 0f);
 
     switch (name) {
       case "wall":

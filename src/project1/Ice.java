@@ -2,8 +2,6 @@ package project1;
 
 import org.newdawn.slick.Input;
 
-import java.util.Stack;
-
 public class Ice extends Block {
   private static final int SLIDE_INTERVAL = 250;
 
@@ -76,19 +74,10 @@ public class Ice extends Block {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveIndex(this.getxCell(),
-          this.getyCell(),
-          this.getzCell(),
-          nextXCell,
-          nextYCell);
+      world.moveReference(this.getxCell(), this.getyCell(), this.getzCell(), nextXCell, nextYCell);
 
       // Update the window coordinates
-      this.setX(this.getX() + deltaX);
-      this.setY(this.getY() + deltaY);
-
-      // Update the cell coordinates
-      this.setxCell(nextXCell);
-      this.setyCell(nextYCell);
+      this.snapToGrid(this.getX() + deltaX, this.getY() + deltaY);
 
       // The block is now sliding
       this.sliding = true;
@@ -107,6 +96,7 @@ public class Ice extends Block {
     this.currentSlideDirection = Direction.DIR_NONE;
   }
 
+  // TODO bug with undo interacting with Ice sliding. Throws an ArrayOutOfBoundsException. Reproducing is inconsistent.
   @Override
   public void undo(int time) {
     super.undo(time);
