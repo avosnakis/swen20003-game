@@ -271,7 +271,6 @@ public class World implements Controllable {
    */
   public void destroySprite(Position<Integer> position) {
     int index = currentState.getValueAt(position);
-    System.out.println(position);
     clearHistoryOfSprite(sprites.get(index).getPastPositions());
     sprites.set(index, null);
     currentState.removeValue(position);

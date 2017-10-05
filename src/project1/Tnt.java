@@ -1,8 +1,10 @@
 package project1;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 
 public class Tnt extends Block {
+
   private boolean exploding;
   private Explosion explosion;
 
@@ -13,10 +15,19 @@ public class Tnt extends Block {
   }
 
   @Override
+  public void update(Input input, int delta, World world) {
+    if (exploding && !explosion.finishedExploding()) {
+      explosion.increment(delta);
+    } else if (explosion.finishedExploding()) {
+      world.destroySprite(getCellPosition());
+    }
+  }
+
+  @Override
   public void render(Graphics g) {
     if (!exploding) {
       super.render(g);
-    } else {
+    } else if (!explosion.finishedExploding()) {
       explosion.render(g);
     }
   }
@@ -60,7 +71,7 @@ public class Tnt extends Block {
     // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
     if (crackedIndex != WorldState.NO_INDEX) {
-      explode(nextXCell, nextYCell, crackedIndex, world);
+      explode(new Position<>(nextXCell, nextYCell, crackedIndex), world);
       return;
     }
 
@@ -74,10 +85,9 @@ public class Tnt extends Block {
     }
   }
 
-  private void explode(int nextXCell, int nextYCell, int nextZCell, World world) {
+  private void explode(Position<Integer> explosionLocation, World world) {
     exploding = true;
-    Position<Integer> explosionCell = new Position<>(nextXCell, nextYCell, nextZCell);
-    world.destroySprite(explosionCell);
-    explosion.start(explosionCell);
+    world.destroySprite(explosionLocation);
+    explosion.start(explosionLocation);
   }
 }
