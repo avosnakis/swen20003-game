@@ -1,12 +1,43 @@
 package project1;
 
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+
 public class Tnt extends Block {
+
+  private boolean exploding;
+  private Explosion explosion;
+
   public Tnt(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/tnt.png", "tnt", cellPosition, windowPosition);
+    explosion = new Explosion(cellPosition, windowPosition);
+    exploding = false;
+  }
+
+  @Override
+  public void update(Input input, int delta, World world) {
+    if (exploding && !explosion.finishedExploding()) {
+      explosion.increment(delta);
+    } else if (explosion.finishedExploding()) {
+      world.destroySprite(getCellPosition());
+    }
+  }
+
+  @Override
+  public void render(Graphics g) {
+    if (!exploding) {
+      super.render(g);
+    } else if (!explosion.finishedExploding()) {
+      explosion.render(g);
+    }
   }
 
   @Override
   public void moveToDestination(Direction direction, World world) {
+    if (exploding) {
+      return;
+    }
+
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement
@@ -40,8 +71,7 @@ public class Tnt extends Block {
     // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
     if (crackedIndex != WorldState.NO_INDEX) {
-      world.destroySprite(new Position<>(nextXCell, nextYCell, crackedIndex));
-      world.destroySprite(getCellPosition());
+      explode(new Position<>(nextXCell, nextYCell, crackedIndex), world);
       return;
     }
 
@@ -53,5 +83,11 @@ public class Tnt extends Block {
       world.moveReference(getCellPosition(), nextXCell, nextYCell);
       snapToGrid(getX() + deltaX, getY()+ deltaY);
     }
+  }
+
+  private void explode(Position<Integer> explosionLocation, World world) {
+    exploding = true;
+    world.destroySprite(explosionLocation);
+    explosion.start(explosionLocation);
   }
 }

@@ -181,6 +181,8 @@ public class World implements Controllable {
           cannotMove = isBlocked(nextX, nextY, direction);
           sprites.get(index).moveToDestination(direction, this);
           break;
+        default:
+          break;
       }
       if (cannotMove) {
         return true;
@@ -290,7 +292,7 @@ public class World implements Controllable {
     while (iterator.hasNext()) {
       pastStates.get(time).removeValue(currentPosition);
 
-      // Increment to the next world state, and if the sprite was changed then, update the positions to update
+      // Increment to the next world state, and if the sprite was changed then, move to that position
       time = iterator.next();
       if (spritePastPositions.containsKey(time)) {
         currentPosition = spritePastPositions.get(time);
@@ -313,6 +315,10 @@ public class World implements Controllable {
 
   public void setChangedThisFrame(boolean changedThisFrame) {
     this.changedThisFrame = changedThisFrame;
+  }
+
+  public WorldState getCurrentState() {
+    return currentState;
   }
 
   public void incrementMoves() {

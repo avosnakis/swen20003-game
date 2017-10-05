@@ -1,31 +1,31 @@
 package project1;
 
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-
-public class Explosion {
+/**
+ * Explosion effect created by TNT when it collides with a crackedwall.
+ */
+public class Explosion extends Sprite {
   private static final int EXPLOSION_TIME = 400;
 
   private int timer;
 
-  private Position<Float> windowPosition;
-  private Image image = null;
-
-  public Explosion(Position<Float> windowPosition) {
-    this.windowPosition = windowPosition;
-
-    try {
-      image = new Image("res/explosion.png");
-    } catch (SlickException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
-
+  public Explosion(Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super("res/explosion.png", "effect", "explosion", cellPosition, windowPosition);
     timer = 0;
   }
 
-  public void update(Input input, int delta, World world) {
+  public void start(Position<Integer> explosionCell) {
+    setCellPosition(explosionCell);
+
+    float x = Loader.getOffsetX() + getxCell() * App.TILE_SIZE;
+    float y = Loader.getOffsetY() + getyCell() * App.TILE_SIZE;
+    snapToGrid(x, y);
+  }
+
+  public void increment(int delta) {
     timer += delta;
+  }
+
+  public boolean finishedExploding() {
+    return timer > EXPLOSION_TIME;
   }
 }

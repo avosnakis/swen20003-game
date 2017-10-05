@@ -11,7 +11,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Graphics;
 
-public class Sprite implements Movable {
+public class Sprite {
 
   private Image image = null;
 
@@ -42,7 +42,6 @@ public class Sprite implements Movable {
   }
 
   public void update(Input input, int delta, World world) {
-
   }
 
   public void render(Graphics g) {
@@ -50,14 +49,17 @@ public class Sprite implements Movable {
   }
 
   /**
-   * Aligns the sprite's coordinates to the grid.
+   * Aligns the sprite's coordinates to the grid and sets the sprite's new windowCoordinates to this position.
+   *
+   * @param x The x coordinate to align.
+   * @param y The y coordinate to align.
    */
   public void snapToGrid(float x, float y) {
     x /= App.TILE_SIZE;
     y /= App.TILE_SIZE;
 
-    x = (float)Math.round(x);
-    y = (float)Math.round(y);
+    x = (float) Math.round(x);
+    y = (float) Math.round(y);
 
     x *= App.TILE_SIZE;
     y *= App.TILE_SIZE;
@@ -65,7 +67,12 @@ public class Sprite implements Movable {
     windowPosition = new Position<>(x, y, 0f);
   }
 
-  @Override
+  /**
+   * Attempts to move this sprite one tile in the specified direction.
+   *
+   * @param direction The direction in which the sprite is attempting to move.
+   * @param world     The world in which the sprite is making this movement.
+   */
   public void moveToDestination(Direction direction, World world) {
     float speed = 32;
     int cellSpeed = 1;
@@ -113,6 +120,11 @@ public class Sprite implements Movable {
     pastPositions.put(time, new Position<>(cellPosition));
   }
 
+  /**
+   * Returns this sprite to the position it was at the specified time.
+   *
+   * @param time The time with the state we want the sprite to return to.
+   */
   public void undo(int time) {
     // If the block didn't update at this time, exit the method
     if (!pastPositions.containsKey(time)) {
@@ -122,10 +134,9 @@ public class Sprite implements Movable {
     // Get the coordinates of the specified time this block moved and update it
     cellPosition = pastPositions.get(time);
 
-    float newX = (float)Loader.getOffsetX() + getxCell() * App.TILE_SIZE;
-    float newY = (float)Loader.getOffsetY() + getyCell() * App.TILE_SIZE;
-
     // Set the sprite's coordinates
+    float newX = (float) Loader.getOffsetX() + getxCell() * App.TILE_SIZE;
+    float newY = (float) Loader.getOffsetY() + getyCell() * App.TILE_SIZE;
     snapToGrid(newX, newY);
 
     pastPositions.remove(time);
