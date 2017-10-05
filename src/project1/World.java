@@ -34,7 +34,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 1;
+    currentLevel = 0;
     reset(currentLevel);
   }
 
@@ -315,10 +315,6 @@ public class World implements Controllable {
 
   public void setChangedThisFrame(boolean changedThisFrame) {
     this.changedThisFrame = changedThisFrame;
-  }
-
-  public WorldState getCurrentState() {
-    return currentState;
   }
 
   public void incrementMoves() {
