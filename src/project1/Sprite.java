@@ -19,20 +19,20 @@ public class Sprite {
   private Position<Float> windowPosition;
 
   private boolean passable;
-  private String spriteCategory;
-  private String spriteType;
+  private String category;
+  private String type;
 
   private HashMap<Integer, Position<Integer>> pastPositions;
 
-  public Sprite(String imageSource, String spriteCategory, String spriteType, Position<Integer> cellPosition, Position<Float> windowPosition) {
+  public Sprite(String image, String category, String type, Position<Integer> cellPosition, Position<Float> windowPosition) {
     try {
-      image = new Image(imageSource);
+      this.image = new Image(image);
     } catch (SlickException e) {
       e.printStackTrace();
     }
 
-    this.spriteCategory = spriteCategory;
-    this.spriteType = spriteType;
+    this.category = category;
+    this.type = type;
 
     this.cellPosition = cellPosition;
     snapToGrid(windowPosition.x, windowPosition.y);
@@ -44,6 +44,11 @@ public class Sprite {
   public void update(Input input, int delta, World world) {
   }
 
+  /**
+   * Render the sprite to the screen.
+   *
+   * @param g The Slick graphics object.
+   */
   public void render(Graphics g) {
     image.drawCentered(windowPosition.x, windowPosition.y);
   }
@@ -166,12 +171,12 @@ public class Sprite {
     return cellPosition.z;
   }
 
-  public String getSpriteCategory() {
-    return spriteCategory;
+  public String getCategory() {
+    return category;
   }
 
-  public String getSpriteType() {
-    return spriteType;
+  public String getType() {
+    return type;
   }
 
   public boolean isPassable() {

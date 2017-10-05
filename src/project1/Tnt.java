@@ -85,6 +85,12 @@ public class Tnt extends Block {
     }
   }
 
+  /**
+   * Starts the exploding animation, and destroys the CrackedWall at the target location.
+   *
+   * @param explosionLocation The location of the CrackedWall and the explosion.
+   * @param world The world in which the explosion is occuring.
+   */
   private void explode(Position<Integer> explosionLocation, World world) {
     exploding = true;
     world.destroySprite(explosionLocation);

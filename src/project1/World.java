@@ -9,6 +9,11 @@ import java.util.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
+/**
+ * Updates and renders all sprites, as well as having a record of the current positions visible on the screen
+ * and all past positions on the screen. Also determines what type of blocks is at what coordinate, and manages
+ * whether or not the player has won the level.
+ */
 public class World implements Controllable {
 
   private static final String[] levels = {
@@ -62,7 +67,7 @@ public class World implements Controllable {
   private void initialiseTargetLocations() {
     targetLocations = new ArrayList<>();
     for (Sprite sprite : sprites) {
-      if (sprite.getSpriteType().equals("target")) {
+      if (sprite.getType().equals("target")) {
         targetLocations.add(sprite.getCellPosition());
       }
     }
@@ -142,7 +147,7 @@ public class World implements Controllable {
    */
   private boolean isCovered(int x, int y) {
     for (int i = 0; i < WorldState.LENGTH && currentState.getValueAt(x, y, i) != WorldState.NO_INDEX; i++) {
-      if (sprites.get(currentState.getValueAt(x, y, i)).getSpriteCategory().equals("block")) {
+      if (sprites.get(currentState.getValueAt(x, y, i)).getCategory().equals("block")) {
         return true;
       }
     }
@@ -167,7 +172,7 @@ public class World implements Controllable {
     boolean cannotMove = true;
     for (int i = 0; i < WorldState.LENGTH && currentState.getValueAt(x, y, i) != WorldState.NO_INDEX; i++) {
       int index = currentState.getValueAt(x, y, i);
-      switch (sprites.get(index).getSpriteCategory()) {
+      switch (sprites.get(index).getCategory()) {
         case "character":
           break;
         // Determine whether the tile at the location is passable
@@ -257,7 +262,7 @@ public class World implements Controllable {
   public int crackedWallAtLocation(int x, int y) {
     for (int i = 0; i < WorldState.LENGTH; i++) {
       int index = currentState.getValueAt(x, y, i);
-      if (index != WorldState.NO_INDEX && sprites.get(index).getSpriteType().equals("cracked")) {
+      if (index != WorldState.NO_INDEX && sprites.get(index).getType().equals("cracked")) {
         return i;
       }
     }

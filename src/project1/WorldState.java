@@ -3,6 +3,11 @@ package project1;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Manages the 3D array representing the current location of all sprites in the world.
+ *
+ * Responsible for removing sprite indices, moving them, and reflecting what can be seen visually on the screen.
+ */
 public class WorldState {
   public static final int NO_INDEX = -1;
   public static final int LENGTH = 5;
