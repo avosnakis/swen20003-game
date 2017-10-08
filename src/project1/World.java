@@ -202,8 +202,9 @@ public class World implements Controllable {
         case "block":
           int nextX = incrementCoordinate(x, 'x', direction);
           int nextY = incrementCoordinate(y, 'y', direction);
+          Block block = (Block) sprites.get(index);
           cannotMove = isBlocked(nextX, nextY, direction);
-          sprites.get(index).moveToDestination(direction, this);
+          block.moveToDestination(direction, this);
           break;
         default:
           break;
@@ -261,8 +262,12 @@ public class World implements Controllable {
 
     // Undo all sprites
     for (Sprite sprite : sprites) {
-      if (sprite != null) {
-        sprite.undo(lastUpdateTime);
+      if (sprite != null && sprite instanceof Movable) {
+        if (sprite instanceof Block) {
+          ((Block)sprite).undo(lastUpdateTime);
+        } else {
+          ((Character)sprite).undo(lastUpdateTime);
+        }
       }
     }
 
@@ -298,7 +303,12 @@ public class World implements Controllable {
     // the new Z
     int index = currentState.getValueAt(position);
     currentState.removeValue(position);
-    clearHistoryOfSprite(sprites.get(index).getPastPositions());
+
+    if (sprites.get(index) instanceof Tnt) {
+      clearHistoryOfSprite(((Tnt)sprites.get(index)).getPastPositions());
+    } else {
+      clearHistoryOfSprite(sprites.get(index).getCellPosition());
+    }
     sprites.set(index, null);
   }
 
@@ -322,6 +332,20 @@ public class World implements Controllable {
       if (spritePastPositions.containsKey(time)) {
         currentPosition = spritePastPositions.get(time);
       }
+    }
+  }
+
+  /**
+   * Purge the world history of a sprite at a particular location.
+   *
+   *  @param position The position to purge.
+   */
+  private void clearHistoryOfSprite(Position<Integer> position) {
+    Iterator<Integer> iterator = changeTimes.iterator();
+
+    while (iterator.hasNext()) {
+      int time = iterator.next();
+      pastStates.get(time).removeValue(position);
     }
   }
 
