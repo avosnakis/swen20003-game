@@ -194,4 +194,15 @@ public class Sprite {
   public Position<Integer> getCellPosition() {
     return cellPosition;
   }
+
+  @Override
+  public String toString() {
+    return "Sprite{" +
+        "cellPosition=" + cellPosition +
+        ", windowPosition=" + windowPosition +
+        ", passable=" + passable +
+        ", category='" + category + '\'' +
+        ", type='" + type + '\'' +
+        '}';
+  }
 }

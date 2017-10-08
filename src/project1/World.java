@@ -9,6 +9,7 @@ import java.util.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
+
 /**
  * Updates and renders all sprites, as well as having a record of the current positions visible on the screen
  * and all past positions on the screen. Also determines what type of blocks is at what coordinate, and manages
@@ -40,11 +41,11 @@ public class World implements Controllable {
 
   public World() {
     currentLevel = 0;
-    reset(currentLevel);
+    reset();
   }
 
-  private void reset(int level) {
-    String filename = "res/levels/" + levels[level];
+  private void reset() {
+    String filename = "res/levels/" + levels[currentLevel];
     sprites = Loader.loadSprites(filename);
     initialiseTargetLocations();
 
@@ -84,7 +85,7 @@ public class World implements Controllable {
     // move to the next level and skip the rest of this frame
     if (hasWon()) {
       currentLevel += 1;
-      reset(currentLevel);
+      reset();
       return;
     }
 
@@ -104,10 +105,15 @@ public class World implements Controllable {
 
     // If there were changes in the world, save the past information
     if (changedThisFrame) {
-      changeTimes.push(timer);
-      pastStates.put(timer, currentWorldState);
-      changedThisFrame = false;
+      updateHistory(currentWorldState);
     }
+  }
+
+  private void updateHistory(WorldState currentWorldState) {
+    changeTimes.push(timer);
+    pastStates.put(timer, currentWorldState);
+    changedThisFrame = false;
+
   }
 
   /**
@@ -116,10 +122,23 @@ public class World implements Controllable {
    * @param g The graphics object for the game.
    */
   public void render(Graphics g) {
+    Tnt possibleTnt = null;
     for (Sprite sprite : sprites) {
-      if (sprite != null) {
+      if (sprite != null && !(sprite instanceof Tnt)) {
         sprite.render(g);
+      } else if (sprite != null) {
+        // Check if the TNT here is exploding
+        Tnt tnt = (Tnt)sprite;
+        if (tnt.isExploding()) {
+          possibleTnt = tnt;
+        } else {
+          sprite.render(g);
+        }
       }
+    }
+    // If the TNT was exploding, render it last
+    if (possibleTnt != null) {
+      possibleTnt.render(g);
     }
     g.drawString(String.format("Moves: %d", moveCount), 0, 0);
   }
@@ -169,7 +188,7 @@ public class World implements Controllable {
     }
 
     // Try to move to an (x, y) coordinate, checking every sprite at that location to determine the next action.
-    boolean cannotMove = true;
+    boolean cannotMove = false;
     for (int i = 0; i < WorldState.LENGTH && currentState.getValueAt(x, y, i) != WorldState.NO_INDEX; i++) {
       int index = currentState.getValueAt(x, y, i);
       switch (sprites.get(index).getCategory()) {
@@ -215,7 +234,7 @@ public class World implements Controllable {
   @Override
   public void handlePlayerInput(Input input) {
     if (input.isKeyPressed(Input.KEY_R)) {
-      reset(currentLevel);
+      reset();
       return;
     }
     if (input.isKeyPressed(Input.KEY_Z)) {
@@ -275,10 +294,12 @@ public class World implements Controllable {
    * @param position The position in the WorldState of the sprite.
    */
   public void destroySprite(Position<Integer> position) {
+    // TODO when destroying a sprite at an (x,y), update the positions of each of the sprites at that (x,y) to have
+    // the new Z
     int index = currentState.getValueAt(position);
+    currentState.removeValue(position);
     clearHistoryOfSprite(sprites.get(index).getPastPositions());
     sprites.set(index, null);
-    currentState.removeValue(position);
   }
 
   /**
@@ -296,7 +317,6 @@ public class World implements Controllable {
     // Move through the World history by timestamp and remove every reference to this block
     while (iterator.hasNext()) {
       pastStates.get(time).removeValue(currentPosition);
-
       // Increment to the next world state, and if the sprite was changed then, move to that position
       time = iterator.next();
       if (spritePastPositions.containsKey(time)) {

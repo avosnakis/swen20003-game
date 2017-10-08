@@ -109,6 +109,14 @@ public class WorldState {
     return z;
   }
 
+  public int zValueOf(int x, int y, int value) {
+    int z = 0;
+    while (getValueAt(x, y, z) != value) {
+      z++;
+    }
+    return z;
+  }
+
   /**
    * Moves a sprite index from one (x, y, z) coordinate to another.
    *
@@ -117,7 +125,6 @@ public class WorldState {
    */
   public void moveIndex(Position<Integer> initialPosition, Position<Integer> finalPosition) {
     int spriteIndex = spriteIndices[initialPosition.x][initialPosition.y][initialPosition.z];
-
     removeValue(initialPosition);
     setValue(finalPosition, spriteIndex);
   }

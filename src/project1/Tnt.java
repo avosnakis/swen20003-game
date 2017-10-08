@@ -19,7 +19,9 @@ public class Tnt extends Block {
     if (exploding && !explosion.finishedExploding()) {
       explosion.increment(delta);
     } else if (explosion.finishedExploding()) {
+      exploding = false;
       world.destroySprite(getCellPosition());
+      world.destroySprite(explosion.getCellPosition());
     }
   }
 
@@ -71,7 +73,7 @@ public class Tnt extends Block {
     // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
     int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
     if (crackedIndex != WorldState.NO_INDEX) {
-      explode(new Position<>(nextXCell, nextYCell, crackedIndex), world);
+      explode(new Position<>(nextXCell, nextYCell, crackedIndex), nextXCell, nextYCell, deltaX, deltaY, world);
       return;
     }
 
@@ -88,12 +90,18 @@ public class Tnt extends Block {
   /**
    * Starts the exploding animation, and destroys the CrackedWall at the target location.
    *
-   * @param explosionLocation The location of the CrackedWall and the explosion.
+   * @param wallLocation The location of the CrackedWall and the explosion.
    * @param world The world in which the explosion is occuring.
    */
-  private void explode(Position<Integer> explosionLocation, World world) {
+  private void explode(Position<Integer> wallLocation, int nextXCell, int nextYCell, float deltaX, float deltaY, World world) {
+    world.moveReference(getCellPosition(), nextXCell, nextYCell);
+    snapToGrid(getX() + deltaX, getY()+ deltaY);
+
     exploding = true;
-    world.destroySprite(explosionLocation);
-    explosion.start(explosionLocation);
+    explosion.start(wallLocation);
+  }
+
+  public boolean isExploding() {
+    return exploding;
   }
 }
