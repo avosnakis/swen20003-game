@@ -19,7 +19,7 @@ public class Skeleton extends Character {
   }
 
   @Override
-  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
+  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
     timer.increment(delta);
     if (timer.reachedTimeout()) {
       moveToDestination(currentDirection, world);

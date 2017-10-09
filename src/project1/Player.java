@@ -15,8 +15,8 @@ public class Player extends Character implements Controllable {
   }
 
   @Override
-  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
-    handlePlayerInput(arrowKeys, world);
+  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
+    handlePlayerInput(keysPressed, world);
   }
 
   @Override

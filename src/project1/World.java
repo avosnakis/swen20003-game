@@ -24,8 +24,7 @@ public class World implements Controllable {
       "2.lvl",
       "3.lvl",
       "4.lvl",
-      "5.lvl",
-      "6.lvl"
+      "5.lvl"
   };
 
   private int currentLevel;
@@ -39,7 +38,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 3;
+    currentLevel = 4;
     reset();
   }
 
@@ -133,6 +132,11 @@ public class World implements Controllable {
    * @return Whether all targets have been covered by a block.
    */
   public boolean hasWon() {
+    // Special case for final level
+    if (currentLevel == 5) {
+      return false;
+    }
+
     for (Sprite sprite : sprites) {
       if (sprite instanceof Target && !((Target)sprite).isCovered()) {
         return false;
@@ -195,7 +199,7 @@ public class World implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(ArrayList<Integer> keysPressed, World word) {
+  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
   }
 
   /**
@@ -269,6 +273,15 @@ public class World implements Controllable {
         break;
       }
     }
+  }
+
+  public Position<Integer> getPlayerPosition() {
+    for (Sprite sprite : sprites) {
+      if (sprite != null && sprite.getType().equals("player")) {
+        return sprite.getCellPosition();
+      }
+    }
+    return null;
   }
 
   public int getTimer() {

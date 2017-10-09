@@ -6,8 +6,8 @@ import java.util.HashMap;
 public abstract class Character extends Sprite implements Movable {
   private HashMap<Integer, Position<Integer>> pastPositions;
 
-  public Character(String imageSource, String spriteType, Position<Integer> cellPosition, Position<Float> windowPosition) {
-    super(imageSource, "character", spriteType, cellPosition, windowPosition);
+  public Character(String imageSource, String type, Position<Integer> cellPosition, Position<Float> windowPosition) {
+    super(imageSource, "character", type, cellPosition, windowPosition);
 
     pastPositions = new HashMap<>();
     addPastPosition(0);
@@ -42,18 +42,13 @@ public abstract class Character extends Sprite implements Movable {
         break;
     }
 
-    addPastPosition(world.getTimer());
-    world.setChangedThisFrame(true);
-
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 
     float nextX = this.getX() + deltaX;
     float nextY = this.getY() + deltaY;
 
     // Make sure the position isn't occupied!
-
-
-    if (!world.isBlocked(nextPosition, direction)) {
+    if (!world.isBlocked(nextPosition, direction) && !world.categoryAtLocation(nextPosition, "block")) {
       setCellPosition(nextPosition);
       snapToGrid(nextX, nextY);
     }

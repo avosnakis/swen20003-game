@@ -7,6 +7,6 @@ import java.util.ArrayList;
 public interface Controllable {
   public void handlePlayerInput(Input input);
 
-  public void handlePlayerInput(ArrayList<Integer> keysPressed, World word);
+  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world);
 
 }
