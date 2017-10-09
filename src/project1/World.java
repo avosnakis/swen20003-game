@@ -91,6 +91,9 @@ public class World implements Controllable {
     }
   }
 
+  /**
+   * Adds the current time counter to the updatetimes stack and reset the changed status.
+   */
   private void updateHistory() {
     changeTimes.push(timer.getCounter());
     changedThisFrame = false;
@@ -106,7 +109,7 @@ public class World implements Controllable {
     for (Sprite sprite : sprites) {
       if (sprite != null && !(sprite instanceof Tnt)) {
         sprite.render(g);
-      } else if (sprite != null) {
+      } else if (sprite != null && ((Tnt)sprite).isExploding()) {
         // Check if the TNT here is exploding
         Tnt tnt = (Tnt)sprite;
         if (tnt.isExploding()) {
@@ -159,9 +162,11 @@ public class World implements Controllable {
         switch (sprite.getCategory()) {
           case "character":
             break;
+          // Determine whether the tile is passable
           case "tile":
             cannotMove = !sprite.isPassable();
             break;
+          // Check if the next block can move, and attempt to move it
           case "block":
             int nextX = incrementCoordinate(position.x, 'x', direction);
             int nextY = incrementCoordinate(position.y, 'y', direction);
@@ -195,7 +200,7 @@ public class World implements Controllable {
   private void undo() {
     int lastUpdateTime = changeTimes.pop();
 
-    // If the world is in its initial state, do nothing
+    // If the world is in its initial state, do nothing and exit the method
     if (lastUpdateTime == 0) {
       timer.reset();
       changeTimes.push(0);
@@ -235,10 +240,9 @@ public class World implements Controllable {
    * Determines if a sprite of the given type is at an (x,y) coordinate.
    *
    * @param position The (x,y) coordinate to check.
-   * @param category The typr to check the (x,y) coordinates for.
+   * @param category The type to check the (x,y) coordinates for.
    * @return True if there is a sprite of the given type at the (x,y) location, otherwise false.
    */
-
   public boolean categoryAtLocation(Position<Integer> position, String category) {
     for (Sprite sprite : sprites) {
       if (sprite != null && sprite.isAtPosition(position) && sprite.getCategory().equals(category)) {
@@ -247,7 +251,6 @@ public class World implements Controllable {
     }
     return false;
   }
-
 
   /**
    * Set the specified sprite to null in the sprites ArrayList. Assumes there can only be one destructible block

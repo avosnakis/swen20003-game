@@ -70,7 +70,6 @@ public class Sprite {
     return cellPosition.equals(position);
   }
 
-
   public void setCellPosition(Position<Integer> cellPosition) {
     this.cellPosition = cellPosition;
   }
