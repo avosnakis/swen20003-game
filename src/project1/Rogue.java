@@ -18,12 +18,16 @@ public class Rogue extends Character {
 
   @Override
   public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
-    Direction direction = playerMoved(arrowKeys) ? currentDirection : Direction.DIR_NONE;
+    Direction direction = Character.playerMoved(arrowKeys) ? currentDirection : Direction.DIR_NONE;
     moveToDestination(direction, world);
   }
 
   @Override
   public void moveToDestination(Direction direction, World world) {
+    if (direction == Direction.DIR_NONE) {
+      return;
+    }
+
     if (moveAttempts >= 2) {
       moveAttempts = 0;
       reverseDirection();
@@ -64,6 +68,11 @@ public class Rogue extends Character {
     }
   }
 
+  /**
+   * Reverses the rogue's current direction.
+   * If it is going left, its direction is now right.
+   * If it is going right, its direction is now left.
+   */
   private void reverseDirection() {
     if (currentDirection == Direction.DIR_LEFT) {
       currentDirection = Direction.DIR_RIGHT;
@@ -71,9 +80,4 @@ public class Rogue extends Character {
       currentDirection = Direction.DIR_LEFT;
     }
   }
-
-  private static boolean playerMoved(ArrayList<Integer> keysPressed) {
-    return keysPressed.size() > 0;
-  }
-
 }
