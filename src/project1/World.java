@@ -31,7 +31,7 @@ public class World implements Controllable {
 
   private ArrayList<Sprite> sprites;
 
-  private int timer;
+  private Timer timer;
   private Stack<Integer> changeTimes;
   private boolean changedThisFrame;
   private int moveCount;
@@ -49,7 +49,7 @@ public class World implements Controllable {
     changeTimes = new Stack<>();
     changeTimes.push(0);
 
-    timer = 0;
+    timer = new Timer();
     moveCount = 0;
   }
 
@@ -72,7 +72,7 @@ public class World implements Controllable {
     handlePlayerInput(input);
 
     // Increment the internal timer, and make a record of the current world state
-    timer += delta;
+    timer.increment(delta);
 
     // Update all sprites
     for (Sprite sprite : sprites) {
@@ -88,7 +88,7 @@ public class World implements Controllable {
   }
 
   private void updateHistory() {
-    changeTimes.push(timer);
+    changeTimes.push(timer.getCounter());
     changedThisFrame = false;
   }
 
@@ -196,7 +196,7 @@ public class World implements Controllable {
 
     // If the world is in its initial state, do nothing
     if (lastUpdateTime == 0) {
-      timer = 0;
+      timer.reset();
       changeTimes.push(0);
       return;
     }
@@ -250,7 +250,7 @@ public class World implements Controllable {
 
 
   public int getTimer() {
-    return timer;
+    return timer.getCounter();
   }
 
   public void setChangedThisFrame(boolean changedThisFrame) {

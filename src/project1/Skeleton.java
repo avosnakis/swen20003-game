@@ -27,7 +27,6 @@ public class Skeleton extends Character {
     }
   }
 
-
   @Override
   public void moveToDestination(Direction direction, World world) {
     if (moveAttempts >= 2) {
@@ -53,9 +52,6 @@ public class Skeleton extends Character {
         break;
     }
 
-    addPastPosition(world.getTimer());
-    world.setChangedThisFrame(true);
-
     Position<Integer> nextPosition = new Position<>(getxCell(), getyCell() + deltaYCell);
 
     float nextY = this.getY() + deltaY;
@@ -73,6 +69,11 @@ public class Skeleton extends Character {
     }
   }
 
+  /**
+   * Reverses the skeleton's current direction.
+   * If it is going down, its direction is now up.
+   * If it is going up, its direction is now down.
+   */
   private void reverseDirection() {
     if (currentDirection == Direction.DIR_DOWN) {
       currentDirection = Direction.DIR_UP;
