@@ -6,11 +6,11 @@ package project1;
 public class Explosion extends Sprite {
   private static final int EXPLOSION_TIME = 400;
 
-  private int timer;
+  private Timer timer;
 
   public Explosion(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/explosion.png", "effect", "explosion", cellPosition, windowPosition);
-    timer = 0;
+    timer = new Timer(EXPLOSION_TIME);
   }
 
   public void start(Position<Integer> explosionCell) {
@@ -22,10 +22,10 @@ public class Explosion extends Sprite {
   }
 
   public void increment(int delta) {
-    timer += delta;
+    timer.increment(delta);
   }
 
   public boolean finishedExploding() {
-    return timer > EXPLOSION_TIME;
+    return timer.reachedTimeout();
   }
 }

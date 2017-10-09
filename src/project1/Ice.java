@@ -5,12 +5,14 @@ import org.newdawn.slick.Input;
 public class Ice extends Block {
   private static final int SLIDE_INTERVAL = 250;
 
-  private int timer;
+  private Timer timer;
   private boolean sliding;
   private Direction currentSlideDirection;
 
   public Ice(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/ice.png", "ice", cellPosition, windowPosition);
+
+    timer = new Timer(SLIDE_INTERVAL);
     stop();
   }
 
@@ -19,13 +21,13 @@ public class Ice extends Block {
 
     // Increment the timer while it's sliding
     if (sliding) {
-      timer += delta;
+      timer.increment(delta);
     }
 
     // Check if the ice block will slide in this frame, and if so, reset its timer as well
-    if (timer >= SLIDE_INTERVAL && sliding) {
+    if (timer.reachedTimeout() && sliding) {
       moveToDestination(currentSlideDirection, world);
-      timer = 0;
+      timer.reset();
     }
   }
 
@@ -90,7 +92,7 @@ public class Ice extends Block {
    */
   private void stop() {
     sliding = false;
-    timer = 0;
+    timer.reset();
     currentSlideDirection = Direction.DIR_NONE;
   }
 

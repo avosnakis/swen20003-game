@@ -5,22 +5,23 @@ import org.newdawn.slick.Input;
 
 public class Skeleton extends Character {
   private static final int MOVE_TIME = 1000;
-  private int timer;
+  private Timer timer;
 
   private Direction currentDirection;
 
   public Skeleton(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/skull.png", "skeleton", cellPosition, windowPosition);
     currentDirection = Direction.DIR_UP;
-    timer = 0;
+
+    timer = new Timer(MOVE_TIME);
   }
 
   @Override
   public void update(Input input, int delta, World world) {
-    timer += delta;
-    if (timer > MOVE_TIME) {
+    timer.increment(delta);
+    if (timer.reachedTimeout()) {
       moveToDestination(currentDirection, world);
-      timer = 0;
+      timer.reset();
     }
   }
 
