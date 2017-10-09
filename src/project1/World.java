@@ -39,7 +39,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 0;
+    currentLevel = 3;
     reset();
   }
 
@@ -65,6 +65,8 @@ public class World implements Controllable {
    * @param delta The amount of time passed since the last frame.
    */
   public void update(Input input, int delta) {
+    ArrayList<Integer> arrowKeysPressed = recordArrowKeysPressed(input);
+
     // If the player completed the level on the previous frame,
     // move to the next level and skip the rest of this frame
     if (hasWon()) {
@@ -82,7 +84,7 @@ public class World implements Controllable {
     // Update all sprites
     for (Sprite sprite : sprites) {
       if (sprite != null) {
-        sprite.update(input, delta, this);
+        sprite.update(arrowKeysPressed, delta, this);
       }
     }
 
@@ -193,7 +195,7 @@ public class World implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(Input input, World word) {
+  public void handlePlayerInput(ArrayList<Integer> keysPressed, World word) {
   }
 
   /**
@@ -311,5 +313,25 @@ public class World implements Controllable {
       // default case
       return coordinate;
     }
+  }
+
+  private static ArrayList<Integer> recordArrowKeysPressed(Input input) {
+    ArrayList<Integer> keysPressed = new ArrayList<>();
+    if (input.isKeyPressed(Input.KEY_RIGHT)) {
+      keysPressed.add(Input.KEY_RIGHT);
+    }
+
+    if (input.isKeyPressed(Input.KEY_UP)) {
+      keysPressed.add(Input.KEY_UP);
+    }
+
+    if (input.isKeyPressed(Input.KEY_DOWN)) {
+      keysPressed.add(Input.KEY_DOWN);
+    }
+
+    if (input.isKeyPressed(Input.KEY_LEFT)) {
+      keysPressed.add(Input.KEY_LEFT);
+    }
+    return keysPressed;
   }
 }

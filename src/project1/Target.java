@@ -4,7 +4,7 @@
  */
 package project1;
 
-import org.newdawn.slick.Input;
+import java.util.ArrayList;
 
 public class Target extends Tile {
   private boolean covered;
@@ -16,7 +16,7 @@ public class Target extends Tile {
     covered = false;
   }
 
-  public void update(Input input, int delta, World world) {
+  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
     covered = world.categoryAtLocation(getCellPosition(), "block");
   }
 

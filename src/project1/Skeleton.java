@@ -1,7 +1,7 @@
 package project1;
 
 
-import org.newdawn.slick.Input;
+import java.util.ArrayList;
 
 public class Skeleton extends Character {
   private static final int MOVE_TIME = 1000;
@@ -19,7 +19,7 @@ public class Skeleton extends Character {
   }
 
   @Override
-  public void update(Input input, int delta, World world) {
+  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
     timer.increment(delta);
     if (timer.reachedTimeout()) {
       moveToDestination(currentDirection, world);

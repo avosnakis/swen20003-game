@@ -1,7 +1,8 @@
 package project1;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
+
+import java.util.ArrayList;
 
 public class Tnt extends Block implements Destructible {
 
@@ -16,7 +17,7 @@ public class Tnt extends Block implements Destructible {
   }
 
   @Override
-  public void update(Input input, int delta, World world) {
+  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
     if (exploding && !explosion.finishedExploding()) {
       explosion.increment(delta);
     } else if (explosion.finishedExploding()) {
