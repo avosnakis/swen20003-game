@@ -5,9 +5,10 @@
 package project1;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Graphics;
+
+import java.util.ArrayList;
 
 public class Sprite {
 
@@ -34,7 +35,7 @@ public class Sprite {
     snapToGrid(windowPosition.x, windowPosition.y);
   }
 
-  public void update(Input input, int delta, World world) {
+  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
   }
 
   /**

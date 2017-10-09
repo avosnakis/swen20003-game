@@ -6,6 +6,8 @@ package project1;
 
 import org.newdawn.slick.Input;
 
+import java.util.ArrayList;
+
 public class Player extends Character implements Controllable {
 
   public Player(Position<Integer> cellPosition, Position<Float> windowPosition) {
@@ -13,8 +15,8 @@ public class Player extends Character implements Controllable {
   }
 
   @Override
-  public void update(Input input, int delta, World world) {
-    handlePlayerInput(input, world);
+  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
+    handlePlayerInput(arrowKeys, world);
   }
 
   @Override
@@ -22,8 +24,8 @@ public class Player extends Character implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(Input input, World world) {
-    Direction direction = Direction.determineDirection(input);
+  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
+    Direction direction = determineDirection(keysPressed);
     if (direction == Direction.DIR_NONE) {
       return;
     }
@@ -81,5 +83,26 @@ public class Player extends Character implements Controllable {
       setCellPosition(nextPosition);
       snapToGrid(nextX, nextY);
     }
+  }
+
+  /**
+   * Determines the Player direction based on the input. Essentially the directional controls for the game.
+   *
+   * @param keysPressed The Slick input object.
+   * @return The direction that the player will try to move.
+   */
+  public static Direction determineDirection(ArrayList<Integer> keysPressed) {
+    Direction direction = Direction.DIR_NONE;
+
+    if (keysPressed.contains(Input.KEY_LEFT)) {
+      direction = Direction.DIR_LEFT;
+    } else if (keysPressed.contains(Input.KEY_RIGHT)) {
+      direction = Direction.DIR_RIGHT;
+    } else if (keysPressed.contains(Input.KEY_UP)) {
+      direction = Direction.DIR_UP;
+    } else if (keysPressed.contains(Input.KEY_DOWN)) {
+      direction = Direction.DIR_DOWN;
+    }
+    return direction;
   }
 }

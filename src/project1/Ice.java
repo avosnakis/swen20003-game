@@ -1,6 +1,6 @@
 package project1;
 
-import org.newdawn.slick.Input;
+import java.util.ArrayList;
 
 public class Ice extends Block {
   private static final int SLIDE_INTERVAL = 250;
@@ -17,7 +17,7 @@ public class Ice extends Block {
   }
 
   @Override
-  public void update(Input input, int delta, World world) {
+  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
 
     // Increment the timer while it's sliding
     if (sliding) {
