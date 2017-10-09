@@ -69,18 +69,16 @@ public class Ice extends Block {
       world.setChangedThisFrame(true);
     }
 
-    int nextXCell = getxCell() + deltaXCell;
-    int nextYCell = getyCell() + deltaYCell;
+    Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveReference(getCellPosition(), nextXCell, nextYCell);
-
-      // Update the window coordinates
+    if (!world.isBlocked(nextPosition, direction)) {
+      setCellPosition(nextPosition);
       snapToGrid(getX() + deltaX, getY() + deltaY);
 
       // The block is now sliding
       sliding = true;
+      currentSlideDirection = direction;
     } else {
       // The ice block has collided and it can't move anymore
       stop();

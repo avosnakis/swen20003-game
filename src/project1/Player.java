@@ -65,20 +65,20 @@ public class Player extends Character implements Controllable {
     addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
-    int nextXCell = getxCell() + deltaXCell;
-    int nextYCell = getyCell() + deltaYCell;
+    Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
+
     float nextX = getX() + deltaX;
     float nextY = getY() + deltaY;
 
     // If there is an enemy at the next location, restart the level
-    if (world.categoryAtLocation(nextXCell, nextYCell, "character")) {
+    if (world.categoryAtLocation(nextPosition, "character")) {
       world.reset();
       return;
     }
 
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveReference(getCellPosition(), nextXCell, nextYCell);
+    if (!world.isBlocked(nextPosition, direction)) {
+      setCellPosition(nextPosition);
       snapToGrid(nextX, nextY);
     }
   }

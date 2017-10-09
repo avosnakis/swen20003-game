@@ -24,6 +24,7 @@ public class Skeleton extends Character {
     }
   }
 
+
   @Override
   public void moveToDestination(Direction direction, World world) {
     float speed = 32;
@@ -46,24 +47,23 @@ public class Skeleton extends Character {
     addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
-    int nextYCell = this.getyCell() + deltaYCell;
+    Position<Integer> nextPosition = new Position<>(getxCell(), getyCell() + deltaYCell);
+
     float nextY = this.getY() + deltaY;
 
     // Restart the level if the player is there
-    if (world.typeAtLocation(getxCell(), nextYCell, "player")) {
+    if (world.typeAtLocation(nextPosition, "player")) {
       world.reset();
-    }
-
-    // Reverse direction if the skeleton is about to run into a block
-    if (world.categoryAtLocation(getxCell(), nextYCell, "block")) {
+    } else     if (world.categoryAtLocation(nextPosition, "block")) {
       reverseDirection();
       moveToDestination(currentDirection, world);
-      return;
     }
 
+
+
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(getxCell(), nextYCell, direction)) {
-      world.moveReference(getCellPosition(), getxCell(), nextYCell);
+    if (!world.isBlocked(nextPosition, direction)) {
+      setCellPosition(nextPosition);
       snapToGrid(getX(), nextY);
     } else {
       reverseDirection();

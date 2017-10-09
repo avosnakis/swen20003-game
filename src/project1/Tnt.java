@@ -3,7 +3,7 @@ package project1;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-public class Tnt extends Block {
+public class Tnt extends Block implements Destructible {
 
   private boolean exploding;
   private Explosion explosion;
@@ -67,13 +67,11 @@ public class Tnt extends Block {
         break;
     }
 
-    int nextXCell = getxCell() + deltaXCell;
-    int nextYCell = getyCell() + deltaYCell;
+    Position<Integer> explosionPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 
     // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
-    int crackedIndex = world.crackedWallAtLocation(nextXCell, nextYCell);
-    if (crackedIndex != WorldState.NO_INDEX) {
-      explode(new Position<>(nextXCell, nextYCell, crackedIndex), nextXCell, nextYCell, deltaX, deltaY, world);
+    if (world.typeAtLocation(explosionPosition, "cracked")) {
+      explode(explosionPosition, deltaX, deltaY);
       return;
     }
 
@@ -81,8 +79,8 @@ public class Tnt extends Block {
     world.setChangedThisFrame(true);
 
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveReference(getCellPosition(), nextXCell, nextYCell);
+    if (!world.isBlocked(explosionPosition, direction)) {
+      setCellPosition(explosionPosition);
       snapToGrid(getX() + deltaX, getY()+ deltaY);
     }
   }
@@ -91,10 +89,11 @@ public class Tnt extends Block {
    * Starts the exploding animation, and destroys the CrackedWall at the target location.
    *
    * @param wallLocation The location of the CrackedWall and the explosion.
-   * @param world The world in which the explosion is occuring.
+   * @param deltaX The x position in the window of the explosion.
+   * @param deltaY The y position in the window of the explosion.
    */
-  private void explode(Position<Integer> wallLocation, int nextXCell, int nextYCell, float deltaX, float deltaY, World world) {
-    world.moveReference(getCellPosition(), nextXCell, nextYCell);
+  private void explode(Position<Integer> wallLocation, float deltaX, float deltaY) {
+    setCellPosition(wallLocation);
     snapToGrid(getX() + deltaX, getY()+ deltaY);
 
     exploding = true;

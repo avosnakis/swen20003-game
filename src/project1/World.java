@@ -30,48 +30,27 @@ public class World implements Controllable {
   private int currentLevel;
 
   private ArrayList<Sprite> sprites;
-  private ArrayList<Position<Integer>> targetLocations;
-  private WorldState currentState;
 
   private int timer;
   private Stack<Integer> changeTimes;
-  private HashMap<Integer, WorldState> pastStates;
   private boolean changedThisFrame;
   private int moveCount;
 
   public World() {
-    currentLevel = 3;
+    currentLevel = 1;
     reset();
   }
 
   public void reset() {
     String filename = "res/levels/" + levels[currentLevel];
     sprites = Loader.loadSprites(filename);
-    initialiseTargetLocations();
-
-    currentState = new WorldState(sprites);
 
     changedThisFrame = false;
     changeTimes = new Stack<>();
     changeTimes.push(0);
 
-    pastStates = new HashMap<>();
-    pastStates.put(0, copyWorldState());
-
     timer = 0;
     moveCount = 0;
-  }
-
-  /**
-   * Record all target (x, y, z) coordinates.
-   */
-  private void initialiseTargetLocations() {
-    targetLocations = new ArrayList<>();
-    for (Sprite sprite : sprites) {
-      if (sprite.getType().equals("target")) {
-        targetLocations.add(sprite.getCellPosition());
-      }
-    }
   }
 
   /**
@@ -94,7 +73,6 @@ public class World implements Controllable {
 
     // Increment the internal timer, and make a record of the current world state
     timer += delta;
-    WorldState currentWorldState = copyWorldState();
 
     // Update all sprites
     for (Sprite sprite : sprites) {
@@ -105,15 +83,13 @@ public class World implements Controllable {
 
     // If there were changes in the world, save the past information
     if (changedThisFrame) {
-      updateHistory(currentWorldState);
+      updateHistory();
     }
   }
 
-  private void updateHistory(WorldState currentWorldState) {
+  private void updateHistory() {
     changeTimes.push(timer);
-    pastStates.put(timer, currentWorldState);
     changedThisFrame = false;
-
   }
 
   /**
@@ -147,90 +123,54 @@ public class World implements Controllable {
    * @return Whether all targets have been covered by a block.
    */
   public boolean hasWon() {
-    boolean hasWon = false;
-    for (Position<Integer> location : targetLocations) {
-      hasWon = isCovered(location.x, location.y);
-      if (!hasWon) {
-        return false;
+    for (Sprite sprite : sprites) {
+      if (sprite instanceof Target) {
+        if (!((Target)sprite).isCovered()) {
+          return false;
+        }
       }
     }
-    return hasWon;
-  }
-
-  /**
-   * Checks to see whether a target at an (x,y) position has been covered by a block.
-   *
-   * @param x The x coordinate to check.
-   * @param y The y coordinate to check.
-   * @return Whether the target has been covered by a block.
-   */
-  private boolean isCovered(int x, int y) {
-    for (int i = 0; i < WorldState.LENGTH && currentState.getValueAt(x, y, i) != WorldState.NO_INDEX; i++) {
-      if (sprites.get(currentState.getValueAt(x, y, i)).getCategory().equals("block")) {
-        return true;
-      }
-    }
-    return false;
+    return true;
   }
 
   /**
    * Determines whether an (x,y) position is possible to move to.
    *
-   * @param x         The x point to be checked.
-   * @param y         The y point to be checked.
+   * @param position The (x,y) position to check.
    * @param direction The direction the sprite is currently moving.
    * @return Whether the position is blocked or not.
    */
-  public boolean isBlocked(int x, int y, Direction direction) {
+  public boolean isBlocked(Position<Integer> position, Direction direction) {
     // Check that the block is moving to a spot inside the grid
-    if (x < 0 || x > Loader.getWorldWidth() || y < 0 || y > Loader.getWorldHeight()) {
+    if (position.x < 0 ||
+        position.x > Loader.getWorldWidth() ||
+        position.y < 0 ||
+        position.y > Loader.getWorldHeight()) {
       return false;
     }
 
     // Try to move to an (x, y) coordinate, checking every sprite at that location to determine the next action.
     boolean cannotMove = false;
-    for (int i = 0; i < WorldState.LENGTH && currentState.getValueAt(x, y, i) != WorldState.NO_INDEX; i++) {
-      int index = currentState.getValueAt(x, y, i);
-      switch (sprites.get(index).getCategory()) {
-        case "character":
-          break;
-        // Determine whether the tile at the location is passable
-        case "tile":
-          cannotMove = !sprites.get(index).isPassable();
-          break;
-        // If it's a block, figure out if it can move, and if so, move it
-        case "block":
-          int nextX = incrementCoordinate(x, 'x', direction);
-          int nextY = incrementCoordinate(y, 'y', direction);
-          Block block = (Block) sprites.get(index);
-          cannotMove = isBlocked(nextX, nextY, direction);
-          block.moveToDestination(direction, this);
-          break;
-        default:
-          break;
+    for (Sprite sprite : sprites) {
+      if (sprite != null && sprite.isAtPosition(position)) {
+        switch (sprite.getCategory()) {
+          case "character":
+            break;
+          case "tile":
+            cannotMove = !sprite.isPassable();
+            break;
+          case "block":
+            int nextX = incrementCoordinate(position.x, 'x', direction);
+            int nextY = incrementCoordinate(position.y, 'y', direction);
+            cannotMove = isBlocked(new Position<>(nextX, nextY), direction);
+            ((Block)sprite).moveToDestination(direction, this);
+        }
       }
       if (cannotMove) {
         return true;
       }
     }
     return false;
-  }
-
-  /**
-   * Moves a sprite index from one (x, y) coordinate to another.
-   *
-   * @param initialPosition The initial position of the sprite.
-   * @param newX            The final x coordinate.
-   * @param newY            The final y coordinate.
-   */
-  public void moveReference(Position<Integer> initialPosition, int newX, int newY) {
-    System.out.println(Arrays.toString(currentState.getArrayAt(initialPosition.x, initialPosition.y)));
-    int spriteIndex = currentState.getValueAt(initialPosition);
-    int newZ = currentState.findEmptyZ(newX, newY);
-
-    Position<Integer> finalPosition = new Position<>(newX, newY, newZ);
-    currentState.moveIndex(initialPosition, finalPosition);
-    sprites.get(spriteIndex).setCellPosition(finalPosition);
   }
 
   @Override
@@ -272,42 +212,22 @@ public class World implements Controllable {
       }
     }
 
-    // Set the world state back and decrement the move count
-    currentState = pastStates.get(lastUpdateTime);
     decrementMoves();
   }
 
-  /**
-   * Determines whether there is a cracked wall at an (x, y) coordinate.
-   *
-   * @param x The x coordinate of the location to check.
-   * @param y The y coordinate of the location to check.
-   * @return -1 if there is no cracked wall, otherwise the z coordinate of the cracked wall in the WorldState.
-   */
-  public int crackedWallAtLocation(int x, int y) {
-    for (int i = 0; i < WorldState.LENGTH; i++) {
-      int index = currentState.getValueAt(x, y, i);
-      if (index != WorldState.NO_INDEX && sprites.get(index).getType().equals("cracked")) {
-        return i;
-      }
-    }
-    return WorldState.NO_INDEX;
-  }
 
-  public boolean typeAtLocation(int x, int y, String type) {
-    for (int i = 0; i < WorldState.LENGTH; i++) {
-      int index = currentState.getValueAt(x, y, i);
-      if (index != WorldState.NO_INDEX && sprites.get(index).getType().equals(type)) {
+  public boolean typeAtLocation(Position<Integer> position, String category) {
+    for (Sprite sprite : sprites) {
+      if (sprite != null && sprite.isAtPosition(position) && sprite.getType().equals(category)) {
         return true;
       }
     }
     return false;
   }
 
-  public boolean categoryAtLocation(int x, int y, String category) {
-    for (int i = 0; i < WorldState.LENGTH; i++) {
-      int index = currentState.getValueAt(x, y, i);
-      if (index != WorldState.NO_INDEX && sprites.get(index).getCategory().equals(category)) {
+  public boolean categoryAtLocation(Position<Integer> position, String category) {
+    for (Sprite sprite : sprites) {
+      if (sprite != null && sprite.isAtPosition(position) && sprite.getCategory().equals(category)) {
         return true;
       }
     }
@@ -321,64 +241,13 @@ public class World implements Controllable {
    * @param position The position in the WorldState of the sprite.
    */
   public void destroySprite(Position<Integer> position) {
-    // TODO when destroying a sprite at an (x,y), update the positions of each of the sprites at that (x,y) to have
-    // the new Z
-    int index = currentState.getValueAt(position);
-    currentState.removeValue(position);
-
-    if (sprites.get(index) instanceof Tnt) {
-      clearHistoryOfSprite(((Tnt)sprites.get(index)).getPastPositions());
-    } else {
-      clearHistoryOfSprite(sprites.get(index).getCellPosition());
-    }
-    sprites.set(index, null);
-  }
-
-  /**
-   * Purges the World history of all references to an object.
-   *
-   * @param spritePastPositions The past positions of the sprite.
-   */
-  private void clearHistoryOfSprite(HashMap<Integer, Position<Integer>> spritePastPositions) {
-    Iterator<Integer> iterator = changeTimes.iterator();
-
-    // Initialise the x and y to the first position
-    int time = iterator.next();
-    Position<Integer> currentPosition = spritePastPositions.get(time);
-
-    // Move through the World history by timestamp and remove every reference to this block
-    while (iterator.hasNext()) {
-      pastStates.get(time).removeValue(currentPosition);
-      // Increment to the next world state, and if the sprite was changed then, move to that position
-      time = iterator.next();
-      if (spritePastPositions.containsKey(time)) {
-        currentPosition = spritePastPositions.get(time);
+    for (int i = 0; i < sprites.size(); i++) {
+      if (sprites.get(i) != null && sprites.get(i) instanceof Destructible && sprites.get(i).isAtPosition(position)) {
+        sprites.set(i, null);
       }
     }
   }
 
-  /**
-   * Purge the world history of a sprite at a particular location.
-   *
-   *  @param position The position to purge.
-   */
-  private void clearHistoryOfSprite(Position<Integer> position) {
-    Iterator<Integer> iterator = changeTimes.iterator();
-
-    while (iterator.hasNext()) {
-      int time = iterator.next();
-      pastStates.get(time).removeValue(position);
-    }
-  }
-
-  /**
-   * Manually instantiate a new WorldState with exactly the same data as the current state.
-   *
-   * @return A new instance of the current sprite indices array as-is.
-   */
-  private WorldState copyWorldState() {
-    return new WorldState(currentState);
-  }
 
   public int getTimer() {
     return timer;
