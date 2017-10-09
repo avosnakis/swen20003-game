@@ -8,12 +8,14 @@ public class Skeleton extends Character {
   private Timer timer;
 
   private Direction currentDirection;
+  private int moveAttempts;
 
   public Skeleton(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/skull.png", "skeleton", cellPosition, windowPosition);
     currentDirection = Direction.DIR_UP;
 
     timer = new Timer(MOVE_TIME);
+    moveAttempts = 0;
   }
 
   @Override
@@ -28,6 +30,12 @@ public class Skeleton extends Character {
 
   @Override
   public void moveToDestination(Direction direction, World world) {
+    if (moveAttempts >= 2) {
+      moveAttempts = 0;
+      reverseDirection();
+      return;
+    }
+
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement
@@ -55,20 +63,13 @@ public class Skeleton extends Character {
     // Restart the level if the player is there
     if (world.typeAtLocation(nextPosition, "player")) {
       world.reset();
-    } else     if (world.categoryAtLocation(nextPosition, "block")) {
+    } else if (world.categoryAtLocation(nextPosition, "block") || world.isBlocked(nextPosition, direction)) {
+      moveAttempts++;
       reverseDirection();
       moveToDestination(currentDirection, world);
-    }
-
-
-
-    // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextPosition, direction)) {
+    } else {
       setCellPosition(nextPosition);
       snapToGrid(getX(), nextY);
-    } else {
-      reverseDirection();
-      moveToDestination(currentDirection, world);
     }
   }
 
