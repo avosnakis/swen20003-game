@@ -40,11 +40,11 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 0;
+    currentLevel = 3;
     reset();
   }
 
-  private void reset() {
+  public void reset() {
     String filename = "res/levels/" + levels[currentLevel];
     sprites = Loader.loadSprites(filename);
     initialiseTargetLocations();
@@ -224,6 +224,7 @@ public class World implements Controllable {
    * @param newY            The final y coordinate.
    */
   public void moveReference(Position<Integer> initialPosition, int newX, int newY) {
+    System.out.println(Arrays.toString(currentState.getArrayAt(initialPosition.x, initialPosition.y)));
     int spriteIndex = currentState.getValueAt(initialPosition);
     int newZ = currentState.findEmptyZ(newX, newY);
 
@@ -292,6 +293,27 @@ public class World implements Controllable {
     }
     return WorldState.NO_INDEX;
   }
+
+  public boolean typeAtLocation(int x, int y, String type) {
+    for (int i = 0; i < WorldState.LENGTH; i++) {
+      int index = currentState.getValueAt(x, y, i);
+      if (index != WorldState.NO_INDEX && sprites.get(index).getType().equals(type)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean categoryAtLocation(int x, int y, String category) {
+    for (int i = 0; i < WorldState.LENGTH; i++) {
+      int index = currentState.getValueAt(x, y, i);
+      if (index != WorldState.NO_INDEX && sprites.get(index).getCategory().equals(category)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   /**
    * Purge the world history and world state of a sprite, and set it to null.

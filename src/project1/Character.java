@@ -54,7 +54,6 @@ public abstract class Character extends Sprite implements Movable {
       world.moveReference(getCellPosition(), nextXCell, nextYCell);
       snapToGrid(nextX, nextY);
     }
-
   }
 
   @Override
