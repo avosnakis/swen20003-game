@@ -92,7 +92,7 @@ public class World implements Controllable {
   }
 
   /**
-   * Adds the current time counter to the updatetimes stack and reset the changed status.
+   * Adds the current time counter to the changeTimes stack and reset the changed status.
    */
   private void updateHistory() {
     changeTimes.push(timer.getCounter());
@@ -109,7 +109,7 @@ public class World implements Controllable {
     for (Sprite sprite : sprites) {
       if (sprite != null && !(sprite instanceof Tnt)) {
         sprite.render(g);
-      } else if (sprite != null && ((Tnt)sprite).isExploding()) {
+      } else if (sprite != null) {
         // Check if the TNT here is exploding
         Tnt tnt = (Tnt)sprite;
         if (tnt.isExploding()) {
