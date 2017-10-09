@@ -10,6 +10,7 @@ public class Tnt extends Block implements Destructible {
 
   public Tnt(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/tnt.png", "tnt", cellPosition, windowPosition);
+
     explosion = new Explosion(cellPosition, windowPosition);
     exploding = false;
   }

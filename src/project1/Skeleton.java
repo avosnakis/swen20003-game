@@ -5,28 +5,36 @@ import org.newdawn.slick.Input;
 
 public class Skeleton extends Character {
   private static final int MOVE_TIME = 1000;
-  private int timer;
+  private Timer timer;
 
   private Direction currentDirection;
+  private int moveAttempts;
 
   public Skeleton(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/skull.png", "skeleton", cellPosition, windowPosition);
     currentDirection = Direction.DIR_UP;
-    timer = 0;
+
+    timer = new Timer(MOVE_TIME);
+    moveAttempts = 0;
   }
 
   @Override
   public void update(Input input, int delta, World world) {
-    timer += delta;
-    if (timer > MOVE_TIME) {
+    timer.increment(delta);
+    if (timer.reachedTimeout()) {
       moveToDestination(currentDirection, world);
-      timer = 0;
+      timer.reset();
     }
   }
 
-
   @Override
   public void moveToDestination(Direction direction, World world) {
+    if (moveAttempts >= 2) {
+      moveAttempts = 0;
+      reverseDirection();
+      return;
+    }
+
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement
@@ -44,9 +52,6 @@ public class Skeleton extends Character {
         break;
     }
 
-    addPastPosition(world.getTimer());
-    world.setChangedThisFrame(true);
-
     Position<Integer> nextPosition = new Position<>(getxCell(), getyCell() + deltaYCell);
 
     float nextY = this.getY() + deltaY;
@@ -54,23 +59,21 @@ public class Skeleton extends Character {
     // Restart the level if the player is there
     if (world.typeAtLocation(nextPosition, "player")) {
       world.reset();
-    } else     if (world.categoryAtLocation(nextPosition, "block")) {
+    } else if (world.categoryAtLocation(nextPosition, "block") || world.isBlocked(nextPosition, direction)) {
+      moveAttempts++;
       reverseDirection();
       moveToDestination(currentDirection, world);
-    }
-
-
-
-    // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextPosition, direction)) {
+    } else {
       setCellPosition(nextPosition);
       snapToGrid(getX(), nextY);
-    } else {
-      reverseDirection();
-      moveToDestination(currentDirection, world);
     }
   }
 
+  /**
+   * Reverses the skeleton's current direction.
+   * If it is going down, its direction is now up.
+   * If it is going up, its direction is now down.
+   */
   private void reverseDirection() {
     if (currentDirection == Direction.DIR_DOWN) {
       currentDirection = Direction.DIR_UP;
