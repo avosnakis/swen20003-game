@@ -4,7 +4,7 @@ import org.newdawn.slick.Input;
 
 import java.util.ArrayList;
 
-public class Rogue extends Character {
+public class Rogue extends Character implements Controllable {
 
   private Direction currentDirection;
   private int moveAttempts;
@@ -17,9 +17,8 @@ public class Rogue extends Character {
   }
 
   @Override
-  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
-    Direction direction = Character.playerMoved(arrowKeys) ? currentDirection : Direction.DIR_NONE;
-    moveToDestination(direction, world);
+  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
+    handlePlayerInput(keysPressed, world);
   }
 
   @Override
@@ -79,5 +78,15 @@ public class Rogue extends Character {
     } else {
       currentDirection = Direction.DIR_LEFT;
     }
+  }
+
+  @Override
+  public void handlePlayerInput(Input input) {
+  }
+
+  @Override
+  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
+    Direction direction = Character.playerMoved(keysPressed) ? currentDirection : Direction.DIR_NONE;
+    moveToDestination(direction, world);
   }
 }

@@ -17,7 +17,7 @@ public class Ice extends Block {
   }
 
   @Override
-  public void update(ArrayList<Integer> arrowKeys, int delta, World world) {
+  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
 
     // Increment the timer while it's sliding
     if (sliding) {
@@ -31,6 +31,7 @@ public class Ice extends Block {
     }
   }
 
+  // TODO seems to be a bug with ice interaction with player
   @Override
   public void moveToDestination(Direction direction, World world) {
     float speed = 32;
