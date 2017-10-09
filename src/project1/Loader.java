@@ -24,9 +24,9 @@ public class Loader {
    * @param y    the y position
    * @return the sprite object
    */
-  private static Sprite createSprite(String name, float x, float y, int xCell, int yCell, int zCell) {
-    Position<Integer> cellPosition = new Position<>(xCell, yCell, zCell);
-    Position<Float> windowPosition = new Position<>(x, y, 0f);
+  private static Sprite createSprite(String name, float x, float y, int xCell, int yCell) {
+    Position<Integer> cellPosition = new Position<>(xCell, yCell);
+    Position<Float> windowPosition = new Position<>(x, y);
 
     switch (name) {
       case "wall":
@@ -79,8 +79,6 @@ public class Loader {
       worldWidth = Integer.parseInt(parts[0]);
       worldHeight = Integer.parseInt(parts[1]);
 
-      int[][] spritesAtPosition = new int[worldWidth][worldHeight];
-
       // Calculate the top left of the tiles so that the level is
       // centred
       offsetX = (App.SCREEN_WIDTH - worldWidth * App.TILE_SIZE) / 2;
@@ -95,14 +93,13 @@ public class Loader {
         name = parts[0];
         int xCell = Integer.parseInt(parts[1]);
         int yCell = Integer.parseInt(parts[2]);
-        spritesAtPosition[xCell][yCell]++;
 
         // Adjust for the grid
         float x = offsetX + xCell * App.TILE_SIZE;
         float y = offsetY + yCell * App.TILE_SIZE;
 
         // Create the sprite
-        list.add(createSprite(name, x, y, xCell, yCell, spritesAtPosition[xCell][yCell] - 1));
+        list.add(createSprite(name, x, y, xCell, yCell));
       }
     } catch (IOException e) {
       e.printStackTrace();

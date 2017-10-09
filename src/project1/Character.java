@@ -44,14 +44,16 @@ public abstract class Character extends Sprite implements Movable {
     addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
-    int nextXCell = this.getxCell() + deltaXCell;
-    int nextYCell = this.getyCell() + deltaYCell;
+    Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
+
     float nextX = this.getX() + deltaX;
     float nextY = this.getY() + deltaY;
 
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextXCell, nextYCell, direction)) {
-      world.moveReference(getCellPosition(), nextXCell, nextYCell);
+
+
+    if (!world.isBlocked(nextPosition, direction)) {
+      setCellPosition(nextPosition);
       snapToGrid(nextX, nextY);
     }
   }

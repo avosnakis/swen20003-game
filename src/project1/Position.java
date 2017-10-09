@@ -10,18 +10,26 @@ public class Position<T extends Number> {
 
   public final T x;
   public final T y;
-  public final T z;
 
-  public Position(T x, T y, T z) {
+  public Position(T x, T y) {
     this.x = x;
     this.y = y;
-    this.z = z;
   }
 
   public Position(Position<T> position) {
     this.x = position.x;
     this.y = position.y;
-    this.z = position.z;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Position<?> position = (Position<?>) o;
+
+    if (x != null ? !x.equals(position.x) : position.x != null) return false;
+    return y != null ? y.equals(position.y) : position.y == null;
   }
 
   @Override
@@ -29,7 +37,6 @@ public class Position<T extends Number> {
     return "Position{" +
         "x=" + x +
         ", y=" + y +
-        ", z=" + z +
         '}';
   }
 }

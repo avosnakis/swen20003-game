@@ -63,7 +63,11 @@ public class Sprite {
     x *= App.TILE_SIZE;
     y *= App.TILE_SIZE;
 
-    windowPosition = new Position<>(x, y, 0f);
+    windowPosition = new Position<>(x, y);
+  }
+
+  public boolean isAtPosition(Position<Integer> position) {
+    return cellPosition.equals(position);
   }
 
 
@@ -85,10 +89,6 @@ public class Sprite {
 
   public int getyCell() {
     return cellPosition.y;
-  }
-
-  public int getzCell() {
-    return cellPosition.z;
   }
 
   public String getCategory() {
