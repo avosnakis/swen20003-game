@@ -65,10 +65,10 @@ public class Player extends Character implements Controllable {
     addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
 
-    int nextXCell = this.getxCell() + deltaXCell;
-    int nextYCell = this.getyCell() + deltaYCell;
-    float nextX = this.getX() + deltaX;
-    float nextY = this.getY() + deltaY;
+    int nextXCell = getxCell() + deltaXCell;
+    int nextYCell = getyCell() + deltaYCell;
+    float nextX = getX() + deltaX;
+    float nextY = getY() + deltaY;
 
     // If there is an enemy at the next location, restart the level
     if (world.categoryAtLocation(nextXCell, nextYCell, "character")) {
