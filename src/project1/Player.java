@@ -32,4 +32,54 @@ public class Player extends Character implements Controllable {
     // Move to our destination
     moveToDestination(direction, world);
   }
+
+  @Override
+  public void moveToDestination(Direction direction, World world) {
+    float speed = 32;
+    int cellSpeed = 1;
+    // Translate the direction to an x and y displacement
+    float deltaX = 0;
+    float deltaY = 0;
+    int deltaXCell = 0;
+    int deltaYCell = 0;
+
+    switch (direction) {
+      case DIR_LEFT:
+        deltaX = -speed;
+        deltaXCell = -cellSpeed;
+        break;
+      case DIR_RIGHT:
+        deltaX = speed;
+        deltaXCell = cellSpeed;
+        break;
+      case DIR_UP:
+        deltaY = -speed;
+        deltaYCell = -cellSpeed;
+        break;
+      case DIR_DOWN:
+        deltaY = speed;
+        deltaYCell = cellSpeed;
+        break;
+    }
+
+    addPastPosition(world.getTimer());
+    world.setChangedThisFrame(true);
+
+    int nextXCell = getxCell() + deltaXCell;
+    int nextYCell = getyCell() + deltaYCell;
+    float nextX = getX() + deltaX;
+    float nextY = getY() + deltaY;
+
+    // If there is an enemy at the next location, restart the level
+    if (world.categoryAtLocation(nextXCell, nextYCell, "character")) {
+      world.reset();
+      return;
+    }
+
+    // Make sure the position isn't occupied!
+    if (!world.isBlocked(nextXCell, nextYCell, direction)) {
+      world.moveReference(getCellPosition(), nextXCell, nextYCell);
+      snapToGrid(nextX, nextY);
+    }
+  }
 }
