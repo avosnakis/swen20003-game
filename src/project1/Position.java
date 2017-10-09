@@ -1,8 +1,8 @@
 package project1;
 
 /**
- * A class that records (x, y, z) coordinates or just (x, y) coordinates. Generic so as to support both coordinates
- * in the GUI and the matrix coordinates for where the sprites are stored in the World.
+ * A class that records (x, y) coordinates. Generic so as to support both coordinates
+ * in the GUI and the grid coordinates for where the sprites are in the actual level.
  *
  * @param <T> The type of the position, intended to be either an Integer or a Float.
  */

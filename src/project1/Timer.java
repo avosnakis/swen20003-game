@@ -1,8 +1,19 @@
 package project1;
 
+/**
+ * Timer class. Controls updating a counter, and checking whether a specified timeout has been surpassed.
+ */
 public class Timer {
-  private int timeout;
+
+  /**
+   * The actual counter.
+   */
   private int counter;
+
+  /**
+   * An optional value to check against to see if it has been passed.
+   */
+  private int timeout;
 
   public Timer(int timeout) {
     this.timeout = timeout;

@@ -34,13 +34,17 @@ public class World implements Controllable {
   private Timer timer;
   private Stack<Integer> changeTimes;
   private boolean changedThisFrame;
+
   private int moveCount;
 
   public World() {
-    currentLevel = 3;
+    currentLevel = 0;
     reset();
   }
 
+  /**
+   * Reinitialise this level from the levelfile.
+   */
   public void reset() {
     String filename = "res/levels/" + levels[currentLevel];
     sprites = Loader.loadSprites(filename);
@@ -71,7 +75,7 @@ public class World implements Controllable {
     // Check if the player tried to undo or reset
     handlePlayerInput(input);
 
-    // Increment the internal timer, and make a record of the current world state
+    // Increment the internal timer
     timer.increment(delta);
 
     // Update all sprites
@@ -124,10 +128,8 @@ public class World implements Controllable {
    */
   public boolean hasWon() {
     for (Sprite sprite : sprites) {
-      if (sprite instanceof Target) {
-        if (!((Target)sprite).isCovered()) {
-          return false;
-        }
+      if (sprite instanceof Target && !((Target)sprite).isCovered()) {
+        return false;
       }
     }
     return true;
@@ -135,6 +137,7 @@ public class World implements Controllable {
 
   /**
    * Determines whether an (x,y) position is possible to move to.
+   * If a block is at the specified (x,y), then we attempt to move that one as well.
    *
    * @param position The (x,y) position to check.
    * @param direction The direction the sprite is currently moving.
@@ -177,9 +180,7 @@ public class World implements Controllable {
   public void handlePlayerInput(Input input) {
     if (input.isKeyPressed(Input.KEY_R)) {
       reset();
-      return;
-    }
-    if (input.isKeyPressed(Input.KEY_Z)) {
+    } else if (input.isKeyPressed(Input.KEY_Z)) {
       undo();
     }
   }
@@ -211,11 +212,16 @@ public class World implements Controllable {
         }
       }
     }
-
     decrementMoves();
   }
 
-
+  /**
+   * Determines if a sprite of the given category is at an (x,y) coordinate.
+   *
+   * @param position The (x,y) coordinate to check.
+   * @param category The category to check the (x,y) coordinates for.
+   * @return True if there is a sprite of the given category at the (x,y) location, otherwise false.
+   */
   public boolean typeAtLocation(Position<Integer> position, String category) {
     for (Sprite sprite : sprites) {
       if (sprite != null && sprite.isAtPosition(position) && sprite.getType().equals(category)) {
@@ -224,6 +230,14 @@ public class World implements Controllable {
     }
     return false;
   }
+
+  /**
+   * Determines if a sprite of the given type is at an (x,y) coordinate.
+   *
+   * @param position The (x,y) coordinate to check.
+   * @param category The typr to check the (x,y) coordinates for.
+   * @return True if there is a sprite of the given type at the (x,y) location, otherwise false.
+   */
 
   public boolean categoryAtLocation(Position<Integer> position, String category) {
     for (Sprite sprite : sprites) {
@@ -236,18 +250,19 @@ public class World implements Controllable {
 
 
   /**
-   * Purge the world history and world state of a sprite, and set it to null.
+   * Set the specified sprite to null in the sprites ArrayList. Assumes there can only be one destructible block
+   * at one (x,y) location.
    *
-   * @param position The position in the WorldState of the sprite.
+   * @param position The (x,y) coordinate of the sprite.
    */
   public void destroySprite(Position<Integer> position) {
     for (int i = 0; i < sprites.size(); i++) {
       if (sprites.get(i) != null && sprites.get(i) instanceof Destructible && sprites.get(i).isAtPosition(position)) {
         sprites.set(i, null);
+        break;
       }
     }
   }
-
 
   public int getTimer() {
     return timer.getCounter();
@@ -274,11 +289,10 @@ public class World implements Controllable {
    * @return The incremented coordinate.
    */
   private static int incrementCoordinate(int coordinate, char axis, Direction direction) {
-    if (axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) {
-      // x coordinate cannot go up or down, so don't change it
-      return coordinate;
-    } else if (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT)) {
-      // y coordinate cannot go left or right, so don't change it
+    // x coordinate cannot go up or down, so don't change it
+    // y coordinate cannot go left or right, so don't change it
+    if ((axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) ||
+        (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
       return coordinate;
     } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
       return --coordinate;

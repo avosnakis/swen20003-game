@@ -96,7 +96,6 @@ public class Ice extends Block {
     currentSlideDirection = Direction.DIR_NONE;
   }
 
-  // TODO bug with undo interacting with Ice sliding. Throws an ArrayOutOfBoundsException. Reproducing is inconsistent.
   @Override
   public void undo(int time) {
     super.undo(time);
