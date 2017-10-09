@@ -20,7 +20,6 @@ public class Sprite {
   private String category;
   private String type;
 
-
   public Sprite(String image, String category, String type, Position<Integer> cellPosition, Position<Float> windowPosition) {
     try {
       this.image = new Image(image);

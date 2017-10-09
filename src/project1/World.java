@@ -4,7 +4,8 @@
  */
 package project1;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -174,6 +175,7 @@ public class World implements Controllable {
             ((Block)sprite).moveToDestination(direction, this);
         }
       }
+      // Exit as soon as it is known the next (x,y) is impassable
       if (cannotMove) {
         return true;
       }
