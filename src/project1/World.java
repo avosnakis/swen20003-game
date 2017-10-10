@@ -199,8 +199,7 @@ public class World implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
-  }
+  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {}
 
   /**
    * Set the world back to the last time a player made an input.
@@ -242,6 +241,15 @@ public class World implements Controllable {
       }
     }
     return false;
+  }
+
+  public Door findDoor() {
+    for (Sprite sprite : sprites) {
+      if (sprite.getType().equals("door")) {
+        return (Door)sprite;
+      }
+    }
+    return null;
   }
 
   /**
