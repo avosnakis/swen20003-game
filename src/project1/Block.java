@@ -89,8 +89,4 @@ public abstract class Block extends Sprite implements Movable {
 
     pastPositions.remove(time);
   }
-
-  public HashMap<Integer, Position<Integer>> getPastPositions() {
-    return pastPositions;
-  }
 }

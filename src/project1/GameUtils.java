@@ -5,6 +5,13 @@ import org.newdawn.slick.Input;
 import java.util.ArrayList;
 
 public class GameUtils {
+
+  /**
+   * Determine which arrow keys were pressed by the player and add them to an array.
+   *
+   * @param input The Slick Input object to check.
+   * @retur An ArrayList of key codes that the player pressed.
+   */
   public static ArrayList<Integer> recordArrowKeysPressed(Input input) {
     ArrayList<Integer> keysPressed = new ArrayList<>();
     if (input.isKeyPressed(Input.KEY_RIGHT)) {

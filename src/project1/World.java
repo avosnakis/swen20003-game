@@ -133,7 +133,7 @@ public class World implements Controllable {
    */
   public boolean hasWon() {
     // Special case for final level
-    if (currentLevel == 5) {
+    if (currentLevel == levels.length - 1) {
       return false;
     }
 
@@ -243,6 +243,11 @@ public class World implements Controllable {
     return false;
   }
 
+  /**
+   * Finds the Door in the level, as there can only be a single one.
+   *
+   * @return The door if it is in the level, null otherwise.
+   */
   public Door findDoor() {
     for (Sprite sprite : sprites) {
       if (sprite.getType().equals("door")) {
@@ -283,6 +288,11 @@ public class World implements Controllable {
     }
   }
 
+  /**
+   * Finds the player's location.
+   *
+   * @return The player's Position, null if there is no player.
+   */
   public Position<Integer> getPlayerPosition() {
     for (Sprite sprite : sprites) {
       if (sprite != null && sprite.getType().equals("player")) {

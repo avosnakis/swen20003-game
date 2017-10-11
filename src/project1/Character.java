@@ -1,6 +1,5 @@
 package project1;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Character extends Sprite implements Movable {
@@ -76,5 +75,4 @@ public abstract class Character extends Sprite implements Movable {
   public void addPastPosition(int time) {
     pastPositions.put(time, new Position<>(getCellPosition()));
   }
-
 }
