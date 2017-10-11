@@ -61,10 +61,11 @@ public class GameUtils {
   }
 
   /**
-   * Increments a cell coordinate in the specified direction.
+   * Finds the change in a specified direction.
    *
-   * @param axis       The axis the coordinate lies on.
-   * @param direction  The direction the movement is happening in.
+   * @param axis      The axis the coordinate lies on.
+   * @param direction The direction the movement is happening in.
+   * @param speed     The absolute value of the change being made.
    * @return The incremented coordinate.
    */
   public static float directionDelta(char axis, Direction direction, float speed) {
@@ -88,10 +89,11 @@ public class GameUtils {
   }
 
   /**
-   * Increments a cell coordinate in the specified direction.
+   * Finds the change in a specified direction.
    *
-   * @param axis       The axis the coordinate lies on.
-   * @param direction  The direction the movement is happening in.
+   * @param axis      The axis the coordinate lies on.
+   * @param direction The direction the movement is happening in.
+   * @param speed     The absolute value of the change being made.
    * @return The incremented coordinate.
    */
   public static int directionDelta(char axis, Direction direction, int speed) {
@@ -113,8 +115,6 @@ public class GameUtils {
       return 0;
     }
   }
-
-
 
   /**
    * Determines whether the player attempted to move in this frame.
