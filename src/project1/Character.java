@@ -77,14 +77,4 @@ public abstract class Character extends Sprite implements Movable {
     pastPositions.put(time, new Position<>(getCellPosition()));
   }
 
-
-  /**
-   * Determines whether the player attempted to move in this frame.
-   *
-   * @param keysPressed An array of all arrow keys the player pressed in this frame.
-   * @return Whether or not the player pressed any arrow keys.
-   */
-  public static boolean playerMoved(ArrayList<Integer> keysPressed) {
-    return keysPressed.size() > 0;
-  }
 }

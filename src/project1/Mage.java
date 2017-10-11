@@ -27,7 +27,7 @@ public class Mage extends Character implements Controllable {
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
     Direction direction = Direction.DIR_NONE;
 
-    if (Character.playerMoved(keysPressed)) {
+    if (GameUtils.playerMoved(keysPressed)) {
       direction = determineDirection(world);
     }
 

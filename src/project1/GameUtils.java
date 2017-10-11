@@ -53,4 +53,13 @@ public class GameUtils {
     }
   }
 
+  /**
+   * Determines whether the player attempted to move in this frame.
+   *
+   * @param keysPressed An array of all arrow keys the player pressed in this frame.
+   * @return Whether or not the player pressed any arrow keys.
+   */
+  public static boolean playerMoved(ArrayList<Integer> keysPressed) {
+    return keysPressed.size() > 0;
+  }
 }

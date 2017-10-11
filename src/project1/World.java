@@ -38,7 +38,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 2;
+    currentLevel = 3;
     reset();
   }
 
