@@ -1,4 +1,6 @@
 package project1;
 
-public interface Destructible {
-}
+/**
+ * Interface for sprites that can be destroyed.
+ */
+public interface Destructible {}

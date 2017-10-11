@@ -24,29 +24,10 @@ public abstract class Block extends Sprite implements Movable {
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement
-    float deltaX = 0;
-    float deltaY = 0;
-    int deltaXCell = 0;
-    int deltaYCell = 0;
-
-    switch (direction) {
-      case DIR_LEFT:
-        deltaX = -speed;
-        deltaXCell = -cellSpeed;
-        break;
-      case DIR_RIGHT:
-        deltaX = speed;
-        deltaXCell = cellSpeed;
-        break;
-      case DIR_UP:
-        deltaY = -speed;
-        deltaYCell = -cellSpeed;
-        break;
-      case DIR_DOWN:
-        deltaY = speed;
-        deltaYCell = cellSpeed;
-        break;
-    }
+    float deltaX = GameUtils.directionDelta('x', direction, speed);
+    float deltaY = GameUtils.directionDelta('y', direction, speed);
+    int deltaXCell = GameUtils.directionDelta('x', direction, cellSpeed);
+    int deltaYCell = GameUtils.directionDelta('y', direction, cellSpeed);
 
     addPastPosition(world.getTimer());
     world.setChangedThisFrame(true);
@@ -88,9 +69,5 @@ public abstract class Block extends Sprite implements Movable {
     snapToGrid(newX, newY);
 
     pastPositions.remove(time);
-  }
-
-  public HashMap<Integer, Position<Integer>> getPastPositions() {
-    return pastPositions;
   }
 }

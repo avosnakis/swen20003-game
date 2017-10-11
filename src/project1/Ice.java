@@ -21,7 +21,7 @@ public class Ice extends Block {
 
     // Increment the timer while it's sliding
     if (sliding) {
-      timer.increment(delta);
+      timer.tick(delta);
     }
 
     // Check if the ice block will slide in this frame, and if so, reset its timer as well
@@ -37,29 +37,10 @@ public class Ice extends Block {
     float speed = 32;
     int cellSpeed = 1;
     // Translate the currentSlideDirection to an x and y displacement
-    float deltaX = 0;
-    float deltaY = 0;
-    int deltaXCell = 0;
-    int deltaYCell = 0;
-
-    switch (direction) {
-      case DIR_LEFT:
-        deltaX = -speed;
-        deltaXCell = -cellSpeed;
-        break;
-      case DIR_RIGHT:
-        deltaX = speed;
-        deltaXCell = cellSpeed;
-        break;
-      case DIR_UP:
-        deltaY = -speed;
-        deltaYCell = -cellSpeed;
-        break;
-      case DIR_DOWN:
-        deltaY = speed;
-        deltaYCell = cellSpeed;
-        break;
-    }
+    float deltaX = GameUtils.directionDelta('x', direction, speed);
+    float deltaY = GameUtils.directionDelta('y', direction, speed);
+    int deltaXCell = GameUtils.directionDelta('x', direction, cellSpeed);
+    int deltaYCell = GameUtils.directionDelta('y', direction, cellSpeed);
 
     if (direction == Direction.DIR_NONE) {
       return;
@@ -73,6 +54,12 @@ public class Ice extends Block {
     }
 
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
+
+    // Special case to prevent Ice blocks from pushing other blocks
+    if (world.categoryAtLocation(nextPosition, "block")) {
+      stop();
+      return;
+    }
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextPosition, direction)) {

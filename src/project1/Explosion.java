@@ -22,7 +22,7 @@ public class Explosion extends Sprite {
   }
 
   public void increment(int delta) {
-    timer.increment(delta);
+    timer.tick(delta);
   }
 
   public boolean finishedExploding() {

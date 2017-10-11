@@ -27,15 +27,20 @@ public class Mage extends Character implements Controllable {
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
     Direction direction = Direction.DIR_NONE;
 
-    if (Character.playerMoved(keysPressed)) {
-      direction = determineDirection(world);
+    if (GameUtils.playerMoved(keysPressed)) {
+      direction = determineDirection(world.getPlayerPosition());
     }
 
     moveToDestination(direction, world);
   }
 
-  public Direction determineDirection(World world) {
-    Position<Integer> playerPosition = world.getPlayerPosition();
+  /**
+   * Determines the direction the Mage will move in according to Algorithm 1.
+   *
+   * @param playerPosition The position of the player.
+   * @return The direction the mage needs to go in.
+   */
+  public Direction determineDirection(Position<Integer> playerPosition) {
     if (playerPosition == null) {
       return Direction.DIR_NONE;
     }

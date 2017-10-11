@@ -81,12 +81,11 @@ public class Rogue extends Character implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(Input input) {
-  }
+  public void handlePlayerInput(Input input) {}
 
   @Override
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
-    Direction direction = Character.playerMoved(keysPressed) ? currentDirection : Direction.DIR_NONE;
+    Direction direction = GameUtils.playerMoved(keysPressed) ? currentDirection : Direction.DIR_NONE;
     moveToDestination(direction, world);
   }
 }
