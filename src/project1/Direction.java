@@ -1,7 +1,5 @@
 package project1;
 
-import org.newdawn.slick.Input;
-
 /**
  * The directions that a sprite can move in.
  */

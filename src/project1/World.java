@@ -78,7 +78,7 @@ public class World implements Controllable {
     handlePlayerInput(input);
 
     // Increment the internal timer
-    timer.increment(delta);
+    timer.tick(delta);
 
     // Update all sprites
     for (Sprite sprite : sprites) {

@@ -45,29 +45,11 @@ public class Tnt extends Block implements Destructible {
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement
-    float deltaX = 0;
-    float deltaY = 0;
-    int deltaXCell = 0;
-    int deltaYCell = 0;
+    float deltaX = GameUtils.directionDelta('x', direction, speed);
+    float deltaY = GameUtils.directionDelta('y', direction, speed);
+    int deltaXCell = GameUtils.directionDelta('x', direction, cellSpeed);
+    int deltaYCell = GameUtils.directionDelta('y', direction, cellSpeed);
 
-    switch (direction) {
-      case DIR_LEFT:
-        deltaX = -speed;
-        deltaXCell = -cellSpeed;
-        break;
-      case DIR_RIGHT:
-        deltaX = speed;
-        deltaXCell = cellSpeed;
-        break;
-      case DIR_UP:
-        deltaY = -speed;
-        deltaYCell = -cellSpeed;
-        break;
-      case DIR_DOWN:
-        deltaY = speed;
-        deltaYCell = cellSpeed;
-        break;
-    }
 
     Position<Integer> explosionPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 

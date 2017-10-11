@@ -61,6 +61,62 @@ public class GameUtils {
   }
 
   /**
+   * Increments a cell coordinate in the specified direction.
+   *
+   * @param axis       The axis the coordinate lies on.
+   * @param direction  The direction the movement is happening in.
+   * @return The incremented coordinate.
+   */
+  public static float directionDelta(char axis, Direction direction, float speed) {
+    // x coordinate cannot go up or down, so don't change it
+    // y coordinate cannot go left or right, so don't change it
+    if ((axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) ||
+        (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
+      return 0;
+    } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
+      return -speed;
+    } else if (axis == 'x' && direction == Direction.DIR_RIGHT) {
+      return speed;
+    } else if (axis == 'y' && direction == Direction.DIR_UP) {
+      return -speed;
+    } else if (axis == 'y' && direction == Direction.DIR_DOWN) {
+      return speed;
+    } else {
+      // default case
+      return 0;
+    }
+  }
+
+  /**
+   * Increments a cell coordinate in the specified direction.
+   *
+   * @param axis       The axis the coordinate lies on.
+   * @param direction  The direction the movement is happening in.
+   * @return The incremented coordinate.
+   */
+  public static int directionDelta(char axis, Direction direction, int speed) {
+    // x coordinate cannot go up or down, so don't change it
+    // y coordinate cannot go left or right, so don't change it
+    if ((axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) ||
+        (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
+      return 0;
+    } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
+      return -speed;
+    } else if (axis == 'x' && direction == Direction.DIR_RIGHT) {
+      return speed;
+    } else if (axis == 'y' && direction == Direction.DIR_UP) {
+      return -speed;
+    } else if (axis == 'y' && direction == Direction.DIR_DOWN) {
+      return speed;
+    } else {
+      // default case
+      return 0;
+    }
+  }
+
+
+
+  /**
    * Determines whether the player attempted to move in this frame.
    *
    * @param keysPressed An array of all arrow keys the player pressed in this frame.

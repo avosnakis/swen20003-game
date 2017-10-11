@@ -28,7 +28,7 @@ public class Timer {
     counter = 0;
   }
 
-  public void increment(int delta) {
+  public void tick(int delta) {
     counter += delta;
   }
 

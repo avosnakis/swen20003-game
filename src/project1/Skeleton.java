@@ -20,7 +20,7 @@ public class Skeleton extends Character {
 
   @Override
   public void update(ArrayList<Integer> keysPressed, int delta, World world) {
-    timer.increment(delta);
+    timer.tick(delta);
     if (timer.reachedTimeout()) {
       moveToDestination(currentDirection, world);
       timer.reset();
@@ -29,6 +29,7 @@ public class Skeleton extends Character {
 
   @Override
   public void moveToDestination(Direction direction, World world) {
+    // If the skeleton has attempted to turn around twice, it can't move so exit
     if (moveAttempts >= 2) {
       moveAttempts = 0;
       reverseDirection();
@@ -38,19 +39,8 @@ public class Skeleton extends Character {
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement
-    float deltaY = 0;
-    int deltaYCell = 0;
-
-    switch (direction) {
-      case DIR_UP:
-        deltaY = -speed;
-        deltaYCell = -cellSpeed;
-        break;
-      case DIR_DOWN:
-        deltaY = speed;
-        deltaYCell = cellSpeed;
-        break;
-    }
+    float deltaY = GameUtils.directionDelta('y', direction, speed);
+    int deltaYCell = GameUtils.directionDelta('y', direction, cellSpeed);
 
     Position<Integer> nextPosition = new Position<>(getxCell(), getyCell() + deltaYCell);
 
