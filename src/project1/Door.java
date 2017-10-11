@@ -4,7 +4,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,6 +23,11 @@ public class Door extends Tile implements Observer {
     }
   }
 
+  /**
+   * If the door is open, render a floor tile instead.
+   *
+   * @param g The Slick graphics object.
+   */
   @Override
   public void render(Graphics g) {
     if (isOpen) {
@@ -33,6 +37,12 @@ public class Door extends Tile implements Observer {
     }
   }
 
+  /**
+   * When the switch's state changes, change the state of the Door to match it.
+   *
+   * @param o The SwitchNotifier carrying the change information.
+   * @param arg Null object. Ignored.
+   */
   @Override
   public void update(Observable o, Object arg) {
     if (o instanceof SwitchNotifier) {

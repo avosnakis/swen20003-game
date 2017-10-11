@@ -74,6 +74,12 @@ public class Ice extends Block {
 
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 
+    // Special case to prevent Ice blocks from pushing other blocks
+    if (world.categoryAtLocation(nextPosition, "block")) {
+      stop();
+      return;
+    }
+
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextPosition, direction)) {
       setCellPosition(nextPosition);

@@ -38,7 +38,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 0;
+    currentLevel = 2;
     reset();
   }
 
@@ -64,7 +64,7 @@ public class World implements Controllable {
    * @param delta The amount of time passed since the last frame.
    */
   public void update(Input input, int delta) {
-    ArrayList<Integer> arrowKeysPressed = recordArrowKeysPressed(input);
+    ArrayList<Integer> arrowKeysPressed = GameUtils.recordArrowKeysPressed(input);
 
     // If the player completed the level on the previous frame,
     // move to the next level and skip the rest of this frame
@@ -175,8 +175,8 @@ public class World implements Controllable {
             break;
           // Check if the next block can move, and attempt to move it
           case "block":
-            int nextX = incrementCoordinate(position.x, 'x', direction);
-            int nextY = incrementCoordinate(position.y, 'y', direction);
+            int nextX = GameUtils.incrementCoordinate(position.x, 'x', direction);
+            int nextY = GameUtils.incrementCoordinate(position.y, 'y', direction);
             cannotMove = isBlocked(new Position<>(nextX, nextY), direction);
             ((Block)sprite).moveToDestination(direction, this);
         }
@@ -308,51 +308,4 @@ public class World implements Controllable {
     moveCount--;
   }
 
-  /**
-   * Increments a cell coordinate in the specified direction.
-   *
-   * @param coordinate The coordinate to be incremented.
-   * @param axis       The axis the coordinate lies on.
-   * @param direction  The direction the movement is happening in.
-   * @return The incremented coordinate.
-   */
-  private static int incrementCoordinate(int coordinate, char axis, Direction direction) {
-    // x coordinate cannot go up or down, so don't change it
-    // y coordinate cannot go left or right, so don't change it
-    if ((axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) ||
-        (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
-      return coordinate;
-    } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
-      return --coordinate;
-    } else if (axis == 'x' && direction == Direction.DIR_RIGHT) {
-      return ++coordinate;
-    } else if (axis == 'y' && direction == Direction.DIR_UP) {
-      return --coordinate;
-    } else if (axis == 'y' && direction == Direction.DIR_DOWN) {
-      return ++coordinate;
-    } else {
-      // default case
-      return coordinate;
-    }
-  }
-
-  private static ArrayList<Integer> recordArrowKeysPressed(Input input) {
-    ArrayList<Integer> keysPressed = new ArrayList<>();
-    if (input.isKeyPressed(Input.KEY_RIGHT)) {
-      keysPressed.add(Input.KEY_RIGHT);
-    }
-
-    if (input.isKeyPressed(Input.KEY_UP)) {
-      keysPressed.add(Input.KEY_UP);
-    }
-
-    if (input.isKeyPressed(Input.KEY_DOWN)) {
-      keysPressed.add(Input.KEY_DOWN);
-    }
-
-    if (input.isKeyPressed(Input.KEY_LEFT)) {
-      keysPressed.add(Input.KEY_LEFT);
-    }
-    return keysPressed;
-  }
 }
