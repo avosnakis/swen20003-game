@@ -25,7 +25,7 @@ public class SwitchNotifier extends Observable {
       active = true;
       setChanged();
       notifyObservers();
-    } else if (active && !world.categoryAtLocation(position, "block")){
+    } else if (active && !world.categoryAtLocation(position, "block")) {
       active = false;
       setChanged();
       notifyObservers();

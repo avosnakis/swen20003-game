@@ -10,22 +10,13 @@ import java.util.Stack;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-
 /**
- * Updates and renders all sprites, as well as having a record of the current positions visible on the screen
- * and all past positions on the screen. Also determines what type of blocks is at what coordinate, and manages
+ * Updates and renders all sprites. Also determines what type of blocks is at what coordinate, and manages
  * whether or not the player has won the level.
  */
 public class World implements Controllable {
 
-  private static final String[] levels = {
-      "0.lvl",
-      "1.lvl",
-      "2.lvl",
-      "3.lvl",
-      "4.lvl",
-      "5.lvl"
-  };
+  private static final String[] levels = {"0.lvl", "1.lvl", "2.lvl", "3.lvl", "4.lvl", "5.lvl"};
 
   private int currentLevel;
 
@@ -38,7 +29,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 3;
+    currentLevel = 0;
     reset();
   }
 
