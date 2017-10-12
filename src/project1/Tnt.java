@@ -65,7 +65,7 @@ public class Tnt extends Block implements Destructible {
     // Make sure the position isn't occupied!
     if (!world.isBlocked(explosionPosition, direction)) {
       setCellPosition(explosionPosition);
-      snapToGrid(getX() + deltaX, getY()+ deltaY);
+      snapToGrid(getX() + deltaX, getY() + deltaY);
     }
   }
 
@@ -73,12 +73,12 @@ public class Tnt extends Block implements Destructible {
    * Starts the exploding animation, and destroys the CrackedWall at the target location.
    *
    * @param wallLocation The location of the CrackedWall and the explosion.
-   * @param deltaX The x position in the window of the explosion.
-   * @param deltaY The y position in the window of the explosion.
+   * @param deltaX       The x position in the window of the explosion.
+   * @param deltaY       The y position in the window of the explosion.
    */
   private void explode(Position<Integer> wallLocation, float deltaX, float deltaY) {
     setCellPosition(wallLocation);
-    snapToGrid(getX() + deltaX, getY()+ deltaY);
+    snapToGrid(getX() + deltaX, getY() + deltaY);
 
     exploding = true;
     explosion.start(wallLocation);

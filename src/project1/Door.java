@@ -30,13 +30,13 @@ public class Door extends Tile implements Observer {
   /**
    * When the switch's state changes, change the state of the Door to match it.
    *
-   * @param o The SwitchNotifier carrying the change information.
+   * @param o   The SwitchNotifier carrying the change information.
    * @param arg Null object. Ignored.
    */
   @Override
   public void update(Observable o, Object arg) {
     if (o instanceof SwitchNotifier) {
-      isOpen = ((SwitchNotifier)o).isActive();
+      isOpen = ((SwitchNotifier) o).isActive();
       setPassable(isOpen);
     }
   }

@@ -18,7 +18,7 @@ public class SwitchNotifier extends Observable {
    * Otherwise if the switch is active and a block is not on top of it, deactivate it and notify observers.
    *
    * @param position The position to check whether there is a block.
-   * @param world The World the Switch is in.
+   * @param world    The World the Switch is in.
    */
   public void update(Position<Integer> position, World world) {
     if (world.categoryAtLocation(position, "block") && !active) {

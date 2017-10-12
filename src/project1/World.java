@@ -104,7 +104,7 @@ public class World implements Controllable {
         sprite.render(g);
       } else if (sprite != null) {
         // Check if the TNT here is exploding
-        Tnt tnt = (Tnt)sprite;
+        Tnt tnt = (Tnt) sprite;
         if (tnt.isExploding()) {
           possibleTnt = tnt;
         } else {
@@ -129,7 +129,7 @@ public class World implements Controllable {
     }
 
     for (Sprite sprite : sprites) {
-      if (sprite instanceof Target && !((Target)sprite).isCovered()) {
+      if (sprite instanceof Target && !((Target) sprite).isCovered()) {
         return false;
       }
     }
@@ -140,7 +140,7 @@ public class World implements Controllable {
    * Determines whether an (x,y) position is possible to move to.
    * If a block is at the specified (x,y), then we attempt to move that one as well.
    *
-   * @param position The (x,y) position to check.
+   * @param position  The (x,y) position to check.
    * @param direction The direction the sprite is currently moving.
    * @return Whether the position is blocked or not.
    */
@@ -169,7 +169,7 @@ public class World implements Controllable {
             int nextX = GameUtils.incrementCoordinate(position.x, 'x', direction);
             int nextY = GameUtils.incrementCoordinate(position.y, 'y', direction);
             cannotMove = isBlocked(new Position<>(nextX, nextY), direction);
-            ((Block)sprite).moveToDestination(direction, this);
+            ((Block) sprite).moveToDestination(direction, this);
         }
       }
       // Exit as soon as it is known the next (x,y) is impassable
@@ -190,7 +190,8 @@ public class World implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {}
+  public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
+  }
 
   /**
    * Set the world back to the last time a player made an input.
@@ -209,9 +210,9 @@ public class World implements Controllable {
     for (Sprite sprite : sprites) {
       if (sprite != null && sprite instanceof Movable) {
         if (sprite instanceof Block) {
-          ((Block)sprite).undo(lastUpdateTime);
+          ((Block) sprite).undo(lastUpdateTime);
         } else {
-          ((Character)sprite).undo(lastUpdateTime);
+          ((Character) sprite).undo(lastUpdateTime);
         }
       }
     }
@@ -242,7 +243,7 @@ public class World implements Controllable {
   public Door findDoor() {
     for (Sprite sprite : sprites) {
       if (sprite.getType().equals("door")) {
-        return (Door)sprite;
+        return (Door) sprite;
       }
     }
     return null;
