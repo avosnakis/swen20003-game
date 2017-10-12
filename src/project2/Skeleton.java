@@ -24,6 +24,13 @@ public class Skeleton extends Character {
     moveAttempts = 0;
   }
 
+  /**
+   * If the Skeleton has gone over its movement timer, try to move it.
+   *
+   * @param keys  The keys the player has pressed.
+   * @param delta The time since the last frame (ignored).
+   * @param world The world this sprite is in.
+   */
   @Override
   public void update(ArrayList<Integer> keys, int delta, World world) {
     timer.tick(delta);
@@ -33,6 +40,12 @@ public class Skeleton extends Character {
     }
   }
 
+  /**
+   * Attempt to move the Skeleton. It reverses direction if it cannot move in that direction.
+   *
+   * @param direction The direction the Skeleton is attempting to move in.
+   * @param world     The world the Skeleton is in.
+   */
   @Override
   public void moveToDestination(Direction direction, World world) {
     // If the skeleton has attempted to turn around twice, it can't move so exit

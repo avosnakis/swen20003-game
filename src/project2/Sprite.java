@@ -41,6 +41,13 @@ public abstract class Sprite {
     snapToGrid(windowPosition.x, windowPosition.y);
   }
 
+  /**
+   * Update this sprite.
+   *
+   * @param keys  The keys the player has pressed.
+   * @param delta The time since the last frame (ignored).
+   * @param world The world this sprite is in.
+   */
   public void update(ArrayList<Integer> keys, int delta, World world) {
   }
 
@@ -114,16 +121,5 @@ public abstract class Sprite {
 
   public Position<Integer> getCellPosition() {
     return cellPosition;
-  }
-
-  @Override
-  public String toString() {
-    return "Sprite{" +
-        "cellPosition=" + cellPosition +
-        ", windowPosition=" + windowPosition +
-        ", passable=" + passable +
-        ", category='" + category + '\'' +
-        ", type='" + type + '\'' +
-        '}';
   }
 }

@@ -33,12 +33,4 @@ public class Position<T extends Number> {
     if (x != null ? !x.equals(position.x) : position.x != null) return false;
     return y != null ? y.equals(position.y) : position.y == null;
   }
-
-  @Override
-  public String toString() {
-    return "Position{" +
-        "x=" + x +
-        ", y=" + y +
-        '}';
-  }
 }

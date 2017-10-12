@@ -12,6 +12,13 @@ public abstract class Character extends Sprite implements Movable {
     setPassable(false);
   }
 
+  /**
+   * Attempt to move the player in the specified direction in the world. If it runs into a block, it will also
+   * attempt to move that.
+   *
+   * @param direction The direction the player is attempting to move in.
+   * @param world     The world the Player is in.
+   */
   @Override
   public void moveToDestination(Direction direction, World world) {
     if (direction == Direction.DIR_NONE) {
@@ -38,10 +45,20 @@ public abstract class Character extends Sprite implements Movable {
     }
   }
 
+  /**
+   * Not all Characters can undo, so this is empty.
+   *
+   * @param time The time to revert back to (ignored)
+   */
   @Override
   public void undo(int time) {
   }
 
+  /**
+   * Not all Characters can undo, so this is empty.
+   *
+   * @param time The time to record (ignored)
+   */
   @Override
   public void addPastPosition(int time) {
   }

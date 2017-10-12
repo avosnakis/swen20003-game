@@ -21,11 +21,24 @@ public class Rogue extends Character implements Controllable {
     moveAttempts = 0;
   }
 
+  /**
+   * Update this sprite.
+   *
+   * @param keys  The keys the player has pressed.
+   * @param delta The time since the last frame (ignored).
+   * @param world The world this sprite is in.
+   */
   @Override
   public void update(ArrayList<Integer> keys, int delta, World world) {
     handlePlayerInput(keys, world);
   }
 
+  /**
+   * Try to move this Rogue.
+   *
+   * @param direction The direction the Rogue is attempting to move in.
+   * @param world     The world the Rogue is in.
+   */
   @Override
   public void moveToDestination(Direction direction, World world) {
     if (direction == Direction.DIR_NONE) {
@@ -80,6 +93,12 @@ public class Rogue extends Character implements Controllable {
   public void handlePlayerInput(ArrayList<Integer> input) {
   }
 
+  /**
+   * Determine what direction the Rogue is trying to move in, and try to move there.
+   *
+   * @param keysPressed The keys the player has pressed.
+   * @param world       The world the Rogue is in.
+   */
   @Override
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
     Direction direction = GameUtils.playerMoved(keysPressed) ? currentDirection : Direction.DIR_NONE;

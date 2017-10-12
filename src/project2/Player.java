@@ -7,11 +7,11 @@ import java.util.HashMap;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Template taken from:
  * Sample Project for SWEN20003: Object Oriented Software Development 2017
  * by Eleanor McMurtry
- *
+ * <p>
  * Class for the Floor tile.
  *
  * @author Alex Vosnakis 743936
@@ -26,6 +26,13 @@ public class Player extends Character implements Controllable {
     addPastPosition(0);
   }
 
+  /**
+   * Update this sprite.
+   *
+   * @param keys  The keys the player has pressed.
+   * @param delta The time since the last frame (ignored).
+   * @param world The world this sprite is in.
+   */
   @Override
   public void update(ArrayList<Integer> keys, int delta, World world) {
     handlePlayerInput(keys, world);
@@ -35,6 +42,12 @@ public class Player extends Character implements Controllable {
   public void handlePlayerInput(ArrayList<Integer> input) {
   }
 
+  /**
+   * Determines which direction the player is trying to move in, and attempts to move the player.
+   *
+   * @param keysPressed The arrow keys the player has pressed.
+   * @param world       The world the Player is in.
+   */
   @Override
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
     Direction direction = determineDirection(keysPressed);
@@ -47,6 +60,13 @@ public class Player extends Character implements Controllable {
     moveToDestination(direction, world);
   }
 
+  /**
+   * Attempt to move the player in the specified direction in the world. If it runs into a block, it will also
+   * attempt to move that.
+   *
+   * @param direction The direction the player is attempting to move in.
+   * @param world     The world the Player is in.
+   */
   @Override
   public void moveToDestination(Direction direction, World world) {
     float speed = App.TILE_SIZE;
@@ -92,6 +112,11 @@ public class Player extends Character implements Controllable {
     }
   }
 
+  /**
+   * Returns this sprite to the position it was at the specified time.
+   *
+   * @param time The time with the state we want the sprite to return to.
+   */
   @Override
   public void undo(int time) {
     // If the block didn't update at this time, exit the method
@@ -110,6 +135,11 @@ public class Player extends Character implements Controllable {
     pastPositions.remove(time);
   }
 
+  /**
+   * Save the current position to this Block's history, with the time as its key.
+   *
+   * @param time The timestamp to use a key.
+   */
   @Override
   public void addPastPosition(int time) {
     pastPositions.put(time, new Position<>(getCellPosition()));

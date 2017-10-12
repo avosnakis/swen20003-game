@@ -18,9 +18,10 @@ public class GameUtils {
   public static int CELL_SIZE = 1;
 
   /**
-   * Determine which arrow keys were pressed by the player and add them to an array.
+   * Determine which of the specified keys were pressed by the player and add them to an array.
    *
    * @param input The Slick Input object to check.
+   * @param keys  An array of keys to check if the player pressed.
    * @return An ArrayList of key codes that the player pressed.
    */
   public static ArrayList<Integer> getPressedKeys(Input input, Integer... keys) {
@@ -114,9 +115,9 @@ public class GameUtils {
   }
 
   /**
-   * Determines whether the player attempted to move in this frame.
+   * Determines whether the player pressed a key this frame.
    *
-   * @param keys An array of all arrow keys the player pressed in this frame.
+   * @param keys An array of keys the player pressed in this frame.
    * @return Whether or not the player pressed any arrow keys.
    */
   public static boolean playerMoved(ArrayList<Integer> keys) {

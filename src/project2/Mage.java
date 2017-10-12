@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Class for the Mage character. Implements Algorithm 1 as described in the spec for its movement.
  *
  * @author Alex Vosnakis 743936
@@ -15,6 +15,13 @@ public class Mage extends Character implements Controllable {
     super("res/mage.png", "mage", cellPosition, windowPosition);
   }
 
+  /**
+   * Update this sprite.
+   *
+   * @param keys  The keys the player has pressed.
+   * @param delta The time since the last frame (ignored).
+   * @param world The world this sprite is in.
+   */
   @Override
   public void update(ArrayList<Integer> keys, int delta, World world) {
     handlePlayerInput(keys, world);
@@ -24,6 +31,12 @@ public class Mage extends Character implements Controllable {
   public void handlePlayerInput(ArrayList<Integer> input) {
   }
 
+  /**
+   * If the player has moved, determine which direction to move in and attempt to move in that direction.
+   *
+   * @param keysPressed The arrow keys the player has pressed.
+   * @param world       The world the mage is in.
+   */
   @Override
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world) {
     Direction direction = Direction.DIR_NONE;

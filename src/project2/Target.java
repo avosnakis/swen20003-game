@@ -23,6 +23,13 @@ public class Target extends Tile {
     covered = false;
   }
 
+  /**
+   * Determine whether this target is covered by a Block.
+   *
+   * @param keys  The keys the player has pressed.
+   * @param delta The time since the last frame (ignored).
+   * @param world The world this sprite is in.
+   */
   @Override
   public void update(ArrayList<Integer> keys, int delta, World world) {
     covered = world.categoryAtLocation(getCellPosition(), "block");

@@ -52,6 +52,11 @@ public abstract class Block extends Sprite implements Movable {
     }
   }
 
+  /**
+   * Save the current position to this Block's history, with the time as its key.
+   *
+   * @param time The timestamp to use a key.
+   */
   @Override
   public void addPastPosition(int time) {
     pastPositions.put(time, new Position<>(getCellPosition()));

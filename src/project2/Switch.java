@@ -22,6 +22,13 @@ public class Switch extends Tile {
     active = false;
   }
 
+  /**
+   * Update this sprite.
+   *
+   * @param keys  The keys the player has pressed.
+   * @param delta The time since the last frame (ignored).
+   * @param world The world this sprite is in.
+   */
   @Override
   public void update(ArrayList<Integer> keys, int delta, World world) {
     // On the first frame, add the door as the observer
@@ -29,6 +36,7 @@ public class Switch extends Tile {
       notifier = new Notifier<>((Door) world.findUniqueSprite("door"));
     }
 
+    // If the state of the switch changes, notify the door
     if (world.categoryAtLocation(getCellPosition(), "block") && !active) {
       notifier.alert(true);
       active = true;
