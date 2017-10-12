@@ -31,6 +31,10 @@ public class Mage extends Character implements Controllable {
       direction = determineDirection(world.getPlayerPosition());
     }
 
+    // Exit early if the Mage has no move direction
+    if (direction == Direction.DIR_NONE) {
+      return;
+    }
     moveToDestination(direction, world);
   }
 
