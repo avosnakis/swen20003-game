@@ -14,6 +14,9 @@ public abstract class Character extends Sprite implements Movable {
 
   @Override
   public void moveToDestination(Direction direction, World world) {
+    if (direction == Direction.DIR_NONE) {
+      return;
+    }
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement

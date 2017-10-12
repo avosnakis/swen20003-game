@@ -93,6 +93,7 @@ public class World implements Controllable {
 
   /**
    * Render all sprites and the move count to the screen.
+   * If a TNT block is exploding, render it last.
    *
    * @param g The graphics object for the game.
    */
@@ -198,7 +199,7 @@ public class World implements Controllable {
       return;
     }
 
-    // Undo all sprites
+    // Try to undo all movable sprites
     sprites.stream()
         .filter(sprite -> sprite != null && sprite instanceof Movable)
         .forEach(sprite -> {
