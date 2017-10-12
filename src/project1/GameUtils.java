@@ -4,8 +4,6 @@ import org.newdawn.slick.Input;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GameUtils {
 
@@ -16,7 +14,12 @@ public class GameUtils {
    * @return An ArrayList of key codes that the player pressed.
    */
   public static ArrayList<Integer> recordArrowKeysPressed(Input input) {
-    ArrayList<Integer> keys = new ArrayList<>(Arrays.asList(Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP));
+    ArrayList<Integer> keys = new ArrayList<>(
+        Arrays.asList(
+            Input.KEY_DOWN,
+            Input.KEY_LEFT,
+            Input.KEY_RIGHT,
+            Input.KEY_UP));
     keys.removeIf(key -> !input.isKeyPressed(key));
     return keys;
   }
