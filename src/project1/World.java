@@ -145,8 +145,6 @@ public class World implements Controllable {
    * @return Whether the position is blocked or not.
    */
   public boolean isBlocked(Position<Integer> position, Direction direction) {
-    System.out.println(getPlayerPosition());
-    System.out.println(position);
     // Check that the block is moving to a spot inside the grid
     if (position.x < 0 ||
         position.x > Loader.getWorldWidth() ||
