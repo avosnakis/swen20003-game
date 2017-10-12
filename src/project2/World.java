@@ -5,6 +5,7 @@
 package project2;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Stack;
 
 import org.newdawn.slick.Graphics;
@@ -29,7 +30,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 2;
+    currentLevel = 0;
     reset();
   }
 
@@ -71,12 +72,10 @@ public class World implements Controllable {
     // Increment the internal timer
     timer.tick(delta);
 
-    // Update all sprites
-    for (Sprite sprite : sprites) {
-      if (sprite != null) {
-        sprite.update(arrowKeysPressed, delta, this);
-      }
-    }
+    // Update every non-null sprite
+    sprites.stream()
+        .filter(Objects::nonNull)
+        .forEach(sprite -> sprite.update(arrowKeysPressed, delta, this));
 
     // If there were changes in the world, save the past information
     if (changedThisFrame) {
@@ -120,20 +119,13 @@ public class World implements Controllable {
   }
 
   /**
-   * @return Whether all targets have been covered by a block.
+   * @return Whether all targets have been covered by a block, and it is not the final level.
    */
   public boolean hasWon() {
-    // Special case for final level
-    if (currentLevel == levels.length - 1) {
-      return false;
-    }
-
-    for (Sprite sprite : sprites) {
-      if (sprite instanceof Target && !((Target) sprite).isCovered()) {
-        return false;
-      }
-    }
-    return true;
+    return currentLevel != levels.length - 1 &&
+        sprites.stream()
+            .filter(sprite -> sprite instanceof Target)
+            .allMatch(sprite -> ((Target) sprite).isCovered());
   }
 
   /**
@@ -207,15 +199,15 @@ public class World implements Controllable {
     }
 
     // Undo all sprites
-    sprites.forEach(sprite -> {
-      if (sprite != null && sprite instanceof Movable) {
-        if (sprite instanceof Block) {
-          ((Block) sprite).undo(lastUpdateTime);
-        } else {
-          ((Character) sprite).undo(lastUpdateTime);
-        }
-      }
-    });
+    sprites.stream()
+        .filter(sprite -> sprite != null && sprite instanceof Movable)
+        .forEach(sprite -> {
+          if (sprite instanceof Block) {
+            ((Block) sprite).undo(lastUpdateTime);
+          } else {
+            ((Character) sprite).undo(lastUpdateTime);
+          }
+        });
     decrementMoves();
   }
 
@@ -227,9 +219,10 @@ public class World implements Controllable {
    * @return True if there is a sprite of the given category at the (x,y) location, otherwise false.
    */
   public boolean typeAtLocation(Position<Integer> position, String type) {
-    return sprites.stream().anyMatch(sprite -> sprite != null &&
-        sprite.isAtPosition(position) &&
-        sprite.getType().equals(type));
+    return sprites.stream()
+        .anyMatch(sprite -> sprite != null &&
+            sprite.isAtPosition(position) &&
+            sprite.getType().equals(type));
   }
 
   /**
@@ -240,9 +233,10 @@ public class World implements Controllable {
    * @return True if there is a sprite of the given type at the (x,y) location, otherwise false.
    */
   public boolean categoryAtLocation(Position<Integer> position, String category) {
-    return sprites.stream().anyMatch(sprite -> sprite != null &&
-        sprite.isAtPosition(position) &&
-        sprite.getCategory().equals(category));
+    return sprites.stream()
+        .anyMatch(sprite -> sprite != null &&
+            sprite.isAtPosition(position) &&
+            sprite.getCategory().equals(category));
   }
 
   /**
@@ -251,10 +245,10 @@ public class World implements Controllable {
    * @return The door if it is in the level, null otherwise.
    */
   public Door findDoor() {
-    return (Door)sprites.stream()
-                        .filter(sprite -> sprite != null && sprite.getType().equals("door"))
-                        .findFirst()
-                        .orElse(null);
+    return (Door) sprites.stream()
+        .filter(sprite -> sprite != null && sprite.getType().equals("door"))
+        .findFirst()
+        .orElse(null);
   }
 
   /**
@@ -301,5 +295,4 @@ public class World implements Controllable {
   public void decrementMoves() {
     moveCount--;
   }
-
 }
