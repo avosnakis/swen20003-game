@@ -29,7 +29,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 0;
+    currentLevel = 2;
     reset();
   }
 
@@ -207,7 +207,7 @@ public class World implements Controllable {
     }
 
     // Undo all sprites
-    for (Sprite sprite : sprites) {
+    sprites.forEach(sprite -> {
       if (sprite != null && sprite instanceof Movable) {
         if (sprite instanceof Block) {
           ((Block) sprite).undo(lastUpdateTime);
@@ -215,7 +215,7 @@ public class World implements Controllable {
           ((Character) sprite).undo(lastUpdateTime);
         }
       }
-    }
+    });
     decrementMoves();
   }
 
@@ -223,30 +223,13 @@ public class World implements Controllable {
    * Determines if a sprite of the given category is at an (x,y) coordinate.
    *
    * @param position The (x,y) coordinate to check.
-   * @param category The category to check the (x,y) coordinates for.
+   * @param type     The type to check the (x,y) coordinates for.
    * @return True if there is a sprite of the given category at the (x,y) location, otherwise false.
    */
-  public boolean typeAtLocation(Position<Integer> position, String category) {
-    for (Sprite sprite : sprites) {
-      if (sprite != null && sprite.isAtPosition(position) && sprite.getType().equals(category)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Finds the Door in the level, as there can only be a single one.
-   *
-   * @return The door if it is in the level, null otherwise.
-   */
-  public Door findDoor() {
-    for (Sprite sprite : sprites) {
-      if (sprite.getType().equals("door")) {
-        return (Door) sprite;
-      }
-    }
-    return null;
+  public boolean typeAtLocation(Position<Integer> position, String type) {
+    return sprites.stream().anyMatch(sprite -> sprite != null &&
+        sprite.isAtPosition(position) &&
+        sprite.getType().equals(type));
   }
 
   /**
@@ -257,12 +240,21 @@ public class World implements Controllable {
    * @return True if there is a sprite of the given type at the (x,y) location, otherwise false.
    */
   public boolean categoryAtLocation(Position<Integer> position, String category) {
-    for (Sprite sprite : sprites) {
-      if (sprite != null && sprite.isAtPosition(position) && sprite.getCategory().equals(category)) {
-        return true;
-      }
-    }
-    return false;
+    return sprites.stream().anyMatch(sprite -> sprite != null &&
+        sprite.isAtPosition(position) &&
+        sprite.getCategory().equals(category));
+  }
+
+  /**
+   * Finds the Door in the level, as there can only be a single one.
+   *
+   * @return The door if it is in the level, null otherwise.
+   */
+  public Door findDoor() {
+    return (Door)sprites.stream()
+                        .filter(sprite -> sprite != null && sprite.getType().equals("door"))
+                        .findFirst()
+                        .orElse(null);
   }
 
   /**
