@@ -24,8 +24,8 @@ public abstract class Character extends Sprite implements Movable {
 
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 
-    float nextX = this.getX() + deltaX;
-    float nextY = this.getY() + deltaY;
+    float nextX = getX() + deltaX;
+    float nextY = getY() + deltaY;
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextPosition, direction) && !world.categoryAtLocation(nextPosition, "block")) {
