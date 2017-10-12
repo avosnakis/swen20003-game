@@ -126,25 +126,27 @@ public class World implements Controllable {
   }
 
   /**
-   * Determines whether an (x,y) position is possible to move to.
+   * Determines whether an (x,y) position is possible to move to. ie That it is moving to somewhere inside the grid
+   * and that position is not occupied by an impassable block.
    *
    * @param position  The (x,y) position to check.
    * @param direction The direction the sprite is currently moving.
    * @return Whether the position is blocked or not.
    */
   public boolean isBlocked(Position<Integer> position, Direction direction) {
-    // Check that the block is moving to a spot inside the grid
+    // First check that we are within the bounds.
     return position.x >= 0 &&
         position.x <= Loader.getWorldWidth() &&
         position.y >= 0 &&
         position.y <= Loader.getWorldHeight() &&
+        // Check there are no tiles that are blocked.
         sprites.stream()
             .filter(sprite -> sprite != null && sprite.isAtPosition(position))
             .anyMatch(sprite -> {
               switch (sprite.getCategory()) {
                 // Characters are defined as passable
                 case "character":
-                  return false;
+                  return true;
                 // Determine whether the tile is passable
                 case "tile":
                   return !sprite.isPassable();
