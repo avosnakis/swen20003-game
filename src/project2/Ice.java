@@ -34,8 +34,8 @@ public class Ice extends Block {
   // TODO seems to be a bug with ice interaction with player
   @Override
   public void moveToDestination(Direction direction, World world) {
-    float speed = 32;
-    int cellSpeed = 1;
+    float speed = App.TILE_SIZE;
+    int cellSpeed = GameUtils.CELL_SIZE;
     // Translate the currentSlideDirection to an x and y displacement
     float deltaX = GameUtils.directionDelta('x', direction, speed);
     float deltaY = GameUtils.directionDelta('y', direction, speed);

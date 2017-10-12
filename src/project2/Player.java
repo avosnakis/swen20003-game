@@ -12,7 +12,6 @@ import java.util.HashMap;
 public class Player extends Character implements Controllable {
   private HashMap<Integer, Position<Integer>> pastPositions;
 
-
   public Player(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/player_left.png", "player", cellPosition, windowPosition);
 
@@ -43,8 +42,8 @@ public class Player extends Character implements Controllable {
 
   @Override
   public void moveToDestination(Direction direction, World world) {
-    float speed = 32;
-    int cellSpeed = 1;
+    float speed = App.TILE_SIZE;
+    int cellSpeed = GameUtils.CELL_SIZE;
     // Translate the direction to an x and y displacement
     float deltaX = GameUtils.directionDelta('x', direction, speed);
     float deltaY = GameUtils.directionDelta('y', direction, speed);
@@ -73,27 +72,6 @@ public class Player extends Character implements Controllable {
     }
   }
 
-  /**
-   * Determines the Player direction based on the input. Essentially the directional controls for the game.
-   *
-   * @param keysPressed The Slick input object.
-   * @return The direction that the player will try to move.
-   */
-  public static Direction determineDirection(ArrayList<Integer> keysPressed) {
-    Direction direction = Direction.DIR_NONE;
-
-    if (keysPressed.contains(Input.KEY_LEFT)) {
-      direction = Direction.DIR_LEFT;
-    } else if (keysPressed.contains(Input.KEY_RIGHT)) {
-      direction = Direction.DIR_RIGHT;
-    } else if (keysPressed.contains(Input.KEY_UP)) {
-      direction = Direction.DIR_UP;
-    } else if (keysPressed.contains(Input.KEY_DOWN)) {
-      direction = Direction.DIR_DOWN;
-    }
-    return direction;
-  }
-
   @Override
   public void undo(int time) {
     // If the block didn't update at this time, exit the method
@@ -115,5 +93,26 @@ public class Player extends Character implements Controllable {
   @Override
   public void addPastPosition(int time) {
     pastPositions.put(time, new Position<>(getCellPosition()));
+  }
+
+  /**
+   * Determines the Player direction based on the input. Essentially the directional controls for the game.
+   *
+   * @param keysPressed The Slick input object.
+   * @return The direction that the player will try to move.
+   */
+  private static Direction determineDirection(ArrayList<Integer> keysPressed) {
+    Direction direction = Direction.DIR_NONE;
+
+    if (keysPressed.contains(Input.KEY_LEFT)) {
+      direction = Direction.DIR_LEFT;
+    } else if (keysPressed.contains(Input.KEY_RIGHT)) {
+      direction = Direction.DIR_RIGHT;
+    } else if (keysPressed.contains(Input.KEY_UP)) {
+      direction = Direction.DIR_UP;
+    } else if (keysPressed.contains(Input.KEY_DOWN)) {
+      direction = Direction.DIR_DOWN;
+    }
+    return direction;
   }
 }

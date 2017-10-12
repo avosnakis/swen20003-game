@@ -33,22 +33,11 @@ public class Rogue extends Character implements Controllable {
       return;
     }
 
-    float speed = 32;
-    int cellSpeed = 1;
-    // Translate the direction to an x and y displacement
-    float deltaX = 0;
-    int deltaXCell = 0;
-
-    switch (direction) {
-      case DIR_LEFT:
-        deltaX = -speed;
-        deltaXCell = -cellSpeed;
-        break;
-      case DIR_RIGHT:
-        deltaX = speed;
-        deltaXCell = cellSpeed;
-        break;
-    }
+    float speed = App.TILE_SIZE;
+    int cellSpeed = GameUtils.CELL_SIZE;
+    // Translate the direction to an x displacement
+    float deltaX = GameUtils.directionDelta('x', direction, speed);
+    int deltaXCell = GameUtils.directionDelta('x', direction, cellSpeed);
 
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell());
 

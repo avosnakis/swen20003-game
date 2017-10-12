@@ -30,7 +30,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 3;
+    currentLevel = 0;
     reset();
   }
 
@@ -98,20 +98,16 @@ public class World implements Controllable {
    * @param g The graphics object for the game.
    */
   public void render(Graphics g) {
-    Tnt possibleTnt = null;
-    for (Sprite sprite : sprites) {
-      if (sprite != null && !(sprite instanceof Tnt)) {
-        sprite.render(g);
-      } else if (sprite != null) {
-        // Check if the TNT here is exploding
-        Tnt tnt = (Tnt) sprite;
-        if (tnt.isExploding()) {
-          possibleTnt = tnt;
-        } else {
-          sprite.render(g);
-        }
-      }
-    }
+    // Find any TNT that is currently exploding
+    Tnt possibleTnt = (Tnt) sprites.stream()
+        .filter(sprite -> sprite instanceof Tnt && ((Tnt)sprite).isExploding())
+        .findFirst()
+        .orElse(null);
+    // Render all sprites that aren't exploding Tnt
+    sprites.stream()
+        .filter(sprite -> sprite != null || (sprite instanceof Tnt && !((Tnt)sprite).isExploding()))
+        .forEach(sprite -> sprite.render(g));
+
     // If the TNT was exploding, render it last
     if (possibleTnt != null) {
       possibleTnt.render(g);
@@ -201,7 +197,7 @@ public class World implements Controllable {
 
     // Try to undo all movable sprites
     sprites.stream()
-        .filter(sprite -> sprite != null && sprite instanceof Movable)
+        .filter(sprite -> sprite instanceof Movable)
         .forEach(sprite -> {
           // A Movable sprite is either a Block or a Character
           if (sprite instanceof Block) {
@@ -248,7 +244,7 @@ public class World implements Controllable {
    */
   public Door findDoor() {
     return (Door) sprites.stream()
-        .filter(sprite -> sprite != null && sprite.getType().equals("door"))
+        .filter(sprite -> sprite instanceof Door)
         .findFirst()
         .orElse(null);
   }
@@ -275,7 +271,7 @@ public class World implements Controllable {
    */
   public Position<Integer> getPlayerPosition() {
     return sprites.stream()
-        .filter(sprite -> sprite != null && sprite.getType().equals("player"))
+        .filter(sprite -> sprite instanceof Player)
         .map(Sprite::getCellPosition)
         .findFirst()
         .orElse(null);

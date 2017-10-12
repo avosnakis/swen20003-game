@@ -36,8 +36,8 @@ public class Skeleton extends Character {
       return;
     }
 
-    float speed = 32;
-    int cellSpeed = 1;
+    float speed = App.TILE_SIZE;
+    int cellSpeed = GameUtils.CELL_SIZE;
     // Translate the direction to an x and y displacement
     float deltaY = GameUtils.directionDelta('y', direction, speed);
     int deltaYCell = GameUtils.directionDelta('y', direction, cellSpeed);

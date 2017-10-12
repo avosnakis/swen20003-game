@@ -7,6 +7,8 @@ import java.util.Arrays;
 
 public class GameUtils {
 
+  public static int CELL_SIZE = 1;
+
   /**
    * Determine which arrow keys were pressed by the player and add them to an array.
    *

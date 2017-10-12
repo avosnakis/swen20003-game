@@ -12,8 +12,8 @@ public abstract class Character extends Sprite implements Movable {
       return;
     }
 
-    float speed = 32;
-    int cellSpeed = 1;
+    float speed = App.TILE_SIZE;
+    int cellSpeed = GameUtils.CELL_SIZE;
     // Translate the direction to an x and y displacement
     float deltaX = GameUtils.directionDelta('x', direction, speed);
     float deltaY = GameUtils.directionDelta('y', direction, speed);
