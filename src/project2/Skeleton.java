@@ -1,8 +1,14 @@
 package project2;
 
-
 import java.util.ArrayList;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Class for the Skeleton character.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Skeleton extends Character {
   private static final int MOVE_TIME = 1000;
   private Timer timer;
@@ -54,6 +60,7 @@ public class Skeleton extends Character {
       reverseDirection();
       moveToDestination(currentDirection, world);
     } else {
+      moveAttempts = 0;
       setCellPosition(nextPosition);
       snapToGrid(getX(), nextY);
     }

@@ -1,7 +1,11 @@
 package project2;
 
 /**
- * Explosion effect created by TNT when it collides with a crackedwall.
+ * SWEN20003 Assignment 2B
+ *
+ * Explosion effect created by TNT when it collides with a CrackedWall.
+ *
+ * @author Alex Vosnakis 743936
  */
 public class Explosion extends Sprite {
   private static final int EXPLOSION_TIME = 400;
@@ -13,6 +17,11 @@ public class Explosion extends Sprite {
     timer = new Timer(EXPLOSION_TIME);
   }
 
+  /**
+   * Sets the explosion to the appropriate position.
+   *
+   * @param explosionCell
+   */
   public void start(Position<Integer> explosionCell) {
     setCellPosition(explosionCell);
 

@@ -5,6 +5,13 @@ import org.newdawn.slick.Graphics;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Class for the Door tile.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Door extends Tile implements Observer {
   private boolean isOpen;
 
@@ -35,7 +42,7 @@ public class Door extends Tile implements Observer {
    */
   @Override
   public void update(Observable o, Object arg) {
-    isOpen = (boolean)arg;
+    isOpen = (boolean) arg;
     setPassable(isOpen);
   }
 }

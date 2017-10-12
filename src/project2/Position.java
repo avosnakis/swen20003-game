@@ -5,6 +5,8 @@ package project2;
  * in the GUI and the grid coordinates for where the sprites are in the actual level.
  *
  * @param <T> The type of the position, intended to be either an Integer or a Float.
+ *
+ * @author Alex Vosnakis 743936
  */
 public class Position<T extends Number> {
 

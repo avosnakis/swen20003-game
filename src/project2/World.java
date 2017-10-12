@@ -1,7 +1,3 @@
-/**
- * Sample Project for SWEN20003: Object Oriented Software Development 2017
- * by Eleanor McMurtry
- */
 package project2;
 
 import java.util.ArrayList;
@@ -12,8 +8,17 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 /**
- * Updates and renders all sprites. Also determines what type of blocks is at what coordinate, and manages
- * whether or not the player has won the level.
+ * SWEN20003 Assignment 2B
+ * <p>
+ * Template taken from:
+ * Sample Project for SWEN20003: Object Oriented Software Development 2017
+ * by Eleanor McMurtry
+ * <p>
+ * Updates and renders all sprites, including control over the level reset and undo move functionality.
+ * Given its access to every sprite, it also has logic to find certain information about sprites (or the sprites
+ * themselves) for other sprites.
+ *
+ * @author Alex Vosnakis 743936
  */
 public class World implements Controllable {
 
@@ -21,14 +26,13 @@ public class World implements Controllable {
   private static int finalLevel = levels.length - 1;
 
   private int currentLevel;
+  private int moveCount;
 
   private ArrayList<Sprite> sprites;
 
   private Timer timer;
   private Stack<Integer> changeTimes;
   private boolean changedThisFrame;
-
-  private int moveCount;
 
   public World() {
     currentLevel = 0;
@@ -57,7 +61,11 @@ public class World implements Controllable {
    * @param delta The amount of time passed since the last frame.
    */
   public void update(Input input, int delta) {
-    ArrayList<Integer> arrowKeysPressed = GameUtils.recordArrowKeysPressed(input);
+    // Determine which of the controls the player used
+    ArrayList<Integer> arrowKeys = GameUtils.getPressedKeys(input,
+        Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP);
+    ArrayList<Integer> otherKeys = GameUtils.getPressedKeys(input, Input.KEY_R, Input.KEY_Z);
+
 
     // If the player completed the level on the previous frame,
     // move to the next level and skip the rest of this frame
@@ -68,7 +76,10 @@ public class World implements Controllable {
     }
 
     // Check if the player tried to undo or reset
-    handlePlayerInput(input);
+    if (GameUtils.playerMoved(otherKeys)) {
+      handlePlayerInput(otherKeys);
+      return;
+    }
 
     // Increment the internal timer
     timer.tick(delta);
@@ -76,7 +87,7 @@ public class World implements Controllable {
     // Update every non-null sprite
     sprites.stream()
         .filter(Objects::nonNull)
-        .forEach(sprite -> sprite.update(arrowKeysPressed, delta, this));
+        .forEach(sprite -> sprite.update(arrowKeys, delta, this));
 
     // If there were changes in the world, save the past information
     if (changedThisFrame) {
@@ -145,10 +156,7 @@ public class World implements Controllable {
             .filter(sprite -> sprite != null && sprite.isAtPosition(position))
             .anyMatch(sprite -> {
               switch (sprite.getCategory()) {
-                // Characters are defined as passable
                 case "character":
-                  return true;
-                // Determine whether the tile is passable
                 case "tile":
                   return !sprite.isPassable();
                 // Check if the next block can move
@@ -174,17 +182,16 @@ public class World implements Controllable {
         .filter(sprite -> sprite instanceof Block && sprite.isAtPosition(position))
         .findFirst()
         .orElse(null));
-
     if (block != null) {
       block.moveToDestination(direction, this);
     }
   }
 
   @Override
-  public void handlePlayerInput(Input input) {
-    if (input.isKeyPressed(Input.KEY_R)) {
+  public void handlePlayerInput(ArrayList<Integer> input) {
+    if (input.contains(Input.KEY_R)) {
       reset();
-    } else if (input.isKeyPressed(Input.KEY_Z)) {
+    } else if (input.contains(Input.KEY_Z)) {
       undo();
     }
   }
@@ -206,11 +213,10 @@ public class World implements Controllable {
       return;
     }
 
-    // Try to undo all movable sprites
+    // Try to undo all Movable sprites, ie. Blocks and Characters
     sprites.stream()
         .filter(sprite -> sprite instanceof Movable)
         .forEach(sprite -> {
-          // A Movable sprite is either a Block or a Character
           if (sprite instanceof Block) {
             ((Block) sprite).undo(lastUpdateTime);
           } else {

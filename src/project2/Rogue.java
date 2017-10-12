@@ -1,9 +1,14 @@
 package project2;
 
-import org.newdawn.slick.Input;
-
 import java.util.ArrayList;
 
+/**
+ * SWEN20003 Assignment 2B
+ * <p>
+ * Class for the Rogue character.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Rogue extends Character implements Controllable {
 
   private Direction currentDirection;
@@ -72,7 +77,7 @@ public class Rogue extends Character implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(Input input) {
+  public void handlePlayerInput(ArrayList<Integer> input) {
   }
 
   @Override

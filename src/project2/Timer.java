@@ -1,7 +1,11 @@
 package project2;
 
 /**
+ * SWEN20003 Assignment 2B
+ * <p>
  * Timer class. Controls updating a counter, and checking whether a specified timeout has been surpassed.
+ *
+ * @author Alex Vosnakis 743936
  */
 public class Timer {
 

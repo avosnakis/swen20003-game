@@ -1,7 +1,3 @@
-/**
- * Sample Project for SWEN20003: Object Oriented Software Development 2017
- * by Eleanor McMurtry
- */
 package project2;
 
 import java.io.BufferedReader;
@@ -9,6 +5,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Template taken from:
+ * Sample Project for SWEN20003: Object Oriented Software Development 2017
+ * by Eleanor McMurtry
+ *
+ * Static class for loading the level files.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Loader {
 
   private static int worldWidth;

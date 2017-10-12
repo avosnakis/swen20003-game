@@ -1,7 +1,3 @@
-/**
- * Sample Project for SWEN20003: Object Oriented Software Development 2017
- * by Eleanor McMurtry
- */
 package project2;
 
 import org.newdawn.slick.Image;
@@ -13,6 +9,12 @@ import java.util.ArrayList;
 /**
  * Sprite superclass. Records all information regarding the Sprite's whereabouts in the world grid and on the window,
  * whether other Sprites can move through them, their category and type, and their image.
+ * <p>
+ * Template taken from:
+ * Sample Project for SWEN20003: Object Oriented Software Development 2017
+ * by Eleanor McMurtry
+ *
+ * @author Alex Vosnakis 743936
  */
 public abstract class Sprite {
 

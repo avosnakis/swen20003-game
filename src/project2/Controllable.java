@@ -1,11 +1,16 @@
 package project2;
 
-import org.newdawn.slick.Input;
-
 import java.util.ArrayList;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Interface for all classes that react to the player's input.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public interface Controllable {
-  public void handlePlayerInput(Input input);
+  public void handlePlayerInput(ArrayList<Integer> input);
 
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world);
 

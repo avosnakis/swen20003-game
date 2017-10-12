@@ -1,7 +1,3 @@
-/**
- * Sample Project for SWEN20003: Object Oriented Software Development 2017
- * by Eleanor McMurtry
- */
 package project2;
 
 import org.newdawn.slick.Input;
@@ -9,6 +5,17 @@ import org.newdawn.slick.Input;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Template taken from:
+ * Sample Project for SWEN20003: Object Oriented Software Development 2017
+ * by Eleanor McMurtry
+ *
+ * Class for the Floor tile.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Player extends Character implements Controllable {
   private HashMap<Integer, Position<Integer>> pastPositions;
 
@@ -25,7 +32,7 @@ public class Player extends Character implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(Input input) {
+  public void handlePlayerInput(ArrayList<Integer> input) {
   }
 
   @Override

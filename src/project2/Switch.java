@@ -2,6 +2,13 @@ package project2;
 
 import java.util.ArrayList;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Class for the Switch tile. When activated or deactived, it notifies a Door to change its state.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Switch extends Tile {
 
   private boolean active;

@@ -5,6 +5,13 @@ import org.newdawn.slick.Graphics;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * SWEN20003 Assignment 2B
+
+ * Class for the CrackedWall tile.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class CrackedWall extends Tile implements Destructible, Observer {
   private boolean destroyed;
 

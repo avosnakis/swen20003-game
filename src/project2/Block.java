@@ -2,6 +2,13 @@ package project2;
 
 import java.util.HashMap;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Abstract class for all blocks.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public abstract class Block extends Sprite implements Movable {
   private HashMap<Integer, Position<Integer>> pastPositions;
 

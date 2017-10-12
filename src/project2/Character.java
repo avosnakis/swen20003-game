@@ -1,5 +1,10 @@
 package project2;
 
+/**
+ * Superclass for all characters, ie. the player and the enemies.
+ *
+ * @author Alex Vosnakis 743946
+ */
 public abstract class Character extends Sprite implements Movable {
 
   public Character(String imageSource, String type, Position<Integer> cellPosition, Position<Float> windowPosition) {

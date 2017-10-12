@@ -5,6 +5,14 @@ import org.newdawn.slick.Input;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * SWEN20003 Assignment 2B
+ * <p>
+ * Static class containing useful methods used in multiple other classes, chiefly related
+ * to processing coordinates with regards to directions.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class GameUtils {
 
   public static int CELL_SIZE = 1;
@@ -15,15 +23,10 @@ public class GameUtils {
    * @param input The Slick Input object to check.
    * @return An ArrayList of key codes that the player pressed.
    */
-  public static ArrayList<Integer> recordArrowKeysPressed(Input input) {
-    ArrayList<Integer> keys = new ArrayList<>(
-        Arrays.asList(
-            Input.KEY_DOWN,
-            Input.KEY_LEFT,
-            Input.KEY_RIGHT,
-            Input.KEY_UP));
-    keys.removeIf(key -> !input.isKeyPressed(key));
-    return keys;
+  public static ArrayList<Integer> getPressedKeys(Input input, Integer... keys) {
+    ArrayList<Integer> keysPressed = new ArrayList<>(Arrays.asList(keys));
+    keysPressed.removeIf(key -> !input.isKeyPressed(key));
+    return keysPressed;
   }
 
   /**

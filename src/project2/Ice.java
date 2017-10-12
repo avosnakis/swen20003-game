@@ -2,6 +2,13 @@ package project2;
 
 import java.util.ArrayList;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Class for the Ice block.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Ice extends Block {
   private static final int SLIDE_INTERVAL = 250;
 

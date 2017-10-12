@@ -1,11 +1,13 @@
 package project2;
 
-import org.newdawn.slick.Input;
-
 import java.util.ArrayList;
 
 /**
- * Class for the Mage. Implements Algorithm 1 as specified in the spec for its movement.
+ * SWEN20003 Assignment 2B
+ *
+ * Class for the Mage character. Implements Algorithm 1 as described in the spec for its movement.
+ *
+ * @author Alex Vosnakis 743936
  */
 public class Mage extends Character implements Controllable {
 
@@ -19,7 +21,7 @@ public class Mage extends Character implements Controllable {
   }
 
   @Override
-  public void handlePlayerInput(Input input) {
+  public void handlePlayerInput(ArrayList<Integer> input) {
   }
 
   @Override

@@ -4,6 +4,13 @@ import org.newdawn.slick.Graphics;
 
 import java.util.ArrayList;
 
+/**
+ * SWEN20003 Assignment 2B
+ *
+ * Interface for all classes that react to the player's input.
+ *
+ * @author Alex Vosnakis 743936
+ */
 public class Tnt extends Block implements Destructible {
 
   private Notifier<CrackedWall> tntNotifier;
@@ -33,6 +40,12 @@ public class Tnt extends Block implements Destructible {
     }
   }
 
+  /**
+   * If the Tnt has not exploded, the Tnt itself is rendered. If it's exploding, then the explosion is rendered.
+   * Otherwise it is not rendered.
+   *
+   * @param g The Slick graphics object.
+   */
   @Override
   public void render(Graphics g) {
     if (!undetonated) {
