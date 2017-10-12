@@ -16,7 +16,8 @@ public class Target extends Tile {
     covered = false;
   }
 
-  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
+  @Override
+  public void update(ArrayList<Integer> keys, int delta, World world) {
     covered = world.categoryAtLocation(getCellPosition(), "block");
   }
 

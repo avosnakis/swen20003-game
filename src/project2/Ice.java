@@ -17,7 +17,7 @@ public class Ice extends Block {
   }
 
   @Override
-  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
+  public void update(ArrayList<Integer> keys, int delta, World world) {
 
     // Increment the timer while it's sliding
     if (sliding) {

@@ -7,26 +7,26 @@ import java.util.ArrayList;
 public class Tnt extends Block implements Destructible {
 
   private Notifier<CrackedWall> tntNotifier;
-  private boolean unDetonated;
+  private boolean undetonated;
   private Explosion explosion;
 
   public Tnt(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/tnt.png", "tnt", cellPosition, windowPosition);
 
     explosion = new Explosion(cellPosition, windowPosition);
-    unDetonated = false;
+    undetonated = false;
 
     tntNotifier = null;
   }
 
   @Override
-  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
+  public void update(ArrayList<Integer> keys, int delta, World world) {
     // On the first frame, find the unique cracked wall and make it an observer
     if (tntNotifier == null) {
       tntNotifier = new Notifier<>((CrackedWall) world.findUniqueSprite("cracked"));
     }
 
-    if (unDetonated && !explosion.finishedExploding()) {
+    if (undetonated && !explosion.finishedExploding()) {
       explosion.increment(delta);
     } else if (explosion.finishedExploding()) {
       tntNotifier.alert();
@@ -35,7 +35,7 @@ public class Tnt extends Block implements Destructible {
 
   @Override
   public void render(Graphics g) {
-    if (!unDetonated) {
+    if (!undetonated) {
       super.render(g);
     } else if (!explosion.finishedExploding()) {
       explosion.render(g);
@@ -44,7 +44,7 @@ public class Tnt extends Block implements Destructible {
 
   @Override
   public void moveToDestination(Direction direction, World world) {
-    if (unDetonated) {
+    if (undetonated) {
       return;
     }
 
@@ -61,7 +61,9 @@ public class Tnt extends Block implements Destructible {
 
     // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
     if (world.typeAtLocation(explosionPosition, "cracked")) {
-      explode(explosionPosition, deltaX, deltaY);
+      setCellPosition(explosionPosition);
+      snapToGrid(getX() + deltaX, getY() + deltaY);
+      destroy(explosionPosition);
       return;
     }
 
@@ -76,21 +78,21 @@ public class Tnt extends Block implements Destructible {
   }
 
   /**
-   * Starts the unDetonated animation, and destroys the CrackedWall at the target location.
+   * Starts the undetonated animation, and destroys the CrackedWall at the target location.
    *
-   * @param wallLocation The location of the CrackedWall and the explosion.
-   * @param deltaX       The x position in the window of the explosion.
-   * @param deltaY       The y position in the window of the explosion.
+   * @param position The location of the CrackedWall and the explosion.
    */
-  private void explode(Position<Integer> wallLocation, float deltaX, float deltaY) {
-    setCellPosition(wallLocation);
-    snapToGrid(getX() + deltaX, getY() + deltaY);
-
-    unDetonated = true;
-    explosion.start(wallLocation);
+  @Override
+  public void destroy(Position<Integer> position) {
+    undetonated = true;
+    explosion.start(position);
   }
 
-  public boolean isUnDetonated() {
-    return unDetonated;
+  @Override
+  public void destroy() {
+  }
+
+  public boolean isUndetonated() {
+    return undetonated;
   }
 }

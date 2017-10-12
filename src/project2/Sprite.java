@@ -39,7 +39,7 @@ public abstract class Sprite {
     snapToGrid(windowPosition.x, windowPosition.y);
   }
 
-  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
+  public void update(ArrayList<Integer> keys, int delta, World world) {
   }
 
   /**

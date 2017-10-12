@@ -16,7 +16,7 @@ public class Switch extends Tile {
   }
 
   @Override
-  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
+  public void update(ArrayList<Integer> keys, int delta, World world) {
     // On the first frame, add the door as the observer
     if (notifier == null) {
       notifier = new Notifier<>((Door) world.findUniqueSprite("door"));

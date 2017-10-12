@@ -27,8 +27,11 @@ public class CrackedWall extends Tile implements Destructible, Observer {
     destroy();
   }
 
-  private void destroy() {
+  public void destroy() {
     setPassable(true);
     destroyed = true;
+  }
+
+  public void destroy(Position<Integer> position) {
   }
 }

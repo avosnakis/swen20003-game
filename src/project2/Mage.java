@@ -14,8 +14,8 @@ public class Mage extends Character implements Controllable {
   }
 
   @Override
-  public void update(ArrayList<Integer> keysPressed, int delta, World world) {
-    handlePlayerInput(keysPressed, world);
+  public void update(ArrayList<Integer> keys, int delta, World world) {
+    handlePlayerInput(keys, world);
   }
 
   @Override

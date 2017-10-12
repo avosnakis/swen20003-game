@@ -101,7 +101,7 @@ public class World implements Controllable {
   public void render(Graphics g) {
     // Find any TNT that is currently exploding
     Tnt possibleTnt = (Tnt) sprites.stream()
-        .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isUnDetonated())
+        .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isUndetonated())
         .findFirst()
         .orElse(null);
     // Render all sprites that aren't exploding Tnt
@@ -119,7 +119,7 @@ public class World implements Controllable {
   /**
    * @return Whether all targets have been covered by a block, and it is not the final level.
    */
-  public boolean hasWon() {
+  private boolean hasWon() {
     return currentLevel != finalLevel &&
         sprites.stream()
             .filter(sprite -> sprite instanceof Target)
