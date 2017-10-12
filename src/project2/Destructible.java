@@ -1,4 +1,4 @@
-package project1;
+package project2;
 
 /**
  * Interface for sprites that can be destroyed.

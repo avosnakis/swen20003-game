@@ -1,4 +1,4 @@
-package project1;
+package project2;
 
 public interface Movable {
   public void moveToDestination(Direction direction, World world);

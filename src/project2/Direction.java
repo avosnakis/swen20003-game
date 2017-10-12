@@ -1,4 +1,4 @@
-package project1;
+package project2;
 
 /**
  * The directions that a sprite can move in.

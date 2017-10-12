@@ -2,7 +2,7 @@
  * Sample Project for SWEN20003: Object Oriented Software Development 2017
  * by Eleanor McMurtry
  */
-package project1;
+package project2;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

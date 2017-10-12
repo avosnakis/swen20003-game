@@ -1,4 +1,4 @@
-package project1;
+package project2;
 
 /**
  * Timer class. Controls updating a counter, and checking whether a specified timeout has been surpassed.

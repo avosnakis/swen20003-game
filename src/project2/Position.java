@@ -1,4 +1,4 @@
-package project1;
+package project2;
 
 /**
  * A class that records (x, y) coordinates. Generic so as to support both coordinates

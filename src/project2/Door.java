@@ -1,4 +1,4 @@
-package project1;
+package project2;
 
 import org.newdawn.slick.Graphics;
 

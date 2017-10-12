@@ -1,4 +1,4 @@
-package project1;
+package project2;
 
 public class CrackedWall extends Tile implements Destructible {
   public CrackedWall(Position<Integer> cellPosition, Position<Float> windowPosition) {
