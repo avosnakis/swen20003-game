@@ -89,4 +89,8 @@ public class Rogue extends Character implements Controllable {
     Direction direction = GameUtils.playerMoved(keysPressed) ? currentDirection : Direction.DIR_NONE;
     moveToDestination(direction, world);
   }
+
+  @Override
+  public void undo(int time) {
+  }
 }

@@ -30,7 +30,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 0;
+    currentLevel = 3;
     reset();
   }
 
@@ -203,6 +203,7 @@ public class World implements Controllable {
     sprites.stream()
         .filter(sprite -> sprite != null && sprite instanceof Movable)
         .forEach(sprite -> {
+          // A Movable sprite is either a Block or a Character
           if (sprite instanceof Block) {
             ((Block) sprite).undo(lastUpdateTime);
           } else {

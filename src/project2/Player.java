@@ -7,11 +7,17 @@ package project2;
 import org.newdawn.slick.Input;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends Character implements Controllable {
+  private HashMap<Integer, Position<Integer>> pastPositions;
+
 
   public Player(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/player_left.png", "player", cellPosition, windowPosition);
+
+    pastPositions = new HashMap<>();
+    addPastPosition(0);
   }
 
   @Override
@@ -87,4 +93,28 @@ public class Player extends Character implements Controllable {
     }
     return direction;
   }
+
+  @Override
+  public void undo(int time) {
+    // If the block didn't update at this time, exit the method
+    if (!pastPositions.containsKey(time)) {
+      return;
+    }
+
+    // Get the coordinates of the specified time this block moved and update it
+    setCellPosition(pastPositions.get(time));
+
+    // Set the sprite's coordinates
+    float newX = (float) Loader.getOffsetX() + getxCell() * App.TILE_SIZE;
+    float newY = (float) Loader.getOffsetY() + getyCell() * App.TILE_SIZE;
+    snapToGrid(newX, newY);
+
+    pastPositions.remove(time);
+  }
+
+  @Override
+  public void addPastPosition(int time) {
+    pastPositions.put(time, new Position<>(getCellPosition()));
+  }
+
 }

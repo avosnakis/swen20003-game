@@ -71,4 +71,8 @@ public class Skeleton extends Character {
       currentDirection = Direction.DIR_DOWN;
     }
   }
+
+  @Override
+  public void undo(int time) {
+  }
 }

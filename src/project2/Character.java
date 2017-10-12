@@ -1,15 +1,10 @@
 package project2;
 
-import java.util.HashMap;
-
 public abstract class Character extends Sprite implements Movable {
-  private HashMap<Integer, Position<Integer>> pastPositions;
 
   public Character(String imageSource, String type, Position<Integer> cellPosition, Position<Float> windowPosition) {
     super(imageSource, "character", type, cellPosition, windowPosition);
 
-    pastPositions = new HashMap<>();
-    addPastPosition(0);
   }
 
   @Override
@@ -39,24 +34,9 @@ public abstract class Character extends Sprite implements Movable {
 
   @Override
   public void undo(int time) {
-    // If the block didn't update at this time, exit the method
-    if (!pastPositions.containsKey(time)) {
-      return;
-    }
-
-    // Get the coordinates of the specified time this block moved and update it
-    setCellPosition(pastPositions.get(time));
-
-    // Set the sprite's coordinates
-    float newX = (float) Loader.getOffsetX() + getxCell() * App.TILE_SIZE;
-    float newY = (float) Loader.getOffsetY() + getyCell() * App.TILE_SIZE;
-    snapToGrid(newX, newY);
-
-    pastPositions.remove(time);
   }
 
   @Override
   public void addPastPosition(int time) {
-    pastPositions.put(time, new Position<>(getCellPosition()));
   }
 }

@@ -54,4 +54,8 @@ public class Mage extends Character implements Controllable {
       return distX < 0 ? Direction.DIR_UP : Direction.DIR_DOWN;
     }
   }
+
+  @Override
+  public void undo(int time) {
+  }
 }
