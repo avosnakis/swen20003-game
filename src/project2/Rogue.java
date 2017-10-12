@@ -51,6 +51,7 @@ public class Rogue extends Character implements Controllable {
       reverseDirection();
       moveToDestination(currentDirection, world);
     } else {
+      world.moveBlockAtPosition(nextPosition, direction);
       setCellPosition(nextPosition);
       snapToGrid(nextX, getY());
     }

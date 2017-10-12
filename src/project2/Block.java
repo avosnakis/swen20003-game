@@ -38,6 +38,7 @@ public abstract class Block extends Sprite implements Movable {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextPosition, direction)) {
+      world.moveBlockAtPosition(nextPosition, direction);
       setCellPosition(nextPosition);
       snapToGrid(nextX, nextY);
     }

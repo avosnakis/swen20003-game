@@ -65,8 +65,21 @@ public class Player extends Character implements Controllable {
       return;
     }
 
+    // Special case for pushing TNT into walls. Try and find the potential NEXT position of the TNT being pushed,
+    // and if it is a CrackedWall, push the TNT into it.
+    if (world.typeAtLocation(nextPosition, "tnt")) {
+      Position<Integer> potentialWallPosition = new Position<>(
+          nextPosition.x + deltaXCell,
+          nextPosition.y + deltaYCell);
+      // If it is a cracked wall, pushing the TNT into it
+      if (world.typeAtLocation(potentialWallPosition, "cracked")) {
+        world.moveBlockAtPosition(nextPosition, direction);
+      }
+    }
+
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextPosition, direction)) {
+      world.moveBlockAtPosition(nextPosition, direction);
       setCellPosition(nextPosition);
       snapToGrid(nextX, nextY);
     }

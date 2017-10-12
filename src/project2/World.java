@@ -100,12 +100,12 @@ public class World implements Controllable {
   public void render(Graphics g) {
     // Find any TNT that is currently exploding
     Tnt possibleTnt = (Tnt) sprites.stream()
-        .filter(sprite -> sprite instanceof Tnt && ((Tnt)sprite).isExploding())
+        .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isExploding())
         .findFirst()
         .orElse(null);
     // Render all sprites that aren't exploding Tnt
     sprites.stream()
-        .filter(sprite -> sprite != null || (sprite instanceof Tnt && !((Tnt)sprite).isExploding()))
+        .filter(sprite -> sprite != null || (sprite instanceof Tnt && !((Tnt) sprite).isExploding()))
         .forEach(sprite -> sprite.render(g));
 
     // If the TNT was exploding, render it last
@@ -127,7 +127,6 @@ public class World implements Controllable {
 
   /**
    * Determines whether an (x,y) position is possible to move to.
-   * If a block is at the specified (x,y), then we attempt to move that one as well.
    *
    * @param position  The (x,y) position to check.
    * @param direction The direction the sprite is currently moving.
@@ -135,38 +134,47 @@ public class World implements Controllable {
    */
   public boolean isBlocked(Position<Integer> position, Direction direction) {
     // Check that the block is moving to a spot inside the grid
-    if (position.x < 0 ||
-        position.x > Loader.getWorldWidth() ||
-        position.y < 0 ||
-        position.y > Loader.getWorldHeight()) {
-      return false;
-    }
+    return position.x >= 0 &&
+        position.x <= Loader.getWorldWidth() &&
+        position.y >= 0 &&
+        position.y <= Loader.getWorldHeight() &&
+        sprites.stream()
+            .filter(sprite -> sprite != null && sprite.isAtPosition(position))
+            .anyMatch(sprite -> {
+              switch (sprite.getCategory()) {
+                // Characters are defined as passable
+                case "character":
+                  return false;
+                // Determine whether the tile is passable
+                case "tile":
+                  return !sprite.isPassable();
+                // Check if the next block can move
+                case "block":
+                  int nextX = GameUtils.incrementCoordinate(position.x, 'x', direction);
+                  int nextY = GameUtils.incrementCoordinate(position.y, 'y', direction);
+                  return isBlocked(new Position<>(nextX, nextY), direction);
+                default:
+                  return true;
+              }
+            });
+  }
 
-    // Try to move to an (x, y) coordinate, checking every sprite at that location to determine the next action.
-    boolean cannotMove = false;
-    for (Sprite sprite : sprites) {
-      if (sprite != null && sprite.isAtPosition(position)) {
-        switch (sprite.getCategory()) {
-          case "character":
-            break;
-          // Determine whether the tile is passable
-          case "tile":
-            cannotMove = !sprite.isPassable();
-            break;
-          // Check if the next block can move, and attempt to move it
-          case "block":
-            int nextX = GameUtils.incrementCoordinate(position.x, 'x', direction);
-            int nextY = GameUtils.incrementCoordinate(position.y, 'y', direction);
-            cannotMove = isBlocked(new Position<>(nextX, nextY), direction);
-            ((Block) sprite).moveToDestination(direction, this);
-        }
-      }
-      // Exit as soon as it is known the next (x,y) is impassable
-      if (cannotMove) {
-        return true;
-      }
+  /**
+   * If there is a block at the specified position, move it in the specified direction. By this point we already
+   * know the block can move. Assumes there can only be one block at one position.
+   *
+   * @param position  The position of the block to move.
+   * @param direction The direction to move the block in.
+   */
+  public void moveBlockAtPosition(Position<Integer> position, Direction direction) {
+    Block block = ((Block) sprites.stream()
+        .filter(sprite -> sprite instanceof Block && sprite.isAtPosition(position))
+        .findFirst()
+        .orElse(null));
+
+    if (block != null) {
+      block.moveToDestination(direction, this);
     }
-    return false;
   }
 
   @Override
