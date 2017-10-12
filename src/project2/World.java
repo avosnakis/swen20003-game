@@ -30,7 +30,7 @@ public class World implements Controllable {
   private int moveCount;
 
   public World() {
-    currentLevel = 0;
+    currentLevel = 4;
     reset();
   }
 
@@ -272,12 +272,11 @@ public class World implements Controllable {
    * @return The player's Position, null if there is no player.
    */
   public Position<Integer> getPlayerPosition() {
-    for (Sprite sprite : sprites) {
-      if (sprite != null && sprite.getType().equals("player")) {
-        return sprite.getCellPosition();
-      }
-    }
-    return null;
+    return sprites.stream()
+        .filter(sprite -> sprite != null && sprite.getType().equals("player"))
+        .map(Sprite::getCellPosition)
+        .findFirst()
+        .orElse(null);
   }
 
   public int getTimer() {
