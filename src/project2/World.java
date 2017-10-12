@@ -18,6 +18,7 @@ import org.newdawn.slick.Input;
 public class World implements Controllable {
 
   private static final String[] levels = {"0.lvl", "1.lvl", "2.lvl", "3.lvl", "4.lvl", "5.lvl"};
+  private static int finalLevel = levels.length - 1;
 
   private int currentLevel;
 
@@ -100,12 +101,12 @@ public class World implements Controllable {
   public void render(Graphics g) {
     // Find any TNT that is currently exploding
     Tnt possibleTnt = (Tnt) sprites.stream()
-        .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isExploding())
+        .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isUnDetonated())
         .findFirst()
         .orElse(null);
     // Render all sprites that aren't exploding Tnt
     sprites.stream()
-        .filter(sprite -> sprite != null || (sprite instanceof Tnt && !((Tnt) sprite).isExploding()))
+        .filter(Objects::nonNull)
         .forEach(sprite -> sprite.render(g));
 
     // If the TNT was exploding, render it last
@@ -119,7 +120,7 @@ public class World implements Controllable {
    * @return Whether all targets have been covered by a block, and it is not the final level.
    */
   public boolean hasWon() {
-    return currentLevel != levels.length - 1 &&
+    return currentLevel != finalLevel &&
         sprites.stream()
             .filter(sprite -> sprite instanceof Target)
             .allMatch(sprite -> ((Target) sprite).isCovered());
@@ -248,30 +249,15 @@ public class World implements Controllable {
   }
 
   /**
-   * Finds the Door in the level, as there can only be a single one.
+   * Finds a sprite of a certain type in a level. Returns the first one found so assumes there is only one.
    *
-   * @return The door if it is in the level, null otherwise.
+   * @return The sprite if it is in the level, null otherwise.
    */
-  public Door findDoor() {
-    return (Door) sprites.stream()
-        .filter(sprite -> sprite instanceof Door)
+  public Sprite findUniqueSprite(String type) {
+    return sprites.stream()
+        .filter(sprite -> sprite.getType().equals(type))
         .findFirst()
         .orElse(null);
-  }
-
-  /**
-   * Set the specified sprite to null in the sprites ArrayList. Assumes there can only be one destructible block
-   * at one (x,y) location.
-   *
-   * @param position The (x,y) coordinate of the sprite.
-   */
-  public void destroySprite(Position<Integer> position) {
-    for (int i = 0; i < sprites.size(); i++) {
-      if (sprites.get(i) != null && sprites.get(i) instanceof Destructible && sprites.get(i).isAtPosition(position)) {
-        sprites.set(i, null);
-        break;
-      }
-    }
   }
 
   /**

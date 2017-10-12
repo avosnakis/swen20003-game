@@ -10,7 +10,11 @@ import org.newdawn.slick.Graphics;
 
 import java.util.ArrayList;
 
-public class Sprite {
+/**
+ * Sprite superclass. Records all information regarding the Sprite's whereabouts in the world grid and on the window,
+ * whether other Sprites can move through them, their category and type, and their image.
+ */
+public abstract class Sprite {
 
   private Image image = null;
 

@@ -95,8 +95,8 @@ public class Loader {
         int yCell = Integer.parseInt(parts[2]);
 
         // Adjust for the grid
-        float x = offsetX + xCell * App.TILE_SIZE;
-        float y = offsetY + yCell * App.TILE_SIZE;
+        float x = cellToWindow(xCell, 'x');
+        float y = cellToWindow(yCell, 'y');
 
         // Create the sprite
         list.add(createSprite(name, x, y, xCell, yCell));
@@ -105,6 +105,21 @@ public class Loader {
       e.printStackTrace();
     }
     return list;
+  }
+
+  /**
+   * Converts cell coordinate to window coordinate.
+   *
+   * @param cell The cell coordinate to transform.
+   * @param axis The axis this cell coordinate lies on.
+   * @return The corresponding window coordinate for this cell.
+   */
+  public static float cellToWindow(int cell, char axis) {
+    if (axis == 'x') {
+      return App.TILE_SIZE * cell + offsetX;
+    } else {
+      return App.TILE_SIZE * cell + offsetY;
+    }
   }
 
   public static int getWorldWidth() {

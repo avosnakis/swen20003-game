@@ -4,6 +4,7 @@ public abstract class Character extends Sprite implements Movable {
 
   public Character(String imageSource, String type, Position<Integer> cellPosition, Position<Float> windowPosition) {
     super(imageSource, "character", type, cellPosition, windowPosition);
+    setPassable(false);
   }
 
   @Override

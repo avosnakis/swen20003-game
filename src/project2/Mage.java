@@ -4,7 +4,11 @@ import org.newdawn.slick.Input;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the Mage. Implements Algorithm 1 as specified in the spec for its movement.
+ */
 public class Mage extends Character implements Controllable {
+
   public Mage(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/mage.png", "mage", cellPosition, windowPosition);
   }
@@ -12,11 +16,6 @@ public class Mage extends Character implements Controllable {
   @Override
   public void update(ArrayList<Integer> keysPressed, int delta, World world) {
     handlePlayerInput(keysPressed, world);
-  }
-
-  @Override
-  public void moveToDestination(Direction direction, World world) {
-    super.moveToDestination(direction, world);
   }
 
   @Override
@@ -40,13 +39,13 @@ public class Mage extends Character implements Controllable {
    * @param playerPosition The position of the player.
    * @return The direction the mage needs to go in.
    */
-  public Direction determineDirection(Position<Integer> playerPosition) {
+  private Direction determineDirection(Position<Integer> playerPosition) {
     if (playerPosition == null) {
       return Direction.DIR_NONE;
     }
 
-    int distX = playerPosition.x - getxCell();
-    int distY = playerPosition.y - getyCell();
+    float distX = Loader.cellToWindow(playerPosition.x, 'x') - getX();
+    float distY = Loader.cellToWindow(playerPosition.y, 'y') - getY();
 
     if (Math.abs(distX) > Math.abs(distY)) {
       return distX < 0 ? Direction.DIR_LEFT : Direction.DIR_RIGHT;
@@ -55,6 +54,11 @@ public class Mage extends Character implements Controllable {
     }
   }
 
+  /**
+   * Mage can't undo.
+   *
+   * @param time Timestamp of undo (ignored)
+   */
   @Override
   public void undo(int time) {
   }

@@ -23,6 +23,7 @@ public abstract class Block extends Sprite implements Movable {
   public void moveToDestination(Direction direction, World world) {
     float speed = 32;
     int cellSpeed = GameUtils.CELL_SIZE;
+
     // Translate the direction to an x and y displacement
     float deltaX = GameUtils.directionDelta('x', direction, speed);
     float deltaY = GameUtils.directionDelta('y', direction, speed);

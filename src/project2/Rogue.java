@@ -27,6 +27,7 @@ public class Rogue extends Character implements Controllable {
       return;
     }
 
+    // If it has attempted to move twice, it can't move.
     if (moveAttempts >= 2) {
       moveAttempts = 0;
       reverseDirection();
@@ -41,7 +42,7 @@ public class Rogue extends Character implements Controllable {
 
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell());
 
-    float nextX = this.getX() + deltaX;
+    float nextX = getX() + deltaX;
 
     // Restart the level if the player is there
     if (world.typeAtLocation(nextPosition, "player")) {
@@ -80,6 +81,11 @@ public class Rogue extends Character implements Controllable {
     moveToDestination(direction, world);
   }
 
+  /**
+   * Rogue can't undo.
+   *
+   * @param time Timestamp of undo (ignored)
+   */
   @Override
   public void undo(int time) {
   }

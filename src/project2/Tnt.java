@@ -6,30 +6,36 @@ import java.util.ArrayList;
 
 public class Tnt extends Block implements Destructible {
 
-  private boolean exploding;
+  private Notifier<CrackedWall> tntNotifier;
+  private boolean unDetonated;
   private Explosion explosion;
 
   public Tnt(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/tnt.png", "tnt", cellPosition, windowPosition);
 
     explosion = new Explosion(cellPosition, windowPosition);
-    exploding = false;
+    unDetonated = false;
+
+    tntNotifier = null;
   }
 
   @Override
   public void update(ArrayList<Integer> keysPressed, int delta, World world) {
-    if (exploding && !explosion.finishedExploding()) {
+    // On the first frame, find the unique cracked wall and make it an observer
+    if (tntNotifier == null) {
+      tntNotifier = new Notifier<>((CrackedWall) world.findUniqueSprite("cracked"));
+    }
+
+    if (unDetonated && !explosion.finishedExploding()) {
       explosion.increment(delta);
     } else if (explosion.finishedExploding()) {
-      exploding = false;
-      world.destroySprite(getCellPosition());
-      world.destroySprite(explosion.getCellPosition());
+      tntNotifier.alert();
     }
   }
 
   @Override
   public void render(Graphics g) {
-    if (!exploding) {
+    if (!unDetonated) {
       super.render(g);
     } else if (!explosion.finishedExploding()) {
       explosion.render(g);
@@ -38,7 +44,7 @@ public class Tnt extends Block implements Destructible {
 
   @Override
   public void moveToDestination(Direction direction, World world) {
-    if (exploding) {
+    if (unDetonated) {
       return;
     }
 
@@ -70,7 +76,7 @@ public class Tnt extends Block implements Destructible {
   }
 
   /**
-   * Starts the exploding animation, and destroys the CrackedWall at the target location.
+   * Starts the unDetonated animation, and destroys the CrackedWall at the target location.
    *
    * @param wallLocation The location of the CrackedWall and the explosion.
    * @param deltaX       The x position in the window of the explosion.
@@ -80,11 +86,11 @@ public class Tnt extends Block implements Destructible {
     setCellPosition(wallLocation);
     snapToGrid(getX() + deltaX, getY() + deltaY);
 
-    exploding = true;
+    unDetonated = true;
     explosion.start(wallLocation);
   }
 
-  public boolean isExploding() {
-    return exploding;
+  public boolean isUnDetonated() {
+    return unDetonated;
   }
 }

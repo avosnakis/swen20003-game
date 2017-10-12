@@ -44,7 +44,7 @@ public class Skeleton extends Character {
 
     Position<Integer> nextPosition = new Position<>(getxCell(), getyCell() + deltaYCell);
 
-    float nextY = this.getY() + deltaY;
+    float nextY = getY() + deltaY;
 
     // Restart the level if the player is there
     if (world.typeAtLocation(nextPosition, "player")) {
@@ -72,6 +72,11 @@ public class Skeleton extends Character {
     }
   }
 
+  /**
+   * Skeleton can't undo.
+   *
+   * @param time Timestamp of undo (ignored)
+   */
   @Override
   public void undo(int time) {
   }
