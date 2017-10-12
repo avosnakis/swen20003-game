@@ -4,7 +4,6 @@ public abstract class Character extends Sprite implements Movable {
 
   public Character(String imageSource, String type, Position<Integer> cellPosition, Position<Float> windowPosition) {
     super(imageSource, "character", type, cellPosition, windowPosition);
-
   }
 
   @Override
@@ -12,6 +11,7 @@ public abstract class Character extends Sprite implements Movable {
     if (direction == Direction.DIR_NONE) {
       return;
     }
+
     float speed = 32;
     int cellSpeed = 1;
     // Translate the direction to an x and y displacement

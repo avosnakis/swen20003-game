@@ -116,5 +116,4 @@ public class Player extends Character implements Controllable {
   public void addPastPosition(int time) {
     pastPositions.put(time, new Position<>(getCellPosition()));
   }
-
 }
