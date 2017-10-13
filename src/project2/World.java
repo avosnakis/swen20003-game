@@ -85,7 +85,6 @@ public class World implements Controllable {
         .filter(Objects::nonNull)
         .forEach(sprite -> sprite.update(arrowKeys, delta, this));
 
-    // If there were changes in the world, save the past information
     if (changedThisFrame) {
       updateHistory();
     }
