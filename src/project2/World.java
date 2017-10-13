@@ -66,9 +66,7 @@ public class World implements Controllable {
         Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP);
     ArrayList<Integer> otherKeys = GameUtils.getPressedKeys(input, Input.KEY_R, Input.KEY_Z);
 
-
-    // If the player completed the level on the previous frame,
-    // move to the next level and skip the rest of this frame
+    // If the player completed the level on the previous frame, move to the next level and skip the rest of this frame
     if (hasWon()) {
       currentLevel += 1;
       reset();
@@ -81,10 +79,8 @@ public class World implements Controllable {
       return;
     }
 
-    // Increment the internal timer
+    // Increment the internal timer and update every non-null sprite
     timer.tick(delta);
-
-    // Update every non-null sprite
     sprites.stream()
         .filter(Objects::nonNull)
         .forEach(sprite -> sprite.update(arrowKeys, delta, this));
@@ -187,6 +183,11 @@ public class World implements Controllable {
     }
   }
 
+  /**
+   * If the player has pressed the appropriate keys, undo or reset the world.
+   *
+   * @param input The keys the player has pressed.
+   */
   @Override
   public void handlePlayerInput(ArrayList<Integer> input) {
     if (input.contains(Input.KEY_R)) {
