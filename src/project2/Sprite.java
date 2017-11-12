@@ -19,9 +19,6 @@ import java.util.function.BiPredicate;
  */
 public abstract class Sprite {
 
-  public static final BiPredicate<Sprite, String> isOfType = ((sprite, s) -> sprite.getType().equals(s));
-  public static final BiPredicate<Sprite, String> isOfCategory = ((sprite, s) -> sprite.getCategory().equals(s));
-
   private Image image = null;
 
   private Position<Integer> cellPosition;
@@ -83,6 +80,20 @@ public abstract class Sprite {
     windowPosition = new Position<>(x, y);
   }
 
+  /**
+   * @return A predicate testing whether a sprite is of a given type.
+   */
+  public static BiPredicate<Sprite, String> isOfType() {
+    return ((sprite, s) -> sprite.type.equals(s));
+  }
+
+  /**
+   * @return A predicate testing whether a sprite is of a given category.
+   */
+  public static BiPredicate<Sprite, String> isOfCategory() {
+    return ((sprite, s) -> sprite.category.equals(s));
+  }
+
   public boolean isAtPosition(Position<Integer> position) {
     return cellPosition.equals(position);
   }
@@ -109,10 +120,6 @@ public abstract class Sprite {
 
   public String getCategory() {
     return category;
-  }
-
-  public String getType() {
-    return type;
   }
 
   public boolean isPassable() {

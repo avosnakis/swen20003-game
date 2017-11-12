@@ -249,7 +249,7 @@ public class World implements Controllable {
    */
   public Sprite findUniqueSprite(String type) {
     return sprites.stream()
-        .filter(sprite -> sprite.getType().equals(type))
+        .filter(sprite -> Sprite.isOfType().test(sprite, type))
         .findFirst()
         .orElse(null);
   }

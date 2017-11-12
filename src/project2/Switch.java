@@ -37,10 +37,10 @@ public class Switch extends Tile {
     }
 
     // If the state of the switch changes, notify the door
-    if (world.spriteAtLocation(getCellPosition(), "block", Sprite.isOfCategory) && !active) {
+    if (world.spriteAtLocation(getCellPosition(), "block", Sprite.isOfCategory()) && !active) {
       notifier.alert(true);
       active = true;
-    } else if (active && !world.spriteAtLocation(getCellPosition(), "block", Sprite.isOfCategory)) {
+    } else if (active && !world.spriteAtLocation(getCellPosition(), "block", Sprite.isOfCategory())) {
       notifier.alert(false);
       active = false;
     }

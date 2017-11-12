@@ -63,7 +63,7 @@ public class Rogue extends Character implements Controllable {
     float nextX = getX() + deltaX;
 
     // Restart the level if the player is there
-    if (world.spriteAtLocation(nextPosition, "player", Sprite.isOfType)) {
+    if (world.spriteAtLocation(nextPosition, "player", Sprite.isOfType())) {
       world.reset();
     } else if (world.isBlocked(nextPosition, direction)) {
       moveAttempts++;

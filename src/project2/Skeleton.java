@@ -66,9 +66,9 @@ public class Skeleton extends Character {
     float nextY = getY() + deltaY;
 
     // Restart the level if the player is there
-    if (world.spriteAtLocation(nextPosition, "player", Sprite.isOfType)) {
+    if (world.spriteAtLocation(nextPosition, "player", Sprite.isOfType())) {
       world.reset();
-    } else if (world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory) ||
+    } else if (world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory()) ||
         world.isBlocked(nextPosition, direction)) {
       moveAttempts++;
       reverseDirection();
