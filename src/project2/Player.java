@@ -87,19 +87,19 @@ public class Player extends Character implements Controllable {
     float nextY = getY() + deltaY;
 
     // If there is an enemy at the next location, restart the level
-    if (world.categoryAtLocation(nextPosition, "character")) {
+    if (world.spriteAtLocation(nextPosition, "character", Sprite.isOfCategory)) {
       world.reset();
       return;
     }
 
     // Special case for pushing TNT into walls. Try and find the potential NEXT position of the TNT being pushed,
     // and if it is a CrackedWall, push the TNT into it.
-    if (world.typeAtLocation(nextPosition, "tnt")) {
+    if (world.spriteAtLocation(nextPosition, "tnt", Sprite.isOfType)) {
       Position<Integer> potentialWallPosition = new Position<>(
           nextPosition.x + deltaXCell,
           nextPosition.y + deltaYCell);
       // If it is a cracked wall, pushing the TNT into it
-      if (world.typeAtLocation(potentialWallPosition, "cracked")) {
+      if (world.spriteAtLocation(potentialWallPosition, "cracked", Sprite.isOfType)) {
         world.moveBlockAtPosition(nextPosition, direction);
       }
     }

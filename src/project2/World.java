@@ -3,6 +3,7 @@ package project2;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.function.BiPredicate;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -227,31 +228,18 @@ public class World implements Controllable {
   }
 
   /**
-   * Determines if a sprite of the given category is at an (x,y) coordinate.
+   * Determines if a sprite of a specific type or category is at an (x,y) coordinate.
    *
-   * @param position The (x,y) coordinate to check.
-   * @param type     The type to check the (x,y) coordinates for.
-   * @return True if there is a sprite of the given category at the (x,y) location, otherwise false.
+   * @param position   The (x,y) coordinate to check.
+   * @param type       The type OR category of the sprite to check.
+   * @param spriteType The function testing the sprite test or category.
+   * @return Whether a sprite of a given type OR category is at that position.
    */
-  public boolean typeAtLocation(Position<Integer> position, String type) {
+  public boolean spriteAtLocation(Position<Integer> position, String type, BiPredicate<Sprite, String> spriteType) {
     return sprites.stream()
         .anyMatch(sprite -> sprite != null &&
             sprite.isAtPosition(position) &&
-            sprite.getType().equals(type));
-  }
-
-  /**
-   * Determines if a sprite of the given type is at an (x,y) coordinate.
-   *
-   * @param position The (x,y) coordinate to check.
-   * @param category The type to check the (x,y) coordinates for.
-   * @return True if there is a sprite of the given type at the (x,y) location, otherwise false.
-   */
-  public boolean categoryAtLocation(Position<Integer> position, String category) {
-    return sprites.stream()
-        .anyMatch(sprite -> sprite != null &&
-            sprite.isAtPosition(position) &&
-            sprite.getCategory().equals(category));
+            spriteType.test(sprite, type));
   }
 
   /**

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Class for the Switch tile. When activated or deactived, it notifies a Door to change its state.
  *
  * @author Alex Vosnakis 743936
@@ -37,10 +37,10 @@ public class Switch extends Tile {
     }
 
     // If the state of the switch changes, notify the door
-    if (world.categoryAtLocation(getCellPosition(), "block") && !active) {
+    if (world.spriteAtLocation(getCellPosition(), "block", Sprite.isOfCategory) && !active) {
       notifier.alert(true);
       active = true;
-    } else if (active && !world.categoryAtLocation(getCellPosition(), "block")) {
+    } else if (active && !world.spriteAtLocation(getCellPosition(), "block", Sprite.isOfCategory)) {
       notifier.alert(false);
       active = false;
     }

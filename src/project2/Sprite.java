@@ -5,6 +5,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Graphics;
 
 import java.util.ArrayList;
+import java.util.function.BiPredicate;
 
 /**
  * Sprite superclass. Records all information regarding the Sprite's whereabouts in the world grid and on the window,
@@ -17,6 +18,9 @@ import java.util.ArrayList;
  * @author Alex Vosnakis 743936
  */
 public abstract class Sprite {
+
+  public static final BiPredicate<Sprite, String> isOfType = ((sprite, s) -> sprite.getType().equals(s));
+  public static final BiPredicate<Sprite, String> isOfCategory = ((sprite, s) -> sprite.getCategory().equals(s));
 
   private Image image = null;
 

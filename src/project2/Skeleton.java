@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Class for the Skeleton character.
  *
  * @author Alex Vosnakis 743936
@@ -66,9 +66,10 @@ public class Skeleton extends Character {
     float nextY = getY() + deltaY;
 
     // Restart the level if the player is there
-    if (world.typeAtLocation(nextPosition, "player")) {
+    if (world.spriteAtLocation(nextPosition, "player", Sprite.isOfType)) {
       world.reset();
-    } else if (world.categoryAtLocation(nextPosition, "block") || world.isBlocked(nextPosition, direction)) {
+    } else if (world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory) ||
+        world.isBlocked(nextPosition, direction)) {
       moveAttempts++;
       reverseDirection();
       moveToDestination(currentDirection, world);

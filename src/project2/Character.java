@@ -39,7 +39,8 @@ public abstract class Character extends Sprite implements Movable {
     float nextY = getY() + deltaY;
 
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextPosition, direction) && !world.categoryAtLocation(nextPosition, "block")) {
+    if (!world.isBlocked(nextPosition, direction) &&
+        !world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory)) {
       setCellPosition(nextPosition);
       snapToGrid(nextX, nextY);
     }

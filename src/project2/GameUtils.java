@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public class GameUtils {
 
-  public static int CELL_SIZE = 1;
+  public static final int CELL_SIZE = 1;
 
   /**
    * Determine which of the specified keys were pressed by the player and add them to an array.

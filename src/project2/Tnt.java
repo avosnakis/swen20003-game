@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Interface for all classes that react to the player's input.
  *
  * @author Alex Vosnakis 743936
@@ -80,7 +80,7 @@ public class Tnt extends Block implements Destructible {
     Position<Integer> explosionPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 
     // Destroy the cracked wall and the TNT if there is a cracked wall at the next location
-    if (world.typeAtLocation(explosionPosition, "cracked")) {
+    if (world.spriteAtLocation(explosionPosition, "cracked", Sprite.isOfType)) {
       setCellPosition(explosionPosition);
       snapToGrid(getX() + deltaX, getY() + deltaY);
       destroy(explosionPosition);

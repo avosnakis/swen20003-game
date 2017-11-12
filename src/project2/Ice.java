@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Class for the Ice block.
  *
  * @author Alex Vosnakis 743936
@@ -70,7 +70,8 @@ public class Ice extends Block {
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 
     // Make sure the position isn't occupied!
-    if (!world.isBlocked(nextPosition, direction) && !world.categoryAtLocation(nextPosition, "block")) {
+    if (!world.isBlocked(nextPosition, direction) &&
+        !world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory)) {
       setCellPosition(nextPosition);
       snapToGrid(getX() + deltaX, getY() + deltaY);
 

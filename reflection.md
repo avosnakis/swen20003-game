@@ -1,18 +1,20 @@
 **Reflection**
 
+**Alex Vosnakis 743946**
+
 The project design was changed after the submission of Project 2A. Some of the key changes were the addition of the `Position`, `Explosion`, `Timer`, `Notifier`, `GameUtils`, and `Direction` classes, as well as the `Destructible` interface.
 
 Due to the multiple entities requiring the usage of a timer (for example, the `Explosion`, `Ice`, `Skeleton`, and the `World`’s undo system, a `Timer` class was created to support the abstraction of these timing functions.
 
 The `Explosion` made sense to abstract into a class, as it had its own functionality that could be considered independent of the `Tnt`.
 
-The `Position` class was created midway through development to alleviate the amount of attributes that the `Sprite` had which were just coordinates in some way. It became too difficult to manage up to four coordinates at once (the `Sprite`'s grid coordinates and windowvcoordinates), so the generic and immutable `Position` class was made with the specification that `T extends Number`. The class was made immutable to make all `Sprite` movement easier to understand; an immutable class must be created every time the `Sprite` moves, making it easier to debug movement issues.
+The `Position` class was created midway through development to alleviate the amount of attributes that the `Sprite` had which were just coordinates in some way. It became too difficult to manage up to four coordinates at once (the `Sprite`'s grid coordinates and window coordinates), so the generic and immutable `Position` class was made with the specification that `T extends Number`. The class was made immutable to make all `Sprite` movement easier to understand; an immutable class must be created every time the `Sprite` moves, making it easier to debug movement issues.
 
-`Notifier` was implemented as `SwitchNotifier extends Observable` as its purpose was to alert the `Switch` or `Tnt`'s corresponding `Door` or `Crackwall` respectively to when its state changed while preserving encapsulation.
+`Notifier` was implemented as `SwitchNotifier extends Observable` as its purpose was to alert the `Switch` or `Tnt`'s corresponding `Door` or `CrackedWall` respectively to when its state changed while preserving encapsulation.
 
 `GameUtils` was created as a static class containing useful methods that needed to be called in many different places.
 
-`Direction` is an `enum` made to represent the different directions possible to move in. This was made as the `Directions` need to be referred to in many places so representing tham as a `public enum` rather than as `static` variables made sense.
+`Direction` is an `enum` made to represent the different directions possible to move in. This was made as the `Directions` need to be referred to in many places so representing them as a `public enum` rather than as `static` variables made sense.
 
 One of the main challenges of the project was the requirement to have multiple classes on the same level of the hierarchy needing to make changes or refer to other classes without direct access to each. This was first encountered early in the project, when making the functionality
 to push blocks. I saw a few ways to approach this:
@@ -33,4 +35,4 @@ A key piece of knowledge gained was the use of the subscriber-publisher model, w
 
 Also used were functional programming utilities in Java 1.8, such as lambdas, streams, and predicates, which were used mainly in the `World` class to make the various methods relying on iteration more abstract and simple to understand.
 
-In the future, if I was to work on a similar project, I would re-evaluate my approach of the `World` class. Given it had access to all the data that many of the `Sprites` needed, it is larger than it should be, given that is has methods for finding references to certain `Sprites` that other `Sprites` require knowledge of. Additionally, passing the `World` to the `Sprites` in their `update` method makes the two classes highly coupled, however I could not think of a better way to implement the required behaviour without using what essentialy amount to global variables. There is likely a better approach, most likely using an Entity-Component system or a more fleshed-out Subscriber-Publisher model, however we did not learn these in time to fully implement them. I am still hesistant to use a `static` data structure though since that seems to defeat the entire purpose of using object oriented programming.
+In the future, if I was to work on a similar project, I would re-evaluate my approach of the `World` class. Given it had access to all the data that many of the `Sprites` needed, it is larger than it should be, given that is has methods for finding references to certain `Sprites` that other `Sprites` require knowledge of. Additionally, passing the `World` to the `Sprites` in their `update` method makes the two classes highly coupled, however I could not think of a better way to implement the required behaviour without using what essentially amount to global variables. There is likely a better approach, most likely using an Entity-Component system or a more fleshed-out Subscriber-Publisher model, however we did not learn these in time to fully implement them. I am still hesitant to use a `static` data structure though since that seems to defeat the entire purpose of using object oriented programming.

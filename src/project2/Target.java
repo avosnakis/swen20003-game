@@ -32,7 +32,7 @@ public class Target extends Tile {
    */
   @Override
   public void update(ArrayList<Integer> keys, int delta, World world) {
-    covered = world.categoryAtLocation(getCellPosition(), "block");
+    covered = world.spriteAtLocation(getCellPosition(), "block", Sprite.isOfCategory);
   }
 
   public boolean isCovered() {
