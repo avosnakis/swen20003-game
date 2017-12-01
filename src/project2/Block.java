@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Abstract class for all blocks.
  *
  * @author Alex Vosnakis 743936

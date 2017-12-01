@@ -96,8 +96,8 @@ public class Player extends Character implements Controllable {
     // and if it is a CrackedWall, push the TNT into it.
     if (world.spriteAtLocation(nextPosition, "tnt", Sprite.isOfType())) {
       Position<Integer> potentialWallPosition = new Position<>(
-          nextPosition.x + deltaXCell,
-          nextPosition.y + deltaYCell);
+              nextPosition.x + deltaXCell,
+              nextPosition.y + deltaYCell);
       // If it is a cracked wall, pushing the TNT into it
       if (world.spriteAtLocation(potentialWallPosition, "cracked", Sprite.isOfType())) {
         world.moveBlockAtPosition(nextPosition, direction);

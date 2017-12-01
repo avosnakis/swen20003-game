@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Template taken from:
  * Sample Project for SWEN20003: Object Oriented Software Development 2017
  * by Eleanor McMurtry
- *
+ * <p>
  * Static class for loading the level files.
  *
  * @author Alex Vosnakis 743936

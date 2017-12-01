@@ -42,7 +42,7 @@ public class GameUtils {
     // x coordinate cannot go up or down, so don't change it
     // y coordinate cannot go left or right, so don't change it
     if ((axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) ||
-        (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
+            (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
       return coordinate;
     } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
       return --coordinate;
@@ -70,7 +70,7 @@ public class GameUtils {
     // x coordinate cannot go up or down, so don't change it
     // y coordinate cannot go left or right, so don't change it
     if ((axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) ||
-        (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
+            (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
       return 0;
     } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
       return -speed;
@@ -98,7 +98,7 @@ public class GameUtils {
     // x coordinate cannot go up or down, so don't change it
     // y coordinate cannot go left or right, so don't change it
     if ((axis == 'x' && (direction == Direction.DIR_DOWN || direction == Direction.DIR_UP)) ||
-        (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
+            (axis == 'y' && (direction == Direction.DIR_LEFT || direction == Direction.DIR_RIGHT))) {
       return 0;
     } else if (axis == 'x' && direction == Direction.DIR_LEFT) {
       return -speed;

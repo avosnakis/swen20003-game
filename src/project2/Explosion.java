@@ -2,7 +2,7 @@ package project2;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Explosion effect created by TNT when it collides with a CrackedWall.
  *
  * @author Alex Vosnakis 743936

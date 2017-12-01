@@ -69,7 +69,7 @@ public class Skeleton extends Character {
     if (world.spriteAtLocation(nextPosition, "player", Sprite.isOfType())) {
       world.reset();
     } else if (world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory()) ||
-        world.isBlocked(nextPosition, direction)) {
+            world.isBlocked(nextPosition, direction)) {
       moveAttempts++;
       reverseDirection();
       moveToDestination(currentDirection, world);

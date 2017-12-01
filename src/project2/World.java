@@ -2,6 +2,7 @@ package project2;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Stack;
 import java.util.function.BiPredicate;
 
@@ -64,7 +65,7 @@ public class World implements Controllable {
   public void update(Input input, int delta) {
     // Determine which of the controls the player used
     ArrayList<Integer> arrowKeys = GameUtils.getPressedKeys(input,
-        Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP);
+            Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP);
     ArrayList<Integer> otherKeys = GameUtils.getPressedKeys(input, Input.KEY_R, Input.KEY_Z);
 
     // If the player completed the level on the previous frame, move to the next level and skip the rest of this frame
@@ -83,8 +84,8 @@ public class World implements Controllable {
     // Increment the internal timer and update every non-null sprite
     timer.tick(delta);
     sprites.stream()
-        .filter(Objects::nonNull)
-        .forEach(sprite -> sprite.update(arrowKeys, delta, this));
+            .filter(Objects::nonNull)
+            .forEach(sprite -> sprite.update(arrowKeys, delta, this));
 
     if (changedThisFrame) {
       updateHistory();
@@ -108,13 +109,13 @@ public class World implements Controllable {
   public void render(Graphics g) {
     // Find any TNT that is currently exploding
     Tnt possibleTnt = (Tnt) sprites.stream()
-        .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isUndetonated())
-        .findFirst()
-        .orElse(null);
+            .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isUndetonated())
+            .findFirst()
+            .orElse(null);
     // Render all sprites that aren't exploding Tnt
     sprites.stream()
-        .filter(Objects::nonNull)
-        .forEach(sprite -> sprite.render(g));
+            .filter(Objects::nonNull)
+            .forEach(sprite -> sprite.render(g));
 
     // If the TNT was exploding, render it last
     if (possibleTnt != null) {
@@ -128,9 +129,9 @@ public class World implements Controllable {
    */
   private boolean hasWon() {
     return currentLevel != finalLevel &&
-        sprites.stream()
-            .filter(sprite -> sprite instanceof Target)
-            .allMatch(sprite -> ((Target) sprite).isCovered());
+            sprites.stream()
+                    .filter(sprite -> sprite instanceof Target)
+                    .allMatch(sprite -> ((Target) sprite).isCovered());
   }
 
   /**
@@ -144,26 +145,26 @@ public class World implements Controllable {
   public boolean isBlocked(Position<Integer> position, Direction direction) {
     // First check that we are within the bounds.
     return position.x >= 0 &&
-        position.x <= Loader.getWorldWidth() &&
-        position.y >= 0 &&
-        position.y <= Loader.getWorldHeight() &&
-        // Check there are no tiles that are blocked.
-        sprites.stream()
-            .filter(sprite -> sprite != null && sprite.isAtPosition(position))
-            .anyMatch(sprite -> {
-              switch (sprite.getCategory()) {
-                case "character":
-                case "tile":
-                  return !sprite.isPassable();
-                // Check if the next block can move
-                case "block":
-                  int nextX = GameUtils.incrementCoordinate(position.x, 'x', direction);
-                  int nextY = GameUtils.incrementCoordinate(position.y, 'y', direction);
-                  return isBlocked(new Position<>(nextX, nextY), direction);
-                default:
-                  return true;
-              }
-            });
+            position.x <= Loader.getWorldWidth() &&
+            position.y >= 0 &&
+            position.y <= Loader.getWorldHeight() &&
+            // Check there are no tiles that are blocked.
+            sprites.stream()
+                    .filter(sprite -> sprite != null && sprite.isAtPosition(position))
+                    .anyMatch(sprite -> {
+                      switch (sprite.getCategory()) {
+                        case "character":
+                        case "tile":
+                          return !sprite.isPassable();
+                        // Check if the next block can move
+                        case "block":
+                          int nextX = GameUtils.incrementCoordinate(position.x, 'x', direction);
+                          int nextY = GameUtils.incrementCoordinate(position.y, 'y', direction);
+                          return isBlocked(new Position<>(nextX, nextY), direction);
+                        default:
+                          return true;
+                      }
+                    });
   }
 
   /**
@@ -174,13 +175,11 @@ public class World implements Controllable {
    * @param direction The direction to move the block in.
    */
   public void moveBlockAtPosition(Position<Integer> position, Direction direction) {
-    Block block = ((Block) sprites.stream()
-        .filter(sprite -> sprite instanceof Block && sprite.isAtPosition(position))
-        .findFirst()
-        .orElse(null));
-    if (block != null) {
-      block.moveToDestination(direction, this);
-    }
+    Optional<Block> block = sprites.stream()
+            .filter(sprite -> sprite instanceof Block && sprite.isAtPosition(position))
+            .map(s -> (Block) s)
+            .findFirst();
+    block.ifPresent(b -> b.moveToDestination(direction, this));
   }
 
   /**
@@ -216,14 +215,14 @@ public class World implements Controllable {
 
     // Try to undo all Movable sprites, ie. Blocks and Characters
     sprites.stream()
-        .filter(sprite -> sprite instanceof Movable)
-        .forEach(sprite -> {
-          if (sprite instanceof Block) {
-            ((Block) sprite).undo(lastUpdateTime);
-          } else {
-            ((Character) sprite).undo(lastUpdateTime);
-          }
-        });
+            .filter(sprite -> sprite instanceof Movable)
+            .forEach(sprite -> {
+              if (sprite instanceof Block) {
+                ((Block) sprite).undo(lastUpdateTime);
+              } else {
+                ((Character) sprite).undo(lastUpdateTime);
+              }
+            });
     decrementMoves();
   }
 
@@ -237,9 +236,9 @@ public class World implements Controllable {
    */
   public boolean spriteAtLocation(Position<Integer> position, String type, BiPredicate<Sprite, String> spriteType) {
     return sprites.stream()
-        .anyMatch(sprite -> sprite != null &&
-            sprite.isAtPosition(position) &&
-            spriteType.test(sprite, type));
+            .anyMatch(sprite -> sprite != null &&
+                    sprite.isAtPosition(position) &&
+                    spriteType.test(sprite, type));
   }
 
   /**
@@ -249,9 +248,9 @@ public class World implements Controllable {
    */
   public Sprite findUniqueSprite(String type) {
     return sprites.stream()
-        .filter(sprite -> Sprite.isOfType().test(sprite, type))
-        .findFirst()
-        .orElse(null);
+            .filter(sprite -> Sprite.isOfType().test(sprite, type))
+            .findFirst()
+            .orElse(null);
   }
 
   /**
@@ -261,10 +260,10 @@ public class World implements Controllable {
    */
   public Position<Integer> getPlayerPosition() {
     return sprites.stream()
-        .filter(sprite -> sprite instanceof Player)
-        .map(Sprite::getCellPosition)
-        .findFirst()
-        .orElse(null);
+            .filter(sprite -> sprite instanceof Player)
+            .map(Sprite::getCellPosition)
+            .findFirst()
+            .orElse(null);
   }
 
   public int getTimer() {

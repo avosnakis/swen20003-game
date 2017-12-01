@@ -71,7 +71,7 @@ public class Ice extends Block {
 
     // Make sure the position isn't occupied!
     if (!world.isBlocked(nextPosition, direction) &&
-        !world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory())) {
+            !world.spriteAtLocation(nextPosition, "block", Sprite.isOfCategory())) {
       setCellPosition(nextPosition);
       snapToGrid(getX() + deltaX, getY() + deltaY);
 

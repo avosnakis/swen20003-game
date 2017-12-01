@@ -7,7 +7,7 @@ import java.util.Observer;
 
 /**
  * SWEN20003 Assignment 2B
- *
+ * <p>
  * Class for the Door tile.
  *
  * @author Alex Vosnakis 743936
