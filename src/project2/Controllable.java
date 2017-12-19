@@ -13,5 +13,4 @@ public interface Controllable {
   public void handlePlayerInput(ArrayList<Integer> input);
 
   public void handlePlayerInput(ArrayList<Integer> keysPressed, World world);
-
 }

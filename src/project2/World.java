@@ -108,19 +108,17 @@ public class World implements Controllable {
    */
   public void render(Graphics g) {
     // Find any TNT that is currently exploding
-    Tnt possibleTnt = (Tnt) sprites.stream()
+    Optional<Tnt> possibleTnt = sprites.stream()
             .filter(sprite -> sprite instanceof Tnt && ((Tnt) sprite).isUndetonated())
             .findFirst()
-            .orElse(null);
+            .map(tnt -> (Tnt) tnt);
     // Render all sprites that aren't exploding Tnt
     sprites.stream()
             .filter(Objects::nonNull)
             .forEach(sprite -> sprite.render(g));
 
     // If the TNT was exploding, render it last
-    if (possibleTnt != null) {
-      possibleTnt.render(g);
-    }
+    possibleTnt.ifPresent(tnt -> tnt.render(g));
     g.drawString(String.format("Moves: %d", moveCount), 0, 0);
   }
 
@@ -250,7 +248,7 @@ public class World implements Controllable {
     return sprites.stream()
             .filter(sprite -> Sprite.isOfType().test(sprite, type))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> new IllegalStateException("Sprite type " + type + " not found in the current level"));
   }
 
   /**
@@ -263,7 +261,7 @@ public class World implements Controllable {
             .filter(sprite -> sprite instanceof Player)
             .map(Sprite::getCellPosition)
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> new IllegalStateException("No player in the current level"));
   }
 
   public int getTimer() {

@@ -16,7 +16,6 @@ public class Rogue extends Character implements Controllable {
 
   public Rogue(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/rogue.png", "rogue", cellPosition, windowPosition);
-
     currentDirection = Direction.DIR_LEFT;
     moveAttempts = 0;
   }
@@ -59,7 +58,6 @@ public class Rogue extends Character implements Controllable {
     int deltaXCell = GameUtils.directionDelta('x', direction, cellSpeed);
 
     Position<Integer> nextPosition = new Position<>(getxCell() + deltaXCell, getyCell());
-
     float nextX = getX() + deltaX;
 
     // Restart the level if the player is there

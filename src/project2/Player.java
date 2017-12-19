@@ -21,7 +21,6 @@ public class Player extends Character implements Controllable {
 
   public Player(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/player_left.png", "player", cellPosition, windowPosition);
-
     pastPositions = new HashMap<>();
     addPastPosition(0);
   }

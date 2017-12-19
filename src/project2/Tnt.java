@@ -19,10 +19,8 @@ public class Tnt extends Block implements Destructible {
 
   public Tnt(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/tnt.png", "tnt", cellPosition, windowPosition);
-
     explosion = new Explosion(cellPosition, windowPosition);
     undetonated = false;
-
     tntNotifier = null;
   }
 
@@ -75,7 +73,6 @@ public class Tnt extends Block implements Destructible {
     float deltaY = GameUtils.directionDelta('y', direction, speed);
     int deltaXCell = GameUtils.directionDelta('x', direction, cellSpeed);
     int deltaYCell = GameUtils.directionDelta('y', direction, cellSpeed);
-
 
     Position<Integer> explosionPosition = new Position<>(getxCell() + deltaXCell, getyCell() + deltaYCell);
 

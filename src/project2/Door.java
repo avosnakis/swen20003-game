@@ -18,7 +18,6 @@ public class Door extends Tile implements Observer {
   public Door(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/door.png", "door", cellPosition, windowPosition);
     setPassable(false);
-
     isOpen = false;
   }
 

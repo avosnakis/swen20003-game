@@ -19,7 +19,6 @@ public class Skeleton extends Character {
   public Skeleton(Position<Integer> cellPosition, Position<Float> windowPosition) {
     super("res/skull.png", "skeleton", cellPosition, windowPosition);
     currentDirection = Direction.DIR_UP;
-
     timer = new Timer(MOVE_TIME);
     moveAttempts = 0;
   }
